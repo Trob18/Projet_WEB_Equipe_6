@@ -1,7 +1,7 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background-image: url('img/Blured_Background.svg');
+    background-image: url('image/Blured_Background\(upscaled\).jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment:scroll;
@@ -9,6 +9,9 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    height: 100vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 
@@ -47,9 +50,10 @@ header h1 {
 
 
 footer {
-    position:sticky;
+    
     bottom: 0;
     left: 0;
+    margin: 0;
     width:auto;
     background-color: rgba(255, 255, 255, 0.4);
     text-align: center;
@@ -78,7 +82,7 @@ main {
     padding: 20px;
 }
 
-.Bloc_Authentification {
+.Bloc_Authentification.active{
     background: white;
     padding: 30px 40px;
     border-radius: 12px;
@@ -100,12 +104,12 @@ main {
     margin-bottom: 20px;
 }
 
-.Bloc_Authentification .checkbox_connexion{
+.checkbox_connexion{
     margin-bottom: 20px;
 }
 
 
-.Bloc_Authentification .Bouton_connexion{
+.Bouton_connexion{
     margin-bottom: 100px;
 }
 
@@ -138,7 +142,7 @@ form a:hover {
     text-decoration: underline;
 }
 
-form button {
+button {
     background-color: rgba(6, 71, 137, 0.9);
     color: white;
     padding: 10px;
@@ -151,4 +155,89 @@ form button {
 
 form button:hover {
     background-color: #004090;
+}
+
+
+
+
+.link {
+    font-weight: bold;
+    font-size: 14px;
+    color: rgba(6, 71, 137, 0.9);;
+    text-decoration: none;
+    margin-bottom: 15px;
+    cursor: pointer;
+  }
+  
+  .link:hover {
+    text-decoration: underline;
+  }
+
+
+
+
+.Bloc_Authentification{
+    display: none;
+}
+
+.Bloc_Authentification.active{
+    display: block;
+}
+
+
+
+
+
+
+#Type_Creation{
+    padding: 40px 40px;
+    .Bouton_connexion{
+       margin-top: 45px;
+    }
+}
+
+
+.Creation {
+    display: none;
+}
+
+
+.Etudiant {
+    display: none;
+}
+
+
+
+
+#formEntreprise{
+    input{
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 14px;
+    }
+    #Nom_entreprise{
+        margin-top: 30px;
+    }
+   
+    
+}
+
+
+#formEtudiant{
+    input{
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 14px;
+    }
+    #Nom{
+        margin-top: 30px;
+    }
+   
+    
 }

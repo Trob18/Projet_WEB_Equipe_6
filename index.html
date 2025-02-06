@@ -11,12 +11,15 @@
 <body>
 
     <header>
-        <img src="img/Logo_InternShip.svg" alt="logo" class="logo">
+        <img src="image/Logo_InternShip.svg" alt="logo" class="logo">
         <h1 class="Titre">Accueil</h1>
     </header>
 
     <main>
-        <section class="Bloc_Authentification">
+        <!--Contenu de la connexion au compte-->
+      
+
+        <section id="Connexion" class="Bloc_Authentification active">
             <h2>Authentification</h2>
             <p>Restez à jour sur le monde professionnel</p>
             <form>
@@ -33,9 +36,86 @@
                 <button type="submit" class="Bouton_connexion">Connexion</button>
             </form>
 
-            <p>Nouveau sur InternShip ? <a href="#">Rejoindre maintenant</a></p>
+            <p>Nouveau sur InternShip ? <span class="link" id="showCreation">Rejoindre maintenant</span></p>
 
         </section>
+
+
+
+
+
+        <!--Choix du type de création de compte-->
+        <div id="Type_Creation" class="Bloc_Authentification">
+            <h2>Création de compte</h2>
+            <p>Choix du type de compte :</p>
+            <form>     
+                <label for="TypeC">
+                    <input type="radio" name="Type" value="etudiant" id="etudiant" required>Etudiant
+                    <input type="radio" name="Type" value="entreprise" id="entreprise" required>Entreprise
+                </label>            
+            </form>
+            <!--Contenu Entreprise de la création de compte-->
+            <section id="formEntreprise" class="Creation">
+                <form>
+                    <label for="Nom_entreprise" id="Nom_entreprise">Nom de l'entreprise :
+                        <input type="text" id="Nom_Entreprise" required>
+                    </label>
+                    <label for="Type">Type :
+                        <input type="text" id="Type" required>
+                    </label>
+                    <label for="secteur">Secteur :
+                        <input type="text" id="Secteur" required>
+                    </label>
+                    <label for="adresse">Adresse :
+                        <input type="text" id="Adresse" required>
+                    </label>
+                    <label for="email">Email de l'entreprise :
+                        <input type="email" id="email" required>
+                    </label>
+                    <label for="password">Mot de passe :
+                        <input type="password" id="password" minlength="8" required>
+                    </label>
+                    <label for="password">Confirmation du Mot de passe :
+                        <input type="password" id="Cpassword" minlength="8" required>
+                    </label>
+                </form>
+            </section>
+            <!--Contenu Etudiant de la création de compte-->
+            <section id="formEtudiant" class="Etudiant">
+                <form>
+                    <label for="Nom" id="Nom">Nom :
+                        <input type="text" id="Nom_Entreprise" required>
+                    </label>
+                    <label for="DateNaissance">Date de naissance :
+                        <input type="text" id="Type" required>
+                    </label>
+                    <label for="email">Email :
+                        <input type="email" id="email" required>
+                    </label>
+                    <label for="numéro">Numéro de téléphone :
+                        <input type="tel" id="numéro" pattern="^(\+33|0)[1-9](\d{2}){4}$" required>
+                    </label>
+                    <label for="password">Mot de passe :
+                        <input type="password" id="password" minlength="8" required>
+                    </label>
+                    <label for="password">Confirmation du Mot de passe :
+                        <input type="password" id="Cpassword" minlength="8" required>
+                    </label>
+                </form>
+            </section>
+            <button type="submit" class="Bouton_connexion">Création du compte</button>
+            <p>Déjà membre sur InternShip ? <span class="link" id="showConnexion">Se connecter</span></p>
+        </div>
+        
+
+
+        
+
+
+
+
+    
+        
     </main>
 
     <footer>
@@ -51,5 +131,8 @@
         <p>&copy; 2025 InternShip</p>
       </footer>
 
+
+      <script src="script.js"></script>
 </body>
 </html>
+
