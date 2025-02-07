@@ -1,16 +1,17 @@
 body {
+    overflow-y: scroll;
+    overflow-x: hidden;
     margin: 0;
     font-family: Arial, sans-serif;
-    background-image: url('img/Blured_Background.svg');
+    background-image: url('./img/Blured_Background\(upscaled\).jpg');
     background-repeat: no-repeat;
-    background-size: cover;
-    background-attachment:scroll;
+    background-size:cover;
+    background-attachment: fixed;
     background-position:center;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
-
 
 header {
     background-color: rgba(255, 255, 255, 0.4);
@@ -47,9 +48,10 @@ header h1 {
 
 
 footer {
-    position:sticky;
+    
     bottom: 0;
     left: 0;
+    margin: 0;
     width:auto;
     background-color: rgba(255, 255, 255, 0.4);
     text-align: center;
@@ -78,37 +80,6 @@ main {
     padding: 20px;
 }
 
-.Bloc_Authentification {
-    background: white;
-    padding: 30px 40px;
-    border-radius: 12px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    max-width: 300px;
-    width: 100%;
-    text-align: center;
-    margin-top: 10px;
-}
-
-.Bloc_Authentification h2 {
-    font-size: 22px;
-    margin-bottom: 15px;
-}
-
-.Bloc_Authentification p {
-    font-size: 14px;
-    color: #555;
-    margin-bottom: 20px;
-}
-
-.Bloc_Authentification .checkbox_connexion{
-    margin-bottom: 20px;
-}
-
-
-.Bloc_Authentification .Bouton_connexion{
-    margin-bottom: 100px;
-}
-
 
 form {
     display: flex;
@@ -116,39 +87,100 @@ form {
     align-items: stretch;
 }
 
-form input[type="email"],
-form input[type="password"] {
-    width: 100%;
-    padding: 10px;
+
+
+
+.container {
+    background: rgba(255, 255, 255, 0.75);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    text-align: center;
+}
+
+.pp-txt{
+    position: absolute;
+    top: -70px; /* Ajustez cette valeur pour positionner le texte au-dessus de l'image */
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    width: 100%;}
+
+
+.profile-picture {
+    position: relative;
+    display: inline-block;
     margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 14px;
+    margin-top: 50px;
 }
 
-.Bloc_Authentification a {
-    font-weight: bold;
-    font-size: 14px;
-    color: rgba(6, 71, 137, 0.9);;
-    text-decoration: none;
-    margin-bottom: 15px;
+.profile-picture img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: #ddd;
 }
 
-form a:hover {
-    text-decoration: underline;
-}
-
-form button {
-    background-color: rgba(6, 71, 137, 0.9);
-    color: white;
-    padding: 10px;
+.edit-btn {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background: white;
     border: none;
-    border-radius: 8px;
     cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
+    font-size: 14px;
 }
 
-form button:hover {
-    background-color: #004090;
+form {
+    display: flex;
+    flex-direction: column;
 }
+
+label {
+    text-align: left;
+    font-size: 14px;
+    margin: 5px 0 2px;
+}
+
+input, textarea {
+    width: 90%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+textarea {
+    resize: none;
+    height: 80px;
+}
+
+
+
+.btn-primary {
+    background: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn-danger {
+    
+    background: #DC3545;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 5px;
+    width: 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
