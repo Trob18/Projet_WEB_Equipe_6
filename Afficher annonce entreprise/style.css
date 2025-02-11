@@ -492,7 +492,7 @@ button.mon-compte {
 
 .annonce {
     width: 100%;
-    max-height: 100vh;
+    max-height: 100%;
     
     background-color: rgba(224, 231, 234, 0.6667);
     padding: 20px;
@@ -510,7 +510,7 @@ button.mon-compte {
 
 .detail-annonce {
     width: 97%;
-    max-height: 100vh;
+    max-height: 100%;
     background-color: rgb(255, 255, 255);
     padding: 20px;
     border-radius: 12px;
@@ -562,6 +562,31 @@ button.mon-compte {
     background-color: #004090;
 }
 
+.post-suppr {
+    margin-top: 10px;
+    background-color: rgba(182, 0, 0, 0.9);
+    color: white;
+    padding: 15px 24px;
+    /* Augmente l'espace interne du bouton */
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 15px;
+    /* Augmente la taille du texte */
+    transition: background-color 0.3s;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 150px;
+    /* Augmente la largeur du bouton */
+    text-align: center;
+    
+}
+
+.post-suppr:hover {
+    background-color: #7e0000;
+}
+
 .annonce h1,
 h2,
 h3,
@@ -569,6 +594,11 @@ h4,
 h5 {
     color: #0056b3;
     font-family: 'Open Sans', serif;
+}
+
+.annonce h1 {
+    font-size: 40px;
+    margin: 0;
 }
 
 .data-annonce hr {
@@ -654,10 +684,12 @@ h5 {
 .entreprise {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between;
     /* Aligne tout le contenu de la ligne de manière espacée */
     margin-bottom: 15px;
+    
 }
+
 
 .entreprise div {
     display: flex;
@@ -671,10 +703,21 @@ h5 {
     text-align: left;
 }
 
+.test125{
+    display: flex;
+    flex-direction: row !important;
+    align-items: center;
+}
 
+.entreprise-text {
+    font-size: 30px;
+    line-height: 1; /* Réduit l'espace vertical entre les lignes */
+}
 
-
-
+.entreprise-text p {
+    margin: 0; /* Supprime les marges par défaut des <p> */
+    padding: 0; /* Supprime tout padding éventuel */
+}
 
 
 

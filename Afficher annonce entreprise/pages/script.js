@@ -13,11 +13,11 @@ function star() {
     const element2 = document.getElementById("star-text");
         if (element.style.color == "grey") {
             element.style.color = "#0056b3"; 
-            element2.innerText = "Retirer de la wishlis";
+            element2.innerText = "Retirer de la wishlist";
         } 
         else {
             element.style.color = "grey";
-            element2.innerText = "Ajouter a la wishlist"; 
+            element2.innerText = "Ajouter à la wishlist"; 
         }
 }
 
