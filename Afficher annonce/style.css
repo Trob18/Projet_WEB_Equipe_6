@@ -1,3 +1,11 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+
 body {
     overflow-y: scroll;
     overflow-x: hidden;
@@ -5,9 +13,9 @@ body {
     font-family: Arial, sans-serif;
     background-image: url('images/Blured_Background\(upscaled\).jpg');
     background-repeat: no-repeat;
-    background-size:cover;
+    background-size: cover;
     background-attachment: fixed;
-    background-position:center;
+    background-position: center;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -18,7 +26,7 @@ header {
     background-color: rgba(255, 255, 255, 0.4);
     z-index: 1;
     position: relative;
-    width:auto;
+    width: auto;
     padding: 10px 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     display: flex;
@@ -41,7 +49,7 @@ header h1 {
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    background-color:#F5F5F5;
+    background-color: #F5F5F5;
     padding: 5px 15px;
     border-radius: 8px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
@@ -49,13 +57,13 @@ header h1 {
 
 
 footer {
-    position:sticky;
+    position: sticky;
     bottom: 0;
     left: 0;
-    width:auto;
+    width: auto;
     background-color: rgba(255, 255, 255, 0.4);
     text-align: center;
-    padding:0px;
+    padding: 0px;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
     font-size: 14px;
 }
@@ -76,7 +84,7 @@ footer a:hover {
     text-decoration: underline;
 }
 
-.social-icons{
+.social-icons {
     width: 30px;
     height: 30px;
     object-fit: contain;
@@ -120,12 +128,12 @@ main {
     margin-bottom: 20px;
 }
 
-.Bloc_Authentification .checkbox_connexion{
+.Bloc_Authentification .checkbox_connexion {
     margin-bottom: 20px;
 }
 
 
-.Bloc_Authentification .Bouton_connexion{
+.Bloc_Authentification .Bouton_connexion {
     margin-bottom: 100px;
 }
 
@@ -149,7 +157,8 @@ form input[type="password"] {
 .Bloc_Authentification a {
     font-weight: bold;
     font-size: 14px;
-    color: rgba(6, 71, 137, 0.9);;
+    color: rgba(6, 71, 137, 0.9);
+    ;
     text-decoration: none;
     margin-bottom: 15px;
 }
@@ -194,7 +203,7 @@ header nav a {
     padding: 5px 10px;
     border-radius: 5px;
     transition: background-color 0.3s;
-    
+
 }
 
 header nav a.active {
@@ -226,7 +235,7 @@ header nav a:hover {
 }
 
 .parametre:hover {
-    filter:contrast(120%)
+    filter: contrast(120%)
 }
 
 .mon-compte {
@@ -244,7 +253,7 @@ button.mon-compte {
     transition: background-color .3s;
 }
 
-.mon-compte:hover{
+.mon-compte:hover {
     background-color: #004090;
 }
 
@@ -322,7 +331,7 @@ button.mon-compte {
     display: none;
 }
 
-.search-input-container input:not(:placeholder-shown) + .clear-input {
+.search-input-container input:not(:placeholder-shown)+.clear-input {
     display: block;
 }
 
@@ -377,12 +386,13 @@ button.mon-compte {
 
 
 .main-container {
-    display: flex;              
+    display: flex;
     flex-direction: row;
-    justify-content: space-between; 
-    align-items: flex-start;    
-    gap: 20px;                  
-    width: 100%;                
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    width: 100%;
+    max-height: 100vh;
 }
 
 
@@ -397,7 +407,7 @@ button.mon-compte {
     margin-right: auto;
     scrollbar-gutter: 50px;
     scrollbar-width: thin;
-    scrollbar-color: rgba(0,0,0,0.2) transparent;
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
 }
 
 
@@ -426,7 +436,7 @@ button.mon-compte {
     color: #555;
 }
 
-.offre .tag {
+.tag {
     display: inline-block;
     background-color: #ececec;
     color: #333;
@@ -441,7 +451,7 @@ button.mon-compte {
     color: #0056b3;
 }
 
-.offre .voir-plus {
+.voir-plus {
     margin-top: 10px;
     background-color: rgba(6, 71, 137, 0.9);
     color: white;
@@ -458,3 +468,208 @@ button.mon-compte {
 }
 
 
+
+.Connexion {
+    display: block;
+}
+
+.Connexion.active {
+
+    display: none;
+}
+
+
+.test125 {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    width: 100%;
+}
+
+
+
+/*Partie affichage des annonces*/
+
+.annonce {
+    width: 50%;
+    max-height: 100vh;
+    background-color: rgba(224, 231, 234, 0.6667);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin-right: auto;
+    display: none;
+
+    flex-direction: column;
+    /* Afficher les blocs en colonne */
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+}
+
+.detail-annonce {
+    width: 100%;
+    max-height: 100vh;
+    background-color: rgb(255, 255, 255);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin-right: auto;
+}
+
+/*.postuler-annonce {
+    
+}*/
+
+.data-annonce {
+    width: 100%;
+    max-height: 60vh;
+    background-color: rgb(255, 255, 255);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin-right: auto;
+
+    display: flex;
+    justify-content: space-between;
+    /* Distribution uniforme de l'espace */
+    flex-wrap: wrap;
+}
+
+.post {
+    margin-top: 10px;
+    background-color: rgba(6, 71, 137, 0.9);
+    color: white;
+    padding: 15px 24px;
+    /* Augmente l'espace interne du bouton */
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 18px;
+    /* Augmente la taille du texte */
+    transition: background-color 0.3s;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 200px;
+    /* Augmente la largeur du bouton */
+    text-align: center;
+    /* Centre le texte */
+    white-space: nowrap;
+}
+
+.post:hover {
+    background-color: #004090;
+}
+
+.annonce h1,
+h2,
+h3,
+h4,
+h5 {
+    color: #0056b3;
+    font-family: 'Open Sans', serif;
+}
+
+.data-annonce hr {
+    width: 100%;
+    /* La barre va maintenant occuper toute la largeur de .data-annonce */
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 0;
+    /* Retire les bordures par défaut */
+    border-top: 2px solid #0056b3;
+    /* La couleur de la barre */
+}
+
+.data-annonce p {
+    text-align: center;
+}
+
+.data-annonce div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 5px;
+    padding: 5px;
+}
+
+.data-annonce h3 {
+    text-align: center;
+    /* Centrage du texte */
+    width: 100%;
+    /* S'assure que h3 occupe toute la largeur disponible */
+    margin: 0 auto;
+    /* Centrage du bloc h3 */
+    display: block;
+    /* Permet de contrôler le centrage en tant que bloc */
+}
+
+.detail-annonce h4 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.blue {
+    color: #0056b3;
+}
+
+
+.logo-entreprise {
+    width: 83xp;
+    height: 83px;
+    object-fit: contain;
+    margin: 0 5px;
+    transition: transform 0.3s;
+}
+
+.star-button {
+    background-color: transparent;
+    /* Pas de fond */
+    display: flex;
+    border: none;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 20px;
+    /* Taille de l'étoile */
+    color: #0056b3;
+    /* Couleur dorée pour l'étoile */
+    transition: all 0.3s ease;
+}
+
+.star {
+    font-size: 40px;
+    /* Taille de l'étoile */
+    color: inherit;
+    /* La couleur héritée du bouton */
+}
+
+.star-text{
+    color: grey;
+    font-size: 14px;
+}
+
+
+.entreprise {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    /* Aligne tout le contenu de la ligne de manière espacée */
+    margin-bottom: 15px;
+}
+
+.entreprise div {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    margin: 5px;
+    padding: 5px;
+}
+
+.entreprise p {
+    text-align: left;
+}
