@@ -1,19 +1,6 @@
-/*
-const test = document.getElementById("test");
-const Connexion = document.getElementById("Connexion");
-const test_buttonLink = document.getElementById("test_button");
 
-
-test_buttonLink.addEventListener("click", () => {
-    alert("test");
-    test.classList.add("active");
-    Connexion.classList.remove("active");
-    });*/
-
-
-function test() {
-    //alert("test"); // Affiche une alerte avec le texte "test"
-    const element = document.getElementById("test125");
+function affichage() {
+    const element = document.getElementById("offres-global");
     const element2 = document.getElementById("annonce");
         if (element) {
             element.style.display = "none"; // Cache l'élément ciblé
@@ -36,27 +23,3 @@ function star() {
 
 
 
-
-
-
-
-
-
-// Get a reference to the button
-//const btn = document.getElementById("bouton-voir");
-//const main = document.getElementById("main-js");
-
-// Add an event handler for the click event
-//btn.addEventListener("click", myFunction);
-/*
-function test(){
-main.classList.remove('active');
-};*/
-
-/*
-function test(){
-    const test_t = document.getElementById("main-js");
-    test_t.remove();
-}
-
-window.onload = ok;*/
