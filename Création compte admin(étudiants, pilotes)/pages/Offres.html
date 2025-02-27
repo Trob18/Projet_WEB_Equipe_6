@@ -237,7 +237,7 @@
                 </label>
             </div>
             <section class="create-etudiant" id="create-etudiant">
-
+                <form class="form-container">
                 <label for="adresse">Nom :</label>
                 <input type="text" id="adresse" name="adresse" placeholder="Votre nom" required>
 
@@ -248,15 +248,15 @@
                 <input type="date" id="adresse" name="adresse" placeholder="Votre Date de naissance" required>
 
                 <label for="email">Email :</label>
-                <input type="email" id="email" name="email" placeholder="Votre email" autocomplete="email" required>
+                <input type="email" id="email" name="email" placeholder="L'email" autocomplete="email" required>
 
                 <label for="telephone">Numéro de téléphone :</label>
-                <input type="tel" id="telephone" name="telephone" placeholder="Votre numéro de téléphone"
+                <input type="tel" id="telephone" name="telephone" placeholder="Le numéro de téléphone"
                     pattern="[0-9]{10}" required>
 
                 <label for="password1">Choix du mot de passe :</label>
                 <div class="password-container">
-                    <input type="password" id="password1" name="password1" placeholder="Choisisez votre mot de passe"
+                    <input type="password" id="password1" name="password1" placeholder="Choisisez le mot de passe"
                         minlength="6" required>
                     <img src="https://cdn-icons-png.flaticon.com/512/565/565655.png" alt="Afficher"
                         class="toggle-password" id="toggle-password" onclick="Click()">
@@ -264,43 +264,51 @@
 
                 <label for="confirm-password">Confirmation du mot de passe :</label>
                 <input type="password" id="confirm-password" name="confirm-password"
-                    placeholder="Confirmez votre mot de passe" minlength="6" required>
+                    placeholder="Confirmez le mot de passe" minlength="6" required>
 
                 <button type="submit" class="btn-primary">Enregistrement</button>
                 <hr>
                 <label>En créant un compte, vous acceptez nos Conditions de service et notre Politique de
                     confidentialité.
                 </label>
+            </form>
             </section>
             <section class="create-pilote" id="create-pilote">
-                <label for="description">Pour ajouter des détails sur vous pilote
-                </label>
-                <textarea id="description" name="description" placeholder="Ajoutez des détails sur vous"></textarea>
-
-                <label for="adresse">Adresse :</label>
-                <input type="text" id="adresse" name="adresse" placeholder="Votre adresse" required>
-
-                <label for="email">Email :</label>
-                <input type="email" id="email" name="email" placeholder="Votre email" autocomplete="email" required>
-
-                <label for="telephone">Numéro de téléphone :</label>
-                <input type="tel" id="telephone" name="telephone" placeholder="Votre numéro de téléphone"
-                    pattern="[0-9]{10}" required>
-
-                <label for="password1">Choix du mot de passe :</label>
-                <div class="password-container">
-                    <input type="password" id="password1" name="password1" placeholder="Choisisez votre mot de passe"
-                        minlength="6" required>
-                    <img src="https://cdn-icons-png.flaticon.com/512/565/565655.png" alt="Afficher"
-                        class="toggle-password" id="toggle-password" onclick="Click()">
-                </div>
-
-                <label for="confirm-password">Confirmation du mot de passe :</label>
-                <input type="password" id="confirm-password" name="confirm-password"
-                    placeholder="Confirmez votre mot de passe" minlength="6" required>
-
-                <button type="submit" class="btn-primary">Enregistrement</button>
-
+                <form class="form-container">
+                    <label for="adresse">Nom :</label>
+                    <input type="text" id="adresse" name="adresse" placeholder="Votre nom" required>
+    
+                    <label for="adresse">Prénom :</label>
+                    <input type="text" id="adresse" name="adresse" placeholder="Votre prénom" required>
+    
+                    <label for="adresse">Date de naissance :</label>
+                    <input type="date" id="adresse" name="adresse" placeholder="Votre Date de naissance" required>
+    
+                    <label for="email">Email :</label>
+                    <input type="email" id="email" name="email" placeholder="L'email" autocomplete="email" required>
+    
+                    <label for="telephone">Numéro de téléphone :</label>
+                    <input type="tel" id="telephone" name="telephone" placeholder="Le numéro de téléphone"
+                        pattern="[0-9]{10}" required>
+    
+                    <label for="password1">Choix du mot de passe :</label>
+                    <div class="password-container">
+                        <input type="password" id="password1" name="password1" placeholder="Choisisez le mot de passe"
+                            minlength="6" required>
+                        <img src="https://cdn-icons-png.flaticon.com/512/565/565655.png" alt="Afficher"
+                            class="toggle-password" id="toggle-password" onclick="Click()">
+                    </div>
+    
+                    <label for="confirm-password">Confirmation du mot de passe :</label>
+                    <input type="password" id="confirm-password" name="confirm-password"
+                        placeholder="Confirmez le mot de passe" minlength="6" required>
+    
+                    <button type="submit" class="btn-primary">Enregistrement</button>
+                    <hr>
+                    <label>En créant un compte, vous acceptez nos Conditions de service et notre Politique de
+                        confidentialité.
+                    </label>
+                </form>
             </section>
 
         </section>

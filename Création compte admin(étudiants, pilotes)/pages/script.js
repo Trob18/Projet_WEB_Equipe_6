@@ -28,7 +28,7 @@ function create() {
     if (element) {
         element.style.display = "none"; // Cache l'élément ciblé
         element2.style.display = "none"; // Affiche l'élément ciblé
-        element3.style.display = "block"; // Affiche l'élément ciblé
+        element3.style.display = "flex"; // Affiche l'élément ciblé
     }
 }
 
@@ -40,7 +40,7 @@ function toggleMessage1() {
     if (checkbox1.checked) {
         checkbox2.checked = false;
         element2.style.display = "none"; // Cache l'élément ciblé
-        element.style.display = "block"; // Affiche l'élément ciblé
+        element.style.display = "flex"; // Affiche l'élément ciblé
     } else { 
         element.style.display = "none";
     }
@@ -54,7 +54,7 @@ function toggleMessage2() {
     if (checkbox2.checked) {
         checkbox1.checked = false;
         element.style.display = "none"; // Cache l'élément ciblé
-        element2.style.display = "block"; // Affiche l'élément ciblé
+        element2.style.display = "flex"; // Affiche l'élément ciblé
     } else {
         element2.style.display = "none";
     }
