@@ -97,9 +97,21 @@ function open_wishlist(){
 };
 
 
-function close_wishlist(){
+function close_wishlist(event){
+
+    event.stopPropagation();
+
     const element = document.getElementById("wishlist");
+    const element2 = document.getElementById("wishlist_header");
+    const element3 = document.getElementById("wishlist_id");
+
+    element2.style.border = "none";
+
+
     if (element) {
         element.style.display = "none"; // Cache l'élément ciblé
+    }
+    if (element3) {
+        element3.style.display = "none"; // Affiche l'élément ciblé
     }
 };

@@ -24,7 +24,7 @@
                 <a href="#">Accueil</a>
                 <a href="Offres.html" class="active">Offres</a>
                 <a href="#">Entreprises</a>
-                <a href="#" onclick="open_wishlist()" class="wishlist_header" id="wishlist_header">Wishlist <div class="wishlist_id" id="wishlist_id" > ✖ </div></a>
+                <a href="#" onclick="open_wishlist()" class="wishlist_header" id="wishlist_header">Wishlist <div class="wishlist_id" id="wishlist_id"  onclick="close_wishlist(event)"> ✖ </div></a>
             </nav>
         </div>
         <div class="header-actions">
@@ -318,7 +318,7 @@
             <div class="top-search">
                 <h2 class="wishlist_title">Ma Wishlist</h2>
                 <input type="text" placeholder="Rechercher une offre">
-                <h2 class="cross" onclick="close_wishlist()">✖</h2>
+                <h2 class="cross" onclick="close_wishlist(event)">✖</h2>
             </div>
             <section class="offres-container">
                 <div class="offres">
