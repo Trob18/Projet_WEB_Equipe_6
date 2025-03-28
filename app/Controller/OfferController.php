@@ -43,7 +43,7 @@ class OfferController{
             return "Echec de la creation";
         }
         else{
-            return "Offre Crée ! ";
+            return "Offre Créée ! ";
         }
     }
 
@@ -53,14 +53,14 @@ class OfferController{
             return "Offre Introuvable";
         }
         else{
-            return "Offre Supprimé";
+            return "Offre Supprimée";
         }
     }
 
     public function RemoveAllOffer(){
         $offers = $this->offerModel->RemoveAllOffer();
         if (!$offers){
-            return "Offre Introuvable";
+            return "Offre(s) Introuvable(s)";
         }
         else{
             return "Toutes les offres sont supprimées";
