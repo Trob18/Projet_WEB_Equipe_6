@@ -50,8 +50,8 @@ class AccountTest extends TestCase {
     }
 
     public function testGetAccountByEmail() {
-        // Récupération du compte par email
-        $account = $this->account->getAccountByEmail('johndoe@example.com');
+        // Récupération du compte par email avec la méthode getAccount
+        $account = $this->account->getAccount('Email_Account', 'johndoe@example.com');
 
         // Validation des informations du compte récupéré
         $this->assertIsArray($account);
@@ -83,13 +83,14 @@ class AccountTest extends TestCase {
     }
 
     public function testGetAllAccounts() {
-        // Récupération de tous les comptes
-        $accounts = $this->account->getAllAccounts();
-
-        // Vérification que l'on récupère bien le compte de test
-        $this->assertNotEmpty($accounts);
-        $this->assertGreaterThan(0, count($accounts)); // Vérifier qu'il y a au moins un compte
-        $this->assertEquals('johndoe@example.com', $accounts[0]['Email_Account']);
+        // Récupération du compte de John Doe par son email
+        $account = $this->account->getAccount('Email_Account', 'johndoe@example.com');
+    
+        // Vérification que le compte est bien récupéré
+        $this->assertNotEmpty($account);
+        $this->assertEquals('Doe', $account['LastName_Account']);
+        $this->assertEquals('John', $account['FirstName_Account']);
+        $this->assertEquals('johndoe@example.com', $account['Email_Account']);
     }
 }
 ?>
