@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Controller;
+namespace app\Model;
 
 
 require_once __DIR__ . '/../../config/ConfigDatabase.php';
@@ -16,7 +16,7 @@ class AccountController {
     // Créer un compte
     public function createAccount($lastName, $firstName, $email, $password) {
         // Vérifier si l'email existe déjà
-        if ($this->accountModel->getAccountByEmail($email)) {
+        if ($this->accountModel->getAccount('Email_Account', $email)) {
             return "Email déjà utilisé!";
         }
         
@@ -27,13 +27,15 @@ class AccountController {
 
     // Obtenir un compte par email
     public function getAccount($email) {
-        $account = $this->accountModel->getAccountByEmail($email);
+        // Utilisation de get_account pour obtenir un compte par email
+        $account = $this->accountModel->getAccount('Email_Account', $email);
         return $account ? $account : "Compte introuvable!";
     }
 
     // Supprimer un compte par ID
     public function removeAccount($accountId) {
-        $account = $this->accountModel->getAccountById($accountId);
+        // Utilisation de get_account pour vérifier si le compte existe
+        $account = $this->accountModel->getAccount('Id_Account', $accountId);
         if (!$account) {
             return "Compte introuvable!";
         }
@@ -44,7 +46,8 @@ class AccountController {
 
     // Mettre à jour un compte
     public function editAccount($accountId, $newLastName, $newFirstName, $newEmail, $newPassword) {
-        $account = $this->accountModel->getAccountById($accountId);
+        // Utilisation de get_account pour vérifier si le compte existe
+        $account = $this->accountModel->getAccount('Id_Account', $accountId);
         if (!$account) {
             return "Compte introuvable!";
         }
