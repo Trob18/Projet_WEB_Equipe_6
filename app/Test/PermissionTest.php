@@ -13,16 +13,19 @@ class PermissionTest extends TestCase {
     private $permission;
     private $pdo;
 
+    // Initialise l'environnement de test avant chaque test
     protected function setUp(): void {
         $this->pdo = (new \app\Config\ConfigDatabase())->connect();
         $this->permission = new Permission($this->pdo);
         $this->cleanUpTestPermissions();
     }
 
+    // Nettoie l'environnement après chaque test
     protected function tearDown(): void {
         $this->cleanUpTestPermissions();
     }
 
+    // Teste la création d'une permission dans la base de données
     public function testStorePermission() {
         $data = $this->getTestPermissionData();
         $id = $this->permission->StorePermission($data);
@@ -34,6 +37,7 @@ class PermissionTest extends TestCase {
         $this->assertEquals($data['Description_Permission'], $permission['Description_Permission'], "La description de la permission doit correspondre.");
     }
 
+    // Teste la récupération d'une permission spécifique
     public function testGetPermission() {
         $id = $this->insertTestPermission();
         $permission = $this->permission->GetPermission($id);
@@ -42,6 +46,7 @@ class PermissionTest extends TestCase {
         $this->assertEquals('Permission de test', $permission['Description_Permission'], "La description de la permission récupérée doit être correcte.");
     }
 
+    // Teste la récupération de toutes les permissions
     public function testGetAllPermission() {
         $this->insertTestPermission('Permission 1');
         $this->insertTestPermission('Permission 2');
@@ -54,6 +59,7 @@ class PermissionTest extends TestCase {
         $this->assertContains('Permission 2', $descriptions, "La liste des permissions doit contenir 'Permission 2'.");
     }
 
+    // Teste la suppression d'une permission spécifique
     public function testRemovePermission() {
         $id = $this->insertTestPermission();
         $result = $this->permission->RemovePermission($id);
@@ -64,6 +70,7 @@ class PermissionTest extends TestCase {
         $this->assertFalse($permission, "La permission supprimée ne doit plus exister dans la base.");
     }
 
+    // Teste la modification d'une permission existante
     public function testEditPermission() {
         $id = $this->insertTestPermission();
         $updatedData = [
@@ -78,6 +85,7 @@ class PermissionTest extends TestCase {
         $this->assertEquals('Permission mise à jour', $permission['Description_Permission'], "La description de la permission mise à jour doit être correcte.");
     }
 
+    // Teste la suppression de toutes les permissions
     public function testRemoveAllPermission() {
         $this->insertTestPermission('Permission 1');
         $this->insertTestPermission('Permission 2');
@@ -90,24 +98,28 @@ class PermissionTest extends TestCase {
         $this->assertEmpty($permissions, "La liste des permissions doit être vide après suppression.");
     }
 
+    // Crée des données de test pour une permission
     private function getTestPermissionData($description = 'Permission de test') {
         return [
             'Description_Permission' => $description
         ];
     }
 
+    // Insère une permission de test dans la base de données
     private function insertTestPermission($description = 'Permission de test') {
         $stmt = $this->pdo->prepare("INSERT INTO permissions (Description_Permission) VALUES (?)");
         $stmt->execute([$description]);
         return $this->pdo->lastInsertId();
     }
 
+    // Récupère une permission par son ID
     private function fetchPermissionById($id) {
         $stmt = $this->pdo->prepare("SELECT * FROM permissions WHERE Id_Permissions = ?");
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    // Nettoie les permissions de test de la base de données
     private function cleanUpTestPermissions() {
         $this->pdo->exec("DELETE FROM permissions WHERE Description_Permission LIKE 'Permission%'");
     }

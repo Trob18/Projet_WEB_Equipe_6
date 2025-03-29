@@ -13,16 +13,19 @@ class OfferTest extends TestCase {
     private $offer;
     private $pdo;
 
+    // Initialise l'environnement de test avant chaque test
     protected function setUp(): void {
         $this->pdo = (new \app\Config\ConfigDatabase())->connect();
         $this->offer = new Offer($this->pdo);
         $this->cleanUpTestOffers();
     }
 
+    // Nettoie l'environnement après chaque test
     protected function tearDown(): void {
         $this->cleanUpTestOffers();
     }
 
+    // Teste la création d'une offre dans la base de données
     public function testStoreOffer() {
         $data = $this->getTestOfferData();
         $id = $this->offer->StoreOffer($data);
@@ -34,6 +37,7 @@ class OfferTest extends TestCase {
         $this->assertEquals($data['TitleOffer'], $offer['Title_Offer'], "Le titre de l'offre doit correspondre.");
     }
 
+    // Teste la récupération d'une offre spécifique
     public function testGetOffer() {
         $id = $this->insertTestOffer();
         $offer = $this->offer->GetOffer($id);
@@ -42,6 +46,7 @@ class OfferTest extends TestCase {
         $this->assertEquals('Offre de test', $offer['Title_Offer'], "Le titre de l'offre récupérée doit être correct.");
     }
 
+    // Teste la suppression d'une offre spécifique
     public function testRemoveOffer() {
         $id = $this->insertTestOffer();
         $result = $this->offer->RemoveOffer($id);
@@ -52,6 +57,7 @@ class OfferTest extends TestCase {
         $this->assertFalse($offer, "L'offre supprimée ne doit plus exister dans la base.");
     }
 
+    // Teste la modification d'une offre existante
     public function testEditOffer() {
         $id = $this->insertTestOffer();
         $updatedData = [
@@ -73,6 +79,7 @@ class OfferTest extends TestCase {
         $this->assertEquals('PHP, Symfony', $offer['Skills_Offer'], "Les compétences de l'offre mise à jour doivent être correctes.");
     }
 
+    // Teste la récupération de toutes les offres
     public function testGetAllOffers() {
         $this->insertTestOffer('Offre 1');
         $this->insertTestOffer('Offre 2');
@@ -85,6 +92,7 @@ class OfferTest extends TestCase {
         $this->assertContains('Offre 2', $titles, "La liste des offres doit contenir 'Offre 2'.");
     }
 
+    // Crée des données de test pour une offre
     private function getTestOfferData($title = 'Offre de test') {
         return [
             'TitleOffer' => $title,
@@ -97,6 +105,7 @@ class OfferTest extends TestCase {
         ];
     }
 
+    // Insère une offre de test dans la base de données
     private function insertTestOffer($title = 'Offre de test') {
         $data = $this->getTestOfferData($title);
         $stmt = $this->pdo->prepare("
@@ -107,12 +116,14 @@ class OfferTest extends TestCase {
         return $this->pdo->lastInsertId();
     }
 
+    // Récupère une offre par son ID
     private function fetchOfferById($id) {
         $stmt = $this->pdo->prepare("SELECT * FROM offers WHERE id_Offer = ?");
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    // Nettoie les offres de test de la base de données
     private function cleanUpTestOffers() {
         $this->pdo->exec("DELETE FROM offers WHERE Title_Offer LIKE 'Offre%'");
     }

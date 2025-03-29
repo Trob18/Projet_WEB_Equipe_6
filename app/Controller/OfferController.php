@@ -5,33 +5,57 @@ namespace app\Controller;
 require_once __DIR__ . '/../../config/ConfigDatabase.php';
 require_once __DIR__ . '/../Model/OfferModel.php';
 
-class OfferController{
+/**
+ * Contrôleur pour la gestion des offres d'emploi
+ */
+class OfferController {
     private $offerModel;
 
-    public function __construct($pdo){
+    /**
+     * Constructeur du contrôleur des offres
+     * 
+     * @param PDO $pdo Instance de connexion à la base de données
+     */
+    public function __construct($pdo) {
         $this->offerModel = new OfferModel($pdo);
     }
 
-    public function GetOffer($id){
+    /**
+     * Récupère une offre spécifique par son identifiant
+     * 
+     * @param int $id Identifiant de l'offre
+     * @return array|string Données de l'offre ou message d'erreur
+     */
+    public function GetOffer($id) {
         $offer = $this->offerModel->GetOffer($id);
-        if (!$offer){
+        if (!$offer) {
             return "L'offre n'existe pas !";
-        }
-        else{
+        } else {
             return $offer;
         }
     }
 
-    public function GetAllOffer(){
+    /**
+     * Récupère toutes les offres
+     * 
+     * @return array|string Liste des offres ou message d'erreur
+     */
+    public function GetAllOffer() {
         $offers = $this->offerModel->GetAllOffer();
-        if (!$offers){
-            return "Aucune Offre Trouvé !";
-        }
-        else{
+        if (!$offers) {
+            return "Aucune Offre Trouvée !";
+        } else {
             return $offers;
         }
     }
-    public function createOffer($newdata){
+
+    /**
+     * Crée une nouvelle offre
+     * 
+     * @param array $newdata Données de la nouvelle offre
+     * @return string Message de succès ou d'erreur
+     */
+    public function createOffer($newdata) {
         $verif = ['TitleOffer', 'SkillsOffer', 'AddressOffer', 'DateOffer', 'ActivitySectorOffer', 'SalaryOffer', 'DescriptionOffer'];
         foreach ($verif as $index) {
             if (empty($newdata[$index])) {
@@ -39,36 +63,50 @@ class OfferController{
             }
         }
         $offer = $this->offerModel->StoreOffer($newdata);
-        if (!$offer){
-            return "Echec de la creation";
-        }
-        else{
-            return "Offre Créée ! ";
+        if (!$offer) {
+            return "Échec de la création";
+        } else {
+            return "Offre Créée !";
         }
     }
 
-    public function RemoveOffer($id){
+    /**
+     * Supprime une offre spécifique
+     * 
+     * @param int $id Identifiant de l'offre à supprimer
+     * @return string Message de succès ou d'erreur
+     */
+    public function RemoveOffer($id) {
         $offer = $this->offerModel->RemoveOffer($id);
-        if (!$offer){
+        if (!$offer) {
             return "Offre Introuvable";
-        }
-        else{
+        } else {
             return "Offre Supprimée";
         }
     }
 
-    public function RemoveAllOffer(){
+    /**
+     * Supprime toutes les offres
+     * 
+     * @return string Message de succès ou d'erreur
+     */
+    public function RemoveAllOffer() {
         $offers = $this->offerModel->RemoveAllOffer();
-        if (!$offers){
+        if (!$offers) {
             return "Offre(s) Introuvable(s)";
-        }
-        else{
+        } else {
             return "Toutes les offres sont supprimées";
         }
-
     }
 
-    public function EditOffer($id, $newdata){
+    /**
+     * Modifie une offre existante
+     * 
+     * @param int $id Identifiant de l'offre à modifier
+     * @param array $newdata Nouvelles données de l'offre
+     * @return string Message de succès ou d'erreur
+     */
+    public function EditOffer($id, $newdata) {
         $verif = ['TitleOffer', 'SkillsOffer', 'AddressOffer', 'DateOffer', 'ActivitySectorOffer', 'SalaryOffer', 'DescriptionOffer'];
         foreach ($verif as $index) {
             if (empty($newdata[$index])) {
@@ -76,11 +114,10 @@ class OfferController{
             }
         }
         $offer = $this->offerModel->EditOffer($id, $newdata);
-        if (!$offer){
-            return "Echec de la Modification";
-        }
-        else{
-            return "Modification Reussie !";
+        if (!$offer) {
+            return "Échec de la Modification";
+        } else {
+            return "Modification Réussie !";
         }
     }
 }
