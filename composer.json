@@ -1,0 +1,18 @@
+{
+    "name": "mon-projet/php-twig",
+    "description": "Projet PHP avec Twig",
+    "require": {
+        "twig/twig": "^3.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "app\\": "app/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true
+    }
+}
