@@ -24,7 +24,7 @@ class ApplyModel
 
     public function getAllApply()
     {
-        $stmt = $this->pdo->query("SELECT * FROM applications");
+        $stmt = $this->pdo->query("SELECT * FROM applications ORDER BY Id_Application ASC");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -40,20 +40,20 @@ class ApplyModel
         return $stmt->execute();
     }
 
-    public function storeApply($IdApply,$CvApply,$LetterApply,$DateApply)
+    public function storeApply($IdApply, $CvApply, $LetterApply, $DateApply)
     {
-        if (empty($CvApply) || empty($LetterApply) || empty($DateApply) || empty($IdApply) ) {
+        if (empty($CvApply) || empty($LetterApply) || empty($DateApply) || empty($IdApply)) {
             return false;
         }
 
         $stmt = $this->pdo->prepare("INSERT INTO applications (Id_Application, Cv_Application, CoverLetter_Application, Date_Application) VALUES (?, ?, ?, ?)");
-        return $stmt->execute([$IdApply,$CvApply, $LetterApply, $DateApply]);
+        return $stmt->execute([$IdApply, $CvApply, $LetterApply, $DateApply]);
     }
 
     public function editApply($id, $newData)
     {
-        $stmt = $this->pdo->prepare("UPDATE applications SET Id_Application = ?, Cv_Application = ?, CoverLetterApplication = ? WHERE Id_Application = ?");
-        return $stmt->execute([$newData['Id_Application'], $newData['Cv_Application'], $newData['CoverLetterApplication'], $id]);
+        $stmt = $this->pdo->prepare("UPDATE applications SET Cv_Application = ?, CoverLetterApplication = ? WHERE Id_Application = ?");
+        return $stmt->execute([$newData['Cv_Application'], $newData['CoverLetterApplication'], $id]);
     }
 }
 

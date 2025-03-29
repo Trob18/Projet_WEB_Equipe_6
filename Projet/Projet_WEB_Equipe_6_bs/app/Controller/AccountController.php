@@ -2,6 +2,8 @@
 
 namespace app\Controller;
 
+use app\Model\AccountModel;
+
 
 require_once __DIR__ . '/../../config/ConfigDatabase.php';
 require_once __DIR__ . '/../Model/AccountModel.php';
@@ -10,7 +12,7 @@ class AccountController {
     private $accountModel;
 
     public function __construct($pdo) {
-        $this->accountModel = new Account($pdo);
+        $this->accountModel = new AccountModel($pdo);
     }
 
     // Créer un compte
@@ -33,7 +35,7 @@ class AccountController {
 
     // Supprimer un compte par ID
     public function removeAccount($accountId) {
-        $account = $this->accountModel->getAccountById($accountId);
+        $account = $this->accountModel->getAccountByEmail($accountId);
         if (!$account) {
             return "Compte introuvable!";
         }
@@ -43,13 +45,13 @@ class AccountController {
     }
 
     // Mettre à jour un compte
-    public function editAccount($accountId, $newLastName, $newFirstName, $newEmail, $newPassword) {
-        $account = $this->accountModel->getAccountById($accountId);
+    public function editAccount($accountId, $newData) {
+        $account = $this->accountModel->getAccountByEmail($accountId);
         if (!$account) {
             return "Compte introuvable!";
         }
 
-        $result = $this->accountModel->editAccount($accountId, $newLastName, $newFirstName, $newEmail, $newPassword);
+        $result = $this->accountModel->editAccount($accountId, $newData);
         return $result ? "Compte mis à jour avec succès!" : "Échec de la mise à jour du compte.";
     }
 

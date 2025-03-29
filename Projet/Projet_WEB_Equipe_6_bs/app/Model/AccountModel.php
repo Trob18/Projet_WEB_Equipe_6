@@ -6,7 +6,7 @@ use PDO;
 
 require_once __DIR__ . '/../../config/ConfigDatabase.php';
 
-class Account {
+class AccountModel {
     private $pdo; // Stocker la connexion à la base de données
 
     public function __construct($pdo) {

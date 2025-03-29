@@ -4,8 +4,7 @@ namespace app\Test;
 
 
 use PHPUnit\Framework\TestCase;
-use app\Model\Account;
-use app\Model\Apply;
+use app\Model\AccountModel;
 use PDO;
 require_once __DIR__ . '/../../config/ConfigDatabase.php';
 require_once __DIR__ . '/../Model/AccountModel.php';
@@ -17,7 +16,7 @@ class AccountTest extends TestCase {
 
     protected function setUp(): void {
         $this->pdo = require __DIR__ . '/../../config/ConfigDatabase.php'; 
-        $this->account = new Account($this->pdo);
+        $this->account = new AccountModel($this->pdo);
 
         // Suppression du compte de test s'il existe déjà
         $this->pdo->exec("DELETE FROM Accounts WHERE Email_Account = 'johndoe@example.com'");
