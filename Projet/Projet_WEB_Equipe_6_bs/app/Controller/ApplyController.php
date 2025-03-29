@@ -2,6 +2,8 @@
 
 namespace app\Controller;
 
+use app\Model\ApplyModel;
+
 
 require_once __DIR__ . '/../../config/ConfigDatabase.php';
 require_once __DIR__ . '/../Model/ApplyModel.php';
@@ -10,13 +12,13 @@ class ApplyController {
     private $ApplyModel;
 
     public function __construct($pdo) {
-        $this->ApplyModel = new Apply($pdo);
+        $this->ApplyModel = new ApplyModel($pdo);
     }
 
 
     // Obtenir un compte par email
     public function getApply($IdApply) {
-        $account = $this->ApplyModel->getApply($IdApply);
+        $account = $this->ApplyModel->getApplyById($IdApply);
         return $account ? $account : "Apply introuvable!";
     }
 
@@ -28,7 +30,7 @@ class ApplyController {
 
     // Supprimer un compte par ID
     public function removeApply($IdApply) {
-        $account = $this->ApplyModel->getAllApply($IdApply);
+        $account = $this->ApplyModel->getApply($IdApply);
         if (!$account) {
             return false ; //"Apply introuvable!"
         }
@@ -48,8 +50,8 @@ class ApplyController {
         return $result ? true : false; //"Apply supprimé avec succès!" : "Échec de la suppression du Apply."
     }
 
-    public function storeApply($CvApply,$LetterApply,$DateApply) {
-        $store = $this->ApplyModel->StoreApply($CvApply,$LetterApply,$DateApply);
+    public function storeApply($IdApply,$CvApply,$LetterApply,$DateApply) {
+        $store = $this->ApplyModel->StoreApply($IdApply,$CvApply,$LetterApply,$DateApply);
         if (!$store) {
             return false; // Erreur de création
         }
