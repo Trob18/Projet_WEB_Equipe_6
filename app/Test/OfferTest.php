@@ -3,20 +3,20 @@
 namespace app\Test;
 
 use PHPUnit\Framework\TestCase;
-use app\Model\Offer;
+use app\Model\OfferModel;
 use PDO;
 
 require_once __DIR__ . '/../../config/ConfigDatabase.php';
 require_once __DIR__ . '/../Model/OfferModel.php';
 
 class OfferTest extends TestCase {
-    private $offer;
+    private $offerModel;
     private $pdo;
 
     // Initialise l'environnement de test avant chaque test
     protected function setUp(): void {
         $this->pdo = (new \app\Config\ConfigDatabase())->connect();
-        $this->offer = new Offer($this->pdo);
+        $this->offerModel = new OfferModel($this->pdo);
         $this->cleanUpTestOffers();
     }
 
@@ -28,19 +28,19 @@ class OfferTest extends TestCase {
     // Teste la création d'une offre dans la base de données
     public function testStoreOffer() {
         $data = $this->getTestOfferData();
-        $id = $this->offer->StoreOffer($data);
+        $id = $this->offerModel->storeOffer($data);
 
         $this->assertGreaterThan(0, $id, "L'ID de l'offre insérée doit être supérieur à 0.");
         $offer = $this->fetchOfferById($id);
 
         $this->assertNotEmpty($offer, "L'offre insérée doit exister dans la base.");
-        $this->assertEquals($data['TitleOffer'], $offer['Title_Offer'], "Le titre de l'offre doit correspondre.");
+        $this->assertEquals($data['Title_Offer'], $offer['Title_Offer'], "Le titre de l'offre doit correspondre.");
     }
 
     // Teste la récupération d'une offre spécifique
     public function testGetOffer() {
         $id = $this->insertTestOffer();
-        $offer = $this->offer->GetOffer($id);
+        $offer = $this->offerModel->getOffer('Id_Offer', $id);
 
         $this->assertNotEmpty($offer, "L'offre récupérée ne doit pas être vide.");
         $this->assertEquals('Offre de test', $offer['Title_Offer'], "Le titre de l'offre récupérée doit être correct.");
@@ -49,9 +49,9 @@ class OfferTest extends TestCase {
     // Teste la suppression d'une offre spécifique
     public function testRemoveOffer() {
         $id = $this->insertTestOffer();
-        $result = $this->offer->RemoveOffer($id);
+        $result = $this->offerModel->removeOffer($id);
 
-        $this->assertEquals(1, $result, "La suppression de l'offre doit retourner 1.");
+        $this->assertTrue($result, "La suppression de l'offre doit retourner true.");
         $offer = $this->fetchOfferById($id);
 
         $this->assertFalse($offer, "L'offre supprimée ne doit plus exister dans la base.");
@@ -61,18 +61,18 @@ class OfferTest extends TestCase {
     public function testEditOffer() {
         $id = $this->insertTestOffer();
         $updatedData = [
-            'TitleOffer' => 'Offre mise à jour',
-            'SkillsOffer' => 'PHP, Symfony',
-            'AddressOffer' => 'Lyon',
-            'DateOffer' => '2025-04-01',
-            'ActivitySectorOffer' => 'Développement',
-            'SalaryOffer' => 50000,
-            'DescriptionOffer' => 'Offre mise à jour pour test.'
+            'Title_Offer' => 'Offre mise à jour',
+            'Skills_Offer' => 'PHP, Symfony',
+            'Address_Offer' => 'Lyon',
+            'Date_Offer' => '2025-04-01',
+            'ActivitySector_Offer' => 'Développement',
+            'Salary_Offer' => 50000,
+            'Description_Offer' => 'Offre mise à jour pour test.'
         ];
 
-        $result = $this->offer->EditOffer($id, $updatedData);
+        $result = $this->offerModel->editOffer($id, $updatedData);
 
-        $this->assertEquals(1, $result, "La mise à jour doit retourner 1.");
+        $this->assertTrue($result, "La mise à jour doit retourner true.");
         $offer = $this->fetchOfferById($id);
 
         $this->assertEquals('Offre mise à jour', $offer['Title_Offer'], "Le titre de l'offre mise à jour doit être correct.");
@@ -83,7 +83,7 @@ class OfferTest extends TestCase {
     public function testGetAllOffers() {
         $this->insertTestOffer('Offre 1');
         $this->insertTestOffer('Offre 2');
-        $offers = $this->offer->GetAllOffer();
+        $offers = $this->offerModel->getAllOffers();
 
         $this->assertNotEmpty($offers, "La liste des offres ne doit pas être vide.");
         $titles = array_column($offers, 'Title_Offer');
@@ -95,13 +95,13 @@ class OfferTest extends TestCase {
     // Crée des données de test pour une offre
     private function getTestOfferData($title = 'Offre de test') {
         return [
-            'TitleOffer' => $title,
-            'SkillsOffer' => 'PHP, MySQL',
-            'AddressOffer' => 'Paris',
-            'DateOffer' => '2025-03-28',
-            'ActivitySectorOffer' => 'Informatique',
-            'SalaryOffer' => 45000,
-            'DescriptionOffer' => 'Ceci est une offre de test.'
+            'Title_Offer' => $title,
+            'Skills_Offer' => 'PHP, MySQL',
+            'Address_Offer' => 'Paris',
+            'Date_Offer' => '2025-03-28',
+            'ActivitySector_Offer' => 'Informatique',
+            'Salary_Offer' => 45000,
+            'Description_Offer' => 'Ceci est une offre de test.'
         ];
     }
 
@@ -112,13 +112,21 @@ class OfferTest extends TestCase {
             INSERT INTO offers (Title_Offer, Skills_Offer, Address_Offer, Date_Offer, ActivitySector_Offer, Salary_Offer, Description_Offer)
             VALUES (?, ?, ?, ?, ?, ?, ?)
         ");
-        $stmt->execute(array_values($data));
+        $stmt->execute([
+            $data['Title_Offer'],
+            $data['Skills_Offer'],
+            $data['Address_Offer'],
+            $data['Date_Offer'],
+            $data['ActivitySector_Offer'],
+            $data['Salary_Offer'],
+            $data['Description_Offer']
+        ]);
         return $this->pdo->lastInsertId();
     }
 
     // Récupère une offre par son ID
     private function fetchOfferById($id) {
-        $stmt = $this->pdo->prepare("SELECT * FROM offers WHERE id_Offer = ?");
+        $stmt = $this->pdo->prepare("SELECT * FROM offers WHERE Id_Offer = ?");
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }

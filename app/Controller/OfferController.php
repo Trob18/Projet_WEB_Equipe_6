@@ -4,6 +4,8 @@ namespace app\Controller;
 
 require_once __DIR__ . '/../../config/ConfigDatabase.php';
 require_once __DIR__ . '/../Model/OfferModel.php';
+use app\Model\OfferModel;
+use PDO;
 
 /**
  * Contrôleur pour la gestion des offres d'emploi
@@ -16,23 +18,24 @@ class OfferController {
      * 
      * @param PDO $pdo Instance de connexion à la base de données
      */
-    public function __construct($pdo) {
+    public function __construct(PDO $pdo) {
         $this->offerModel = new OfferModel($pdo);
     }
 
     /**
-     * Récupère une offre spécifique par son identifiant
+     * Récupère une offre en fonction d'une colonne et d'une valeur spécifiques
      * 
-     * @param int $id Identifiant de l'offre
-     * @return array|string Données de l'offre ou message d'erreur
+     * @param string $column Nom de la colonne pour la condition
+     * @param mixed $value Valeur à rechercher
+     * @param string $selectColumn Colonne(s) à sélectionner (par défaut toutes '*')
+     * @return mixed Résultat de la requête ou message d'erreur
      */
-    public function GetOffer($id) {
-        $offer = $this->offerModel->GetOffer($id);
-        if (!$offer) {
-            return "L'offre n'existe pas !";
-        } else {
-            return $offer;
-        }
+    public function getOffer($column, $value, $selectColumn = '*') {
+        // Appel à la méthode du modèle
+        $offer = $this->offerModel->getOffer($column, $value, $selectColumn);
+        
+        // Vérification du résultat et retour approprié
+        return $offer ? $offer : "Offre introuvable!";
     }
 
     /**
@@ -40,13 +43,9 @@ class OfferController {
      * 
      * @return array|string Liste des offres ou message d'erreur
      */
-    public function GetAllOffer() {
-        $offers = $this->offerModel->GetAllOffer();
-        if (!$offers) {
-            return "Aucune Offre Trouvée !";
-        } else {
-            return $offers;
-        }
+    public function getAllOffers() {
+        $offers = $this->offerModel->getAllOffers();
+        return !empty($offers) ? $offers : "Aucune offre trouvée!";
     }
 
     /**
@@ -56,18 +55,17 @@ class OfferController {
      * @return string Message de succès ou d'erreur
      */
     public function createOffer($newdata) {
-        $verif = ['TitleOffer', 'SkillsOffer', 'AddressOffer', 'DateOffer', 'ActivitySectorOffer', 'SalaryOffer', 'DescriptionOffer'];
-        foreach ($verif as $index) {
-            if (empty($newdata[$index])) {
-                return "Contenu non complété !";
+        $requiredFields = ['Title_Offer', 'Skills_Offer', 'Address_Offer', 'Date_Offer', 
+                           'ActivitySector_Offer', 'Salary_Offer', 'Description_Offer'];
+        
+        foreach ($requiredFields as $field) {
+            if (empty($newdata[$field])) {
+                return "Le champ '$field' est requis!";
             }
         }
-        $offer = $this->offerModel->StoreOffer($newdata);
-        if (!$offer) {
-            return "Échec de la création";
-        } else {
-            return "Offre Créée !";
-        }
+        
+        $result = $this->offerModel->storeOffer($newdata);
+        return $result ? "Offre créée avec succès!" : "Échec de la création de l'offre.";
     }
 
     /**
@@ -76,13 +74,14 @@ class OfferController {
      * @param int $id Identifiant de l'offre à supprimer
      * @return string Message de succès ou d'erreur
      */
-    public function RemoveOffer($id) {
-        $offer = $this->offerModel->RemoveOffer($id);
-        if (!$offer) {
-            return "Offre Introuvable";
-        } else {
-            return "Offre Supprimée";
+    public function removeOffer($id) {
+        // Vérifier si l'offre existe
+        if (!$this->offerModel->getOffer('Id_Offer', $id)) {
+            return "Offre introuvable!";
         }
+        
+        $result = $this->offerModel->removeOffer($id);
+        return $result ? "Offre supprimée avec succès!" : "Échec de la suppression de l'offre.";
     }
 
     /**
@@ -90,13 +89,9 @@ class OfferController {
      * 
      * @return string Message de succès ou d'erreur
      */
-    public function RemoveAllOffer() {
-        $offers = $this->offerModel->RemoveAllOffer();
-        if (!$offers) {
-            return "Offre(s) Introuvable(s)";
-        } else {
-            return "Toutes les offres sont supprimées";
-        }
+    public function removeAllOffers() {
+        $result = $this->offerModel->removeAllOffers();
+        return $result ? "Toutes les offres ont été supprimées avec succès!" : "Échec de la suppression des offres.";
     }
 
     /**
@@ -106,19 +101,23 @@ class OfferController {
      * @param array $newdata Nouvelles données de l'offre
      * @return string Message de succès ou d'erreur
      */
-    public function EditOffer($id, $newdata) {
-        $verif = ['TitleOffer', 'SkillsOffer', 'AddressOffer', 'DateOffer', 'ActivitySectorOffer', 'SalaryOffer', 'DescriptionOffer'];
-        foreach ($verif as $index) {
-            if (empty($newdata[$index])) {
-                return "Contenu non complété !";
+    public function editOffer($id, $newdata) {
+        // Vérifier si l'offre existe
+        if (!$this->offerModel->getOffer('Id_Offer', $id)) {
+            return "Offre introuvable!";
+        }
+        
+        $requiredFields = ['Title_Offer', 'Skills_Offer', 'Address_Offer', 'Date_Offer', 
+                           'ActivitySector_Offer', 'Salary_Offer', 'Description_Offer'];
+        
+        foreach ($requiredFields as $field) {
+            if (empty($newdata[$field])) {
+                return "Le champ '$field' est requis!";
             }
         }
-        $offer = $this->offerModel->EditOffer($id, $newdata);
-        if (!$offer) {
-            return "Échec de la Modification";
-        } else {
-            return "Modification Réussie !";
-        }
+        
+        $result = $this->offerModel->editOffer($id, $newdata);
+        return $result ? "Offre modifiée avec succès!" : "Échec de la modification de l'offre.";
     }
 }
 ?>

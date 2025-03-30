@@ -5,7 +5,8 @@ namespace app\Controller;
 require_once __DIR__ . '/../../config/ConfigDatabase.php';
 require_once __DIR__ . '/../Model/NotesModel.php';
 
-use app\Model\Notes;
+use app\Model\NotesModel;
+use PDO;
 
 /**
  * Contrôleur pour la gestion des notes
@@ -18,8 +19,8 @@ class NotesController {
      * 
      * @param PDO $pdo Instance de connexion à la base de données
      */
-    public function __construct($pdo) {
-        $this->notesModel = new Notes($pdo);
+    public function __construct(PDO $pdo) {
+        $this->notesModel = new NotesModel($pdo);
     }
 
     /**
@@ -28,13 +29,9 @@ class NotesController {
      * @param int $id Identifiant de la note
      * @return array|string Données de la note ou message d'erreur
      */
-    public function GetNotes($id) {
-        $notes = $this->notesModel->GetNotes($id);
-        if (!$notes) {
-            return "La note n'existe pas !";
-        } else {
-            return $notes;
-        }
+    public function getNote($id) {
+        $note = $this->notesModel->getNote('Id_Notes', $id);
+        return $note ? $note : "La note n'existe pas !";
     }
 
     /**
@@ -42,13 +39,9 @@ class NotesController {
      * 
      * @return array|string Liste des notes ou message d'erreur
      */
-    public function GetAllNotes() {
-        $notes = $this->notesModel->GetAllNotes();
-        if (!$notes) {
-            return "Aucune Note Trouvée !";
-        } else {
-            return $notes;
-        }
+    public function getAllNotes() {
+        $notes = $this->notesModel->getAllNotes();
+        return !empty($notes) ? $notes : "Aucune Note Trouvée !";
     }
     
     /**
@@ -57,19 +50,17 @@ class NotesController {
      * @param array $newdata Données de la nouvelle note
      * @return string Message de succès ou d'erreur
      */
-    public function createNotes($newdata) {
-        $verif = ['Note', 'Comment'];
-        foreach ($verif as $index) {
-            if (empty($newdata[$index])) {
-                return "Contenu non complété !";
+    public function createNote($newdata) {
+        $requiredFields = ['Note', 'Comment'];
+        
+        foreach ($requiredFields as $field) {
+            if (empty($newdata[$field])) {
+                return "Le champ '$field' est requis!";
             }
         }
-        $notes = $this->notesModel->StoreNotes($newdata);
-        if (!$notes) {
-            return "Échec de la création";
-        } else {
-            return "Note Créée !";
-        }
+        
+        $result = $this->notesModel->storeNote($newdata);
+        return $result ? "Note Créée !" : "Échec de la création";
     }
 
     /**
@@ -78,13 +69,14 @@ class NotesController {
      * @param int $id Identifiant de la note à supprimer
      * @return string Message de succès ou d'erreur
      */
-    public function RemoveNotes($id) {
-        $notes = $this->notesModel->RemoveNotes($id);
-        if (!$notes) {
+    public function removeNote($id) {
+        // Vérifier si la note existe
+        if (!$this->notesModel->getNote('Id_Notes', $id)) {
             return "Note Introuvable";
-        } else {
-            return "Note Supprimée";
         }
+        
+        $result = $this->notesModel->removeNote($id);
+        return $result ? "Note Supprimée" : "Échec de la suppression";
     }
 
     /**
@@ -92,13 +84,9 @@ class NotesController {
      * 
      * @return string Message de succès ou d'erreur
      */
-    public function RemoveAllNotes() {
-        $notes = $this->notesModel->RemoveAllNotes();
-        if (!$notes) {
-            return "Note(s) Introuvable(s)";
-        } else {
-            return "Toutes les notes sont supprimées";
-        }
+    public function removeAllNotes() {
+        $result = $this->notesModel->removeAllNotes();
+        return $result ? "Toutes les notes sont supprimées" : "Note(s) Introuvable(s)";
     }
 
     /**
@@ -108,19 +96,22 @@ class NotesController {
      * @param array $newdata Nouvelles données de la note
      * @return string Message de succès ou d'erreur
      */
-    public function EditNotes($id, $newdata) {
-        $verif = ['Note', 'Comment'];
-        foreach ($verif as $index) {
-            if (empty($newdata[$index])) {
-                return "Contenu non complété !";
+    public function editNote($id, $newdata) {
+        // Vérifier si la note existe
+        if (!$this->notesModel->getNote('Id_Notes', $id)) {
+            return "Note Introuvable";
+        }
+        
+        $requiredFields = ['Note', 'Comment'];
+        
+        foreach ($requiredFields as $field) {
+            if (empty($newdata[$field])) {
+                return "Le champ '$field' est requis!";
             }
         }
-        $notes = $this->notesModel->EditNotes($id, $newdata);
-        if (!$notes) {
-            return "Échec de la Modification";
-        } else {
-            return "Modification Réussie !";
-        }
+        
+        $result = $this->notesModel->editNote($id, $newdata);
+        return $result ? "Modification Réussie !" : "Échec de la Modification";
     }
 }
 ?>
