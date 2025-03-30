@@ -21,13 +21,6 @@ class Controller extends Abstract_Controller {
     }
 
     public function welcomePage() {
-        $this->accountController->storeAccount('Robin', 'Thomas', 'Thomas_Admin@gmail.com', 'T12345678');
-        $this->accountController->storeAccount('Ledoux', 'Bastien', 'Bastien_Admin@gmail.com', 'B12345678');
-        $this->accountController->storeAccount('Borel', 'Baptiste', 'BaptisteBorel_Admin@gmail.com', 'BB12345678');
-        $this->accountController->storeAccount('Selle', 'Baptiste', 'BaptisteSelle_Admin@gmail.com', 'BS12345678');
-
-
-
         echo $this->templateEngine->render('Page_Connection.twig');
     }
 
