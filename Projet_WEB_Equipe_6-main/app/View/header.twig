@@ -1,9 +1,26 @@
+{# header.twig #}
+
 <header>
-    <nav>
-        <ul>
-            <li><a href="/">Accueil</a></li>
-            <li><a href="/login">Connexion</a></li>
-            <li><a href="/register">Inscription</a></li>
-        </ul>
-    </nav>
+    <img src="/assets/img/Logo_InternShip.svg" alt="logo" class="logo"/>
+	<div class="burger-menu" onclick="toggleMenu()">
+		☰
+	</div>
+	<div class="header-container" id="header-container">
+		
+
+		<div class="header-links">
+			<nav>
+				<a href="#">Accueil</a>
+				<a href="#">Offres</a>
+				<a href="#">Entreprises</a>
+				<a href="#">Wishlist</a>
+			</nav>
+		</div>
+		<div class="header-actions">
+			<a href="#">
+				<img src="/assets/img/Windows_Settings_app_icon_2.png" alt="parametre" class="parametre" onclick="create()"/>
+			</a>
+			<button class="mon-compte">Mon Compte</button>
+		</div>
+	</div>
 </header>

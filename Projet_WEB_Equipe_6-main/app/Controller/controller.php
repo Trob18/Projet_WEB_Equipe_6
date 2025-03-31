@@ -20,11 +20,8 @@ class Controller extends Abstract_Controller {
         $this->accountController = new AccountController($this->pdo);
     }
 
-    public function welcomePage() {/*
-        $this->accountController->createAccount('Robin', 'Thomas', 'Thomas_Admin@gmail.com', 'T12345678');
-        $this->accountController->createAccount('Ledoux', 'Bastien', 'Bastien_Admin@gmail.com', 'B12345678');
-        $this->accountController->createAccount('Borel', 'Baptiste', 'BaptisteBorel_Admin@gmail.com', 'BB12345678');
-        $this->accountController->createAccount('Selle', 'Baptiste', 'BaptisteSelle_Admin@gmail.com', 'BS12345678');*/
+    public function welcomePage() {
+
 
 
 
