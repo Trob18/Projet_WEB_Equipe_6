@@ -1,0 +1,118 @@
+.main-account {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+
+.main-account .form-account {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    margin-bottom: 20px;
+
+}
+
+
+
+
+.main-account .container {
+    background: rgba(255, 255, 255, 0.75);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    text-align: center;
+}
+
+.main-account .pp-txt{
+    position: absolute;
+    top: -70px; /* Ajustez cette valeur pour positionner le texte au-dessus de l'image */
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    width: 100%;}
+
+
+    .main-account .profile-picture {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 15px;
+    margin-top: 50px;
+}
+
+.main-account .profile-picture img {
+    width: 150px;
+    height: 150px;
+    margin-top: -50px;
+    margin-bottom: 50px;
+    border-radius: 50%;
+    background: #ddd;
+}
+
+.main-account .edit-btn {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background: white;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.main-account .form-account {
+    display: flex;
+    flex-direction: column;
+}
+
+.main-account label {
+    text-align: left;
+    font-size: 14px;
+    margin: 5px 0 2px;
+}
+
+
+.main-account .btn-primary {
+    background: #004090;
+    width: 150px;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.main-account .btn-danger {
+    
+    background: #DC3545;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 5px;
+    width: 100px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.main-account .blue_txt {
+    color: #004090;
+}
+
+.main-account .title {
+    font-size: large;
+}
+
+
+.main-account .form-group {
+    gap: 10px;
+    display: flex;
+
+}

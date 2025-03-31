@@ -222,7 +222,7 @@ body {
         cursor: pointer;
         white-space: nowrap;
         transition: background-color 0.3s;
-        width: 80%;
+        width: 100%;
         text-align: center; /* Centrer le texte du bouton */
     }
     
@@ -233,21 +233,6 @@ body {
     
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
