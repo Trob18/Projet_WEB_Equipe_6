@@ -4,15 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Mon Site{% endblock %}</title>
-    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/LIVRABLE/assets/style.css">
+    <link rel="stylesheet" href="/LIVRABLE/assets/style_Home.css">
 </head>
 <body>
-
+    {% include 'header.twig' %}
 
     <main>
         {% block content %}{% endblock %}
     </main>
 
-
+    {% include 'footer.twig' %}
 </body>
+    <script src="assets/js/header.js" defer></script>
 </html>
