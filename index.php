@@ -31,7 +31,23 @@ switch ($page) {
     case 'login':
         echo $controller->loginPage();
         break;
-    
+    // case 'Accueil':
+    //     echo $controller->//fonction dans controller.php
+    //     break;
+    // case 'Offer':
+    //     echo $controller->//fonction dans controller.php
+    //     break;
+    // case 'Company':
+    //     echo $controller->//fonction dans controller.php
+    //     break;
+    // case 'Wishlist':
+    //     echo $controller->//fonction dans controller.php
+    //     break;
+    // case 'Settings':
+    //     echo $controller->//fonction dans controller.php
+    //     break;
+    // case 'Account':
+    //     echo $controller->//fonction dans controller.php
     default:
         echo '404 Not Found';
         break;
