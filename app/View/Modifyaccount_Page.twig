@@ -1,0 +1,46 @@
+{% extends 'base.twig' %}
+
+{% block title %}Modify Account{% endblock %}
+
+{% block content %}
+
+	<main class="main-modifyaccount">
+
+		<div class="container">
+			<h2>Voici le compte :</h2>
+
+			<div class="profile-picture">
+				<label class="pp-txt">Photo de profil (cliquez dessus pour la changer) :</label>
+				<img id="profile-img" src="assets/img/pp.jpg" alt="Photo de profil" style="cursor: pointer;">
+				<input type="file" id="file-input" accept="image/png, image/jpeg" style="display: none;">
+			</div>
+			<form class="test">
+				<label for="description">Pour ajouter des détails au profil, décrivez le parcours ici :</label>
+				<textarea id="description" name="description" placeholder="Ajoutez des détails" value="{{ details }}" required></textarea>
+
+				<label for="etude">Niveau d'étude :</label>
+				<input type="text" id="etude" name="etude" placeholder="Son niveau d'étude" value="{{ school }}" >
+
+				<label for="adresse">Adresse :</label>
+				<input type="text" id="adresse" name="adresse" placeholder="Son adresse" value="{{ address }}">
+
+				<label for="telephone">Numéro de téléphone :</label>
+				<input type="tel" id="telephone" name="telephone" placeholder="Son numéro de téléphone" pattern="[0-9]{10}" value="{{ phone }}">
+
+				<label for="password">Mot de passe :</label>
+				<input type="password" id="password" name="password" placeholder="Nouveau mot de passe" minlength="6" value="{{ password }}">
+
+				<label for="confirm-password">Confirmation du mot de passe :</label>
+				<input type="password" id="confirm-password" name="confirm-password" placeholder="Confirmez du nouveau mot de passe" minlength="6" value="{{ password2 }}">
+
+                <label for="confirm-password">{{error}}</label>
+
+				<button type="submit" name="update_account" class="btn-primary">Enregistrement</button>
+				<button type="reset" name="delete_account" class="btn-danger">Supprimer</button>
+			</form>
+		</div>
+
+	</main>
+
+
+{% endblock %}

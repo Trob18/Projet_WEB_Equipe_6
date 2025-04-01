@@ -1,0 +1,15 @@
+{% extends 'base.twig' %}
+
+{% block title %}Company_Details{% endblock %}
+
+{% block content %}
+    <main class="Company">
+        <section class="Company_Recherche_Utilisateur">
+                <h1>{{ company.Name_Company }}</h1>
+                <img src="assets/img/{{ company.Image_Company }}" alt="Logo de {{ company.Name_Company }}">
+                <p>Email: {{ company.Email_Company }}</p>
+                <p>Adresse: {{ company.Address_Company }}</p>
+                <p>Description: {{ company.Description_Company }}</p>
+        </section>
+    </main>
+{% endblock %}

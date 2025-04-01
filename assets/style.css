@@ -34,7 +34,7 @@ body {
   header nav a {
     text-decoration: none;
     color: black;
-    font-size: 16px;
+    font-size: 20px;
     padding: 5px 10px;
     border-radius: 5px;
     transition: background-color 0.3s;
@@ -162,7 +162,7 @@ body {
         top: 0;
         right: -200px;
         width: 200px;
-        height: 300px; /* Prendre toute la hauteur */
+        height: 350px; /* Prendre toute la hauteur */
         background-color: rgb(232, 232, 232);
         box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
         display: flex;
@@ -222,7 +222,7 @@ body {
         cursor: pointer;
         white-space: nowrap;
         transition: background-color 0.3s;
-        width: 80%;
+        width: 100%;
         text-align: center; /* Centrer le texte du bouton */
     }
     

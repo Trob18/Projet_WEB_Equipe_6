@@ -1,0 +1,217 @@
+/* -------- BODY -------- */
+body.Account {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-image: url("./img/Blured_Background(upscaled).jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* -------- HEADER -------- */
+header.Account {
+    background-color: rgba(255, 255, 255, 0.4);
+    z-index: 1;
+    position: relative;
+    width: 100%;
+    padding: 10px 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* -------- RECHERCHE UTILISATEUR -------- */
+.Account_Recherche_Utilisateur {
+    width: 50%;
+    background-color: rgba(224, 231, 234, 0.6667);
+    border-radius: 12px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    text-align: center;
+    padding: 20px;
+}
+#img_search{
+    max-width: 30%;
+}
+
+.Account_Barre_Recherche {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 10px;
+}
+
+.Account_Barre_Recherche input {
+    flex: 1;
+    min-width: 150px;
+    padding: 10px;
+    border: 2px solid rgba(6, 71, 137, 0.9);
+    border-radius: 5px;
+}
+
+#Account_Rechercher {
+    padding: 10px;
+    background-color: rgba(6, 71, 137, 0.9);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: auto;
+    min-width: 120px;
+}
+
+#Account_Rechercher:hover {
+    background-color: rgba(6, 71, 137, 1);
+}
+
+/* -------- LISTE UTILISATEURS -------- */
+.Account_list {
+    width: 90%;
+    max-width: 100%;
+    background-color: rgba(224, 231, 234, 0.6667);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    display: flex;
+    justify-content: center;
+    overflow-x: hidden;
+}
+
+.Account_ligne {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 20px;
+    width: 100%;
+    max-width: 100%;
+}
+
+.Account_ligne a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Style des cartes utilisateurs */
+.Account_card {
+    background-color: #eff5f7;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    padding: 10px;
+    width: 120px;
+    height: 120px;
+}
+
+.Account_card img {
+    max-width: 80px;
+    max-height: 80px;
+    margin-bottom: 10px;
+}
+
+.Account_list p {
+    margin-top: 5px;
+    font-size: 15px;
+    color: black;
+}
+
+/* -------- PAGINATION -------- */
+.Account_pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.Account_pagination a {
+    text-decoration: none;
+    background-color: rgba(224, 231, 234, 0.8);
+    color: black;
+    border: 1px solid rgba(6, 71, 137, 0.5);
+    padding: 8px 12px;
+    margin: 5px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.Account_pagination a:hover,
+.Account_pagination a.active {
+    background-color: rgba(6, 71, 137, 0.9);
+    color: white;
+}
+
+/* -------- RESPONSIVE DESIGN -------- */
+@media screen and (max-width: 1024px) {
+    .Account_Recherche_Utilisateur {
+        width: 90%;
+    }
+
+    .Account_list {
+        width: 95%;
+    }
+
+    .Account_Barre_Recherche {
+        flex-direction: column;
+    }
+
+    .Account_Barre_Recherche input {
+        width: 100%;
+    }
+
+    .Account_ligne {
+        grid-template-columns: repeat(3, minmax(120px, 1fr));
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .Account_ligne {
+        grid-template-columns: repeat(2, minmax(120px, 1fr));
+    }
+}
+
+
+
+
+
+/* -------- PAGINATION -------- */
+.Account_pagination {
+    display: flex;
+    justify-content: center; /* Centrer */
+    align-items: center;
+    margin-top: 20px;
+    width: 100%;
+    padding: 15px 0;
+    text-align: center;
+  }
+  
+  
+  .Account_pagination a {
+    text-decoration: none; /* Supprimer le soulignement */
+    background-color: rgba(224, 231, 234, 0.8);
+    color: black;
+    border: 1px solid rgba(6, 71, 137, 0.5);
+    padding: 8px 12px;
+    margin: 5px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .Account_pagination a:hover, 
+  .Account_pagination a.active {
+    background-color: rgba(6, 71, 137, 0.9);
+    color: white;
+  }
+  

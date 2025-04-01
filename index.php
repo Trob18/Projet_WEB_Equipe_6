@@ -31,23 +31,51 @@ switch ($page) {
     case 'login':
         echo $controller->loginPage();
         break;
-    // case 'Accueil':
-    //     echo $controller->//fonction dans controller.php
-    //     break;
+    case 'HOME':
+        echo $controller->homePage();
+        break;
+    case 'Account':
+        echo $controller->accountPage();
+       break;
+    case 'CreateAccount':
+        echo $controller->CreateAccount();
+        break;
+    case 'ModifyAccount':
+        echo $controller->ModifyAccount();
+        break;
+    case 'Search':
+        echo $controller->SearchAccount();
+        break;
+    
+    
+    
+    
+    case 'Search_Details':
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+        }
+        $controller->showSearch_Details($id);
+        break;
+
+
+
+
+
     // case 'Offer':
     //     echo $controller->//fonction dans controller.php
     //     break;
-    // case 'Company':
-    //     echo $controller->//fonction dans controller.php
-    //     break;
+    case 'Company':
+        echo $controller->Company(); //fonction dans controller.php
+        break;
+    case 'Company_Details':
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+        }
+        $controller->showCompanyDetails($id); //fonction dans controller.php
+        break;
     // case 'Wishlist':
     //     echo $controller->//fonction dans controller.php
     //     break;
-    // case 'Settings':
-    //     echo $controller->//fonction dans controller.php
-    //     break;
-    // case 'Account':
-    //     echo $controller->//fonction dans controller.php
     default:
         echo '404 Not Found';
         break;
