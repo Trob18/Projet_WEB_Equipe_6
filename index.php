@@ -34,7 +34,7 @@ switch ($page) {
         echo $controller->loginPage();
         break;
     case 'Accueil':
-        echo $controller->Accueil();
+        echo $controller->homePage();
         break;
     case 'Offer':
         echo $controller->offerPage(); 
