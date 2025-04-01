@@ -26,19 +26,67 @@
 				<label class="blue_txt">{{emailaccount}}</label>
 
 				<label class="title">Numéro de téléphone :</label>
-				<label class="blue_txt">+33
-					{{numberaccount}}</label>
+				<label class="blue_txt">+33{{numberaccount}}</label>
 
 			</form>
+
+			<!-- Mise en place des notes et des commentaires-->
+			<h2 class="blue_txt">Notes / Commentaire</h2>
+
+			<div class="container-note" method='POST'>
+				<div class="entreprises_intéressées">
+					<h3>Note :
+					</h3>
+					<p class="Accueil-infos-titre">{{noteglobal}}/5</p>
+					<div id="entreprises" class="entreprises-container"></div>
+				</div>
+				<button type="submit" name="note_post" class="btn-primary">Mettre une note</button>
+				<div class="entreprises_intéressées">
+					<h3>Commentaire :
+					</h3>
+					<section class="Company_list-entreprise">
+						<div class="Company_ligne">
+							{% for company in companies %}
+								<a href="?page=Accueil">
+									<div class="Company_entrep">
+										<img src="assets/img/{{ company.Image_Company }}"/>
+										<p>{{ company.Name_Company }}</p>
+									</div>
+								</a>
+							{% endfor %}
+						</div>
+					</section>
+					<div class="Company_pagination">
+						{% if company_page > 1 %}
+							<a href="?page=Company&company_page={{ company_page - 1 }}" class="prev">Précédent</a>
+						{% endif %}
+
+						{% for i in 1..totalPages %}
+							<a href="?page=Company&company_page={{ i }}" class="{% if i == company_page %}active{% endif %}">{{ i }}</a>
+						{% endfor %}
+
+						{% if company_page < totalPages %}
+							<a href="?page=Company&company_page={{ company_page + 1 }}" class="next">Suivant</a>
+						{% endif %}
+					</div>
+
+
+					<p class="Accueil-infos-titre">{{Note}}</p>
+					<div id="entreprises" class="entreprises-container"></div>
+				</div>
+				<button type="submit" name="commentary_post" class="btn-primary">Mettre un commentaire</button>
+			</div>
+
+
 		</div>
+
 
 		{% if idrole != 'Student' %}
 			<button type="submit" class="btn-primary">Ajouter Compte</button>
-			<button class="btn-primary" onclick="window.location.href='?page=ModifyAccount'"  >Modification</button>
+			<button class="btn-primary" onclick="window.location.href='?page=ModifyAccount'">Modification</button>
 			<button type="reset" class="btn-danger">Supprimer</button>
 		{% endif %}
 
+
 	</main>
-
-
 {% endblock %}

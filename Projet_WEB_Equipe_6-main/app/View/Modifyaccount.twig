@@ -11,7 +11,7 @@
 			<h2>Voici le compte :</h2>
 
 			<div class="profile-picture">
-				
+
 				<img id="profile-img" src="assets/img/pp.jpg" alt="Photo de profil" style="cursor: pointer;">
 				<input type="file" id="file-input" accept="image/png, image/jpeg" style="display: none;">
 			</div>
@@ -37,8 +37,11 @@
 
 				<label for="confirm-password">{{error}}</label>
 
-				<button type="submit" name="update_account" class="btn-primary">Enregistrement</button>
-				<button type="submit" name="delete_account" class="btn-danger">Supprimer</button>
+				<button type="SUBMIT" name="update_account" class="btn-primary">Enregistrement</button>
+				
+			</form>
+			<form method="POST">
+				<button type="submit" name="delete_account" class="btn-danger" >Supprimer</button>
 			</form>
 		</div>
 

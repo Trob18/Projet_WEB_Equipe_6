@@ -23,6 +23,8 @@ class NotesController {
         $notes = $this->notesModel->getAllNotes();
         return !empty($notes) ? $notes : "Aucune Note Trouvée !";
     }
+
+    
     
     public function createNote($newdata) {
         $requiredFields = ['Note', 'Comment'];
@@ -69,5 +71,19 @@ class NotesController {
         $result = $this->notesModel->editNote($id, $newdata);
         return $result ? "Modification Réussie !" : "Échec de la Modification";
     }
+
+
+
+
+
+
+    public function getAllNotesArg($argument) {
+        $notes = $this->notesModel->getAllNotesArg($argument);
+        return !empty($notes) ? $notes : "Aucune Note Trouvée !";
+    }
+
+
+
+
 }
 ?>

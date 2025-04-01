@@ -47,14 +47,12 @@ class AccountController {
 
     // Mettre à jour un compte
     public function editAccount($accountId, $newData) {
-
-
         // Vérifier si le compte existe
         if (!$this->accountModel->getAccount('Id_Account', $accountId)) {
             return "Compte introuvable!";
         }
 
-        $result = $this->accountModel->editAccount($accountId,  $newData);
+        $result = $this->accountModel->editAccount($accountId, $newData);
         return $result ? "Compte mis à jour avec succès!" : "Échec de la mise à jour du compte.";
     }
 

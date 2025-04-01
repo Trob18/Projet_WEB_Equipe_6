@@ -44,13 +44,13 @@ class Controller extends Abstract_Controller
     public function welcomePage()
     {
         echo $this->templateEngine->render('Page_Connection.twig');
+
     }
 
     public function loginPage()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $username = $_POST['email'] ?? '';
-            setcookie("email", $username, 0, "/");
             $password = $_POST['password'] ?? '';
 
 
@@ -81,6 +81,7 @@ class Controller extends Abstract_Controller
         }
     }
 
+
     public function AccountPage()
     {
         $username = $_COOKIE['email'] ?? '';
@@ -98,6 +99,32 @@ class Controller extends Abstract_Controller
             }
 
 
+            // baniere Note            
+
+            $limit = 10; // Nombre d'entreprises par page
+            $company_page = isset($_GET['company_page']) ? (int) $_GET['company_page'] : 1;
+            $offset = ($company_page - 1) * $limit;
+
+            $companies = $this->companyController->getCompaniesWithPagination($limit, $offset);
+            $totalCompanies = $this->companyController->getTotalCompanies();
+            $totalPages = ceil($totalCompanies / $limit);
+
+            $company = 'MediaPlus';
+
+            $id_company = $this->companyController->getCompany('Name_Company', $company, 'Id_Company');
+            $liste_note = $this->notesController->getAllNotesArg($id_company . " = Id_Company");
+            $note_global = 0;
+
+            foreach ($liste_note as $note) {
+                $note_global += $note["Note"];
+            }
+
+            //$liste_comment = 
+
+
+
+            // baniere 
+
             $Home_Page = [
                 'firstname' => $this->accountController->getAccount('Email_Account', $username, 'FirstName_Account'),
                 'lastname' => $this->accountController->getAccount('Email_Account', $username, 'LastName_Account'),
@@ -105,10 +132,16 @@ class Controller extends Abstract_Controller
                 'imageaccount' => $this->accountController->getAccount('Email_Account', $username, 'Image_Account'),
                 'descriptionaccount' => $this->accountController->getAccount('Email_Account', $username, 'Description_Account'),
                 'numberaccount' => $this->accountController->getAccount('Email_Account', $username, 'PhoneNumber_Account'),
-                'idrole' => $role
+                'idrole' => $role,
 
+                'companies' => $companies,
+                'company_page' => $company_page,
+                'totalPages' => $totalPages,
+                'noteglobal' => $note_global / count($liste_note)
 
             ];
+
+
 
 
 
@@ -145,45 +178,45 @@ class Controller extends Abstract_Controller
             $error = '';
 
             $id = $this->accountController->getAccount('Email_Account', $username, 'Id_Account');
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                
+            if (!empty($_POST)) {
+                if (isset($_POST['update_account'])) {
 
-                $username = $_POST['email'] ?? ($_COOKIE['email'] ?? '');
-
-
-                $error = '';
-                $password = $_POST['password'] ?? '';
-                $password2 = $_POST['confirm-password'] ?? '';
-                if ($password != $password2) {
-                    $error = 'Different mot de passe mis';
-                    $_POST = [];
-                    echo $this->templateEngine->render('Modifyaccount.twig', ['error' => $error]);
-                    exit();
-                } else {
-                    $newData = [
-                        'Description_Account' => $_POST['details'] ?? '',
-                        'Studies_Account' => $_POST['school'] ?? '',
-                        'Address_Account' => $_POST['address'] ?? '',
-                        'PhoneNumber_Account' => $_POST['phone'] ?? '',
-                        'Password_Account' => $password
-                    ];
-
-                    $result = $this->accountController->editAccount($id, $newData);
-                    $_POST = [];
+                    $username = $_POST['email'] ?? ($_COOKIE['email'] ?? '');
 
 
-                    header("Location: ?page=Account");
+                    $error = '';
+                    $password = $_POST['password'] ?? '';
+                    $password2 = $_POST['confirm-password'] ?? '';
+                    if ($password != $password2) {
+                        $error = 'Different mot de passe mis';
+                        $_POST = [];
+                        echo $this->templateEngine->render('Modifyaccount.twig', ['error' => $error]);
+                        exit();
+                    } else {
+                        $newData = [
+                            'Description_Account' => $_POST['details'] ?? '',
+                            'Studies_Account' => $_POST['school'] ?? '',
+                            'Address_Account' => $_POST['address'] ?? '',
+                            'PhoneNumber_Account' => $_POST['phone'] ?? '',
+                            'Password_Account' => $password
+                        ];
+
+                        $result = $this->accountController->editAccount($id, $newData);
+                        $_POST = [];
+
+
+                        header("Location: ?page=Account");
+                        exit();
+                    }
+                } 
+                elseif (isset($_POST['delete_account'])) {
+                    $this->accountController->removeAccount($id);
+                    echo $this->templateEngine->render('Page_Connection.twig', [
+                        'error' => 'Compte suprimer avec succès.'
+                    ]);
                     exit();
                 }
 
-
-            }
-            if (isset($_POST['delete_account'])) {
-                $this->accountController->removeAccount($id);
-                echo $this->templateEngine->render('Page_Connection.twig', [
-                    'error' => 'Compte suprimer avec succès.'
-                ]);
-                exit();
             }
             echo $this->templateEngine->render('Modifyaccount.twig', ['error' => $error]);
             exit();

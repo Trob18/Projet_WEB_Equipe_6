@@ -39,6 +39,8 @@ class NotesModel {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    
+
     public function storeNote($newdata){
         $stmt = $this->pdo->prepare("INSERT INTO notes (Note, Comment) VALUES (?, ?)");
         $result = $stmt->execute([$newdata['Note'], $newdata['Comment']]);
@@ -59,5 +61,17 @@ class NotesModel {
         $stmt = $this->pdo->prepare("UPDATE notes SET Note = ?, Comment = ? WHERE Id_Notes = ?");
         return $stmt->execute([$newdata['Note'], $newdata['Comment'], $id]);
     }
+
+    public function getAllNotesArg($argument){
+        $stmt = $this->pdo->prepare("SELECT * FROM notes WHERE $argument ");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
+
+
+
+
+
+
 ?>
