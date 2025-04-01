@@ -3,22 +3,20 @@
 namespace app\Controller;
 
 
+require_once __DIR__ . '/../../config/ConfigDatabase.php';
 require_once __DIR__ . '/../Model/AccountModel.php';
-use app\Model\AccountModel;
-use PDO;
-
 
 class AccountController {
     private $accountModel;
-    
-    public function __construct(PDO $pdo) {
-        $this->accountModel = new AccountModel($pdo); // Initialisation correcte
+
+    public function __construct($pdo) {
+        $this->accountModel = new Account($pdo);
     }
 
     // Créer un compte
     public function createAccount($lastName, $firstName, $email, $password) {
         // Vérifier si l'email existe déjà
-        if ($this->accountModel->getAccount('Email_Account', $email)) {
+        if ($this->accountModel->getAccountByEmail($email)) {
             return "Email déjà utilisé!";
         }
         
@@ -27,17 +25,16 @@ class AccountController {
         return $result ? "Compte créé avec succès!" : "Échec de la création du compte.";
     }
 
-    // Obtenir un compte par une colonne spécifique
-    public function getAccount($column, $value, $selectColumn = '*') {
-        // Correction de la syntaxe de l'appel à getAccount
-        $account = $this->accountModel->getAccount($column, $value, $selectColumn);
+    // Obtenir un compte par email
+    public function getAccount($email) {
+        $account = $this->accountModel->getAccountByEmail($email);
         return $account ? $account : "Compte introuvable!";
     }
 
     // Supprimer un compte par ID
     public function removeAccount($accountId) {
-        // Vérifier si le compte existe
-        if (!$this->accountModel->getAccount('Id_Account', $accountId)) {
+        $account = $this->accountModel->getAccountById($accountId);
+        if (!$account) {
             return "Compte introuvable!";
         }
 
@@ -47,8 +44,8 @@ class AccountController {
 
     // Mettre à jour un compte
     public function editAccount($accountId, $newLastName, $newFirstName, $newEmail, $newPassword) {
-        // Vérifier si le compte existe
-        if (!$this->accountModel->getAccount('Id_Account', $accountId)) {
+        $account = $this->accountModel->getAccountById($accountId);
+        if (!$account) {
             return "Compte introuvable!";
         }
 
@@ -59,6 +56,7 @@ class AccountController {
     // Récupérer tous les comptes
     public function getAllAccounts() {
         $accounts = $this->accountModel->getAllAccounts();
-        return !empty($accounts) ? $accounts : "Aucun compte trouvé.";
+        return $accounts ? $accounts : "Aucun compte trouvé.";
     }
 }
+?>

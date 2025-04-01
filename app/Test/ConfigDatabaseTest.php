@@ -1,23 +1,45 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\Assert; 
-require_once __DIR__ . '/../../config/ConfigDatabase.php'; 
+use app\Config\ConfigDatabase;
+require_once __DIR__ . '/../../config/ConfigDatabase.php';
 
-class ConfigDatabaseTest extends TestCase
+class ConfigDatabaseTest extends TestCase 
 {
-    // Vérifie que la connexion fonctionne et est une instance de PDO
-    public function testConnection()
+    public function testGetConnectionString() 
     {
-        $pdo = require __DIR__ . '/../../config/ConfigDatabase.php';
-        Assert::assertInstanceOf(PDO::class, $pdo, "La connexion doit retourner une instance de PDO.");
+        $config = new ConfigDatabase('monserveur', 'mabase');
+        
+        $this->assertEquals('mysql:host=monserveur;dbname=mabase', $config->getConnectionString());
     }
-
-    // Vérifie que l'attribut ERRMODE est bien défini
-    public function testErrMode()
+    public function testGetters() 
     {
-        $pdo = require __DIR__ . '/../../config/ConfigDatabase.php';
-        Assert::assertEquals(PDO::ERRMODE_EXCEPTION, $pdo->getAttribute(PDO::ATTR_ERRMODE), 
-            "L'attribut PDO::ATTR_ERRMODE doit être défini sur PDO::ERRMODE_EXCEPTION.");
+        $config = new ConfigDatabase('monserveur', 'mabase', 'utilisateur', 'motdepasse');
+        
+        $this->assertEquals('utilisateur', $config->getUsername());
+        $this->assertEquals('motdepasse', $config->getPassword());
+    }
+    
+    public function testOptions() 
+    {
+        $config = new ConfigDatabase();
+        $options = $config->getOptions();
+        
+        $this->assertArrayHasKey(\PDO::ATTR_ERRMODE, $options);
+        $this->assertEquals(\PDO::ERRMODE_EXCEPTION, $options[\PDO::ATTR_ERRMODE]);
+    }
+    
+    public function testConstructeurPersonnalise() 
+    {
+        $options = [\PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC];
+        $config = new ConfigDatabase('serveur2', 'db2', 'user2', 'pass2', $options);
+        
+        $this->assertEquals('serveur2;dbname=db2', substr($config->getConnectionString(), 11));
+        $this->assertEquals('user2', $config->getUsername());
+        $this->assertEquals('pass2', $config->getPassword());
+        
+        $optionsResultat = $config->getOptions();
+        $this->assertArrayHasKey(\PDO::ATTR_DEFAULT_FETCH_MODE, $optionsResultat);
+        $this->assertEquals(\PDO::FETCH_ASSOC, $optionsResultat[\PDO::ATTR_DEFAULT_FETCH_MODE]);
     }
 }

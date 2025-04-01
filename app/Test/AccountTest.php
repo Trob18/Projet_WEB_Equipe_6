@@ -2,11 +2,15 @@
 
 namespace app\Test;
 
-
 use PHPUnit\Framework\TestCase;
 use app\Model\Account;
 use PDO;
-require_once __DIR__ . '/../../config/ConfigDatabase.php';
+
+// Utilisation d'une inclusion conditionnelle pour éviter les redéclarations
+if (!class_exists('app\Config\ConfigDatabase')) {
+    require_once __DIR__ . '/../../config/ConfigDatabase.php';
+}
+
 require_once __DIR__ . '/../Model/AccountModel.php';
 
 class AccountTest extends TestCase {
@@ -15,7 +19,10 @@ class AccountTest extends TestCase {
     private $accountController;
 
     protected function setUp(): void {
-        $this->pdo = require __DIR__ . '/../../config/ConfigDatabase.php'; 
+        // Connexion à la base de données sans réinclure le fichier
+        $config = new \app\Config\ConfigDatabase();
+        $this->pdo = $config->connect();
+        
         $this->account = new Account($this->pdo);
 
         // Suppression du compte de test s'il existe déjà
@@ -50,8 +57,8 @@ class AccountTest extends TestCase {
     }
 
     public function testGetAccountByEmail() {
-        // Récupération du compte par email avec la méthode getAccount
-        $account = $this->account->getAccount('Email_Account', 'johndoe@example.com');
+        // Récupération du compte par email
+        $account = $this->account->getAccountByEmail('johndoe@example.com');
 
         // Validation des informations du compte récupéré
         $this->assertIsArray($account);
@@ -81,15 +88,26 @@ class AccountTest extends TestCase {
         // Vérification que le compte n'existe plus dans la base de données
         $this->assertEmpty($account);
     }
-
     public function testGetAllAccounts() {
-        // Récupération du compte de John Doe par son email
-        $account = $this->account->getAccount('Email_Account', 'johndoe@example.com');
+        // Récupération de tous les comptes
+        $accounts = $this->account->getAllAccounts();
     
-        // Vérification que le compte est bien récupéré
-        $this->assertNotEmpty($account);
-        $this->assertEquals('Doe', $account['LastName_Account']);
-        $this->assertEquals('John', $account['FirstName_Account']);
-        $this->assertEquals('johndoe@example.com', $account['Email_Account']);
+        // Vérification que l'on récupère des comptes
+        $this->assertNotEmpty($accounts);
+        $this->assertGreaterThan(0, count($accounts)); // Vérifier qu'il y a au moins un compte
+        
+        // Rechercher le compte de test dans le tableau retourné
+        $found = false;
+        foreach ($accounts as $account) {
+            if ($account['Email_Account'] === 'johndoe@example.com') {
+                $found = true;
+                break;
+            }
+        }
+        
+        // Vérifier que le compte de test est présent dans la liste
+        $this->assertTrue($found, "Le compte de test avec l'email 'johndoe@example.com' n'a pas été trouvé");
     }
+    
 }
+?>

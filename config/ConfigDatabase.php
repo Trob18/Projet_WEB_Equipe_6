@@ -1,22 +1,53 @@
 <?php
+
 namespace app\Config;
 
 use PDO;
 use PDOException;
 
 class ConfigDatabase {
-    private $pdo;
+    private $host;
+    private $dbname;
+    private $username;
+    private $password;
+    private $options;
 
-    public function __construct() {
+    public function __construct($host = 'localhost', $dbname = 'projet_web', $username = 'root', $password = '', $options = []) {
+        $this->host = $host;
+        $this->dbname = $dbname;
+        $this->username = $username;
+        $this->password = $password;
+        $this->options = $options + [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
+    }
+
+    public function getConnectionString() {
+        return "mysql:host={$this->host};dbname={$this->dbname}";
+    }
+
+    public function getUsername() {
+        return $this->username;
+    }
+
+    public function getPassword() {
+        return $this->password;
+    }
+
+    public function getOptions() {
+        return $this->options;
+    }
+
+    public function connect() {
         try {
-            $this->pdo = new PDO('mysql:host=localhost;dbname=livrableweb', 'root', '');
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $pdo = new PDO(
+                $this->getConnectionString(),
+                $this->getUsername(),
+                $this->getPassword(),
+                $this->getOptions()
+            );
+            return $pdo;
         } catch (PDOException $e) {
-            die("Erreur de connexion : " . $e->getMessage());
+            throw new PDOException("Erreur de connexion : " . $e->getMessage());
         }
     }
-
-    public function getConnection() {
-        return $this->pdo;
-    }
 }
+?>
