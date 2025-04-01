@@ -31,15 +31,15 @@ switch ($page) {
     case 'login':
         echo $controller->loginPage();
         break;
-    // case 'Accueil':
-    //     echo $controller->//fonction dans controller.php
-    //     break;
+     case 'Accueil':
+         echo $controller->Accueil();//fonction dans controller.php
+         break;
     // case 'Offer':
     //     echo $controller->//fonction dans controller.php
     //     break;
-    // case 'Company':
-    //     echo $controller->//fonction dans controller.php
-    //     break;
+    case 'Company':
+       echo $controller->Company();//fonction dans controller.php
+        break;
     // case 'Wishlist':
     //     echo $controller->//fonction dans controller.php
     //     break;
@@ -53,24 +53,3 @@ switch ($page) {
         break;
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
