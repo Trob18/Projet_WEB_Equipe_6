@@ -109,5 +109,3 @@ class AccountModel {
         return $stmt->execute($params);
     }
 }
-
-
