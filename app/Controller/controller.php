@@ -47,7 +47,6 @@ class Controller extends abstract_controller {
     public function offerPage() {
         $companies = $this->companyController->getAllCompany();
         
-        // Si le formulaire a été soumis
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $newdata = [
                 'Title_Offer' => $_POST['Title_Offer'] ?? null,
@@ -60,16 +59,21 @@ class Controller extends abstract_controller {
             ];
             $company = $this->companyController->getCompany('Id_Company', $newdata['Id_Company']);
             $result = $this->offerController->createOffer($newdata);
-            var_dump($result);
+            if ($result) {
+                header("Location: " . $_SERVER['REQUEST_URI']);
+                exit;
+        }}
+        $offers = $this->offerController->getAllOffers();
+        foreach ($offers as &$offer) {
+            $company = $this->companyController->getCompany('Id_Company', $offer['Id_Company']);
+            $offer['Company_Name'] = $company['Name_Company'] ?? 'Non spécifié';
         }
-    
-        // Récupérer toutes les offres
-        $offers = $this->offerController->getAllOffers(); // Utilisation de $this->offerController
     
         // Rendu de la vue avec Twig
         return $this->templateEngine->render('Offer_Page.twig', [
             'offers' => $offers,
             'companies' => $companies,
+            
         ]);
     }
     
