@@ -60,11 +60,9 @@ class Controller extends Abstract_Controller {
             
             ];
 
-
-
-
+            
                 echo $this->templateEngine->render('Home_Page.twig', $Home_Page);
-                exit();            
+                exit();
             } else {
                 // Afficher un message d'erreur et recharger la page de connexion
                 echo $this->templateEngine->render('Page_Connection.twig', [
@@ -74,4 +72,27 @@ class Controller extends Abstract_Controller {
             }
         }
     }
+    public function Company() {
+        $limit = 10; // Nombre d'entreprises par page
+        $company_page = isset($_GET['company_page']) ? (int)$_GET['company_page'] : 1;
+        $offset = ($company_page - 1) * $limit;
+    
+        $companies = $this->companyController->getCompaniesWithPagination($limit, $offset);
+        $totalCompanies = $this->companyController->getTotalCompanies();
+        $totalPages = ceil($totalCompanies / $limit);
+    
+        echo $this->templateEngine->render('Company.twig', [
+            'companies' => $companies,
+            'company_page' => $company_page,
+            'totalPages' => $totalPages
+        ]);
+        exit();
+    }
+    
+    
+
+    public function Accueil() {
+        echo $this->templateEngine->render('Accueil.twig');
+    }
+    
 }

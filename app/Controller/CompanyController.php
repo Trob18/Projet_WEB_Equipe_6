@@ -35,7 +35,7 @@ class CompanyController
     // Supprimer un compte par ID
     public function removeCompany($IdCompany)
     {
-        $account = $this->CompanyModel->getCompanyById($IdCompany);
+        $account = $this->CompanyModel->getCompany('Id_Company', $IdCompany);
         if (!$account) {
             return false; //"Company introuvable!"
         }
@@ -68,7 +68,8 @@ class CompanyController
     // Mettre à jour un compte
     public function editCompany($IdCompany, $newData)
     {
-        $account = $this->CompanyModel->getCompanyById($IdCompany);
+        $account = $this->CompanyModel->getCompany('Id_Company', $IdCompany);
+
         if (!$account) {
             return false; //"Company introuvable!"
         }
@@ -77,6 +78,13 @@ class CompanyController
         return $result ? true : false; //"Company mis à jour avec succès!" : "Échec de la mise à jour du Company."
     }
 
+    public function getCompaniesWithPagination($limit, $offset)
+    {
+        return $this->CompanyModel->getCompaniesWithPagination($limit, $offset);
+    }
 
+    public function getTotalCompanies()
+    {
+        return $this->CompanyModel->getTotalCompanies();
+    }
 }
-?>
