@@ -42,10 +42,12 @@ class NotesModel {
     
 
     public function storeNote($newdata){
-        $stmt = $this->pdo->prepare("INSERT INTO notes (Note, Comment) VALUES (?, ?)");
-        $result = $stmt->execute([$newdata['Note'], $newdata['Comment']]);
+        $stmt = $this->pdo->prepare("INSERT INTO notes (Note, Id_Account,Id_Company) VALUES (?, ?, ?)");
+        $result = $stmt->execute([$newdata[0], $newdata[1], $newdata[2]]);
         return $result ? $this->pdo->lastInsertId() : false;
     }
+
+
 
     public function removeNote($id){
         $stmt = $this->pdo->prepare("DELETE FROM notes WHERE Id_Notes = :id");

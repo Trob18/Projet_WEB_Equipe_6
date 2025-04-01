@@ -52,6 +52,8 @@ class Controller extends Abstract_Controller
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $username = $_POST['email'] ?? '';
             $password = $_POST['password'] ?? '';
+            setcookie("email", $username, time() + 3600, "/");
+
 
 
             $account = $this->accountController->getAccount('Email_Account', $username, 'Password_Account');
@@ -85,11 +87,12 @@ class Controller extends Abstract_Controller
     public function AccountPage()
     {
         $username = $_COOKIE['email'] ?? '';
-
+        $error = '';
 
         $account = $this->accountController->getAccount('Email_Account', $username, 'Password_Account');
         if ($account) {
             $idrole = $this->accountController->getAccount('Email_Account', $username, 'Id_Roles');
+            $role = '';
             if ($idrole == 1) {
                 $role = 'Admin';
             } elseif ($idrole == 2) {
@@ -99,7 +102,11 @@ class Controller extends Abstract_Controller
             }
 
 
-            // baniere Note            
+            // baniere Note    
+
+            $id = $this->accountController->getAccount('Email_Account', $username, 'Id_Account');
+            
+
 
             $limit = 10; // Nombre d'entreprises par page
             $company_page = isset($_GET['company_page']) ? (int) $_GET['company_page'] : 1;
@@ -109,21 +116,39 @@ class Controller extends Abstract_Controller
             $totalCompanies = $this->companyController->getTotalCompanies();
             $totalPages = ceil($totalCompanies / $limit);
 
-            $company = 'MediaPlus';
+            $company = 'DataConsult';
 
             $id_company = $this->companyController->getCompany('Name_Company', $company, 'Id_Company');
-            $liste_note = $this->notesController->getAllNotesArg($id_company . " = Id_Company");
+            $liste_note = $this->notesController->getAllNotesArg("{$id_company} = Id_Company");
             $note_global = 0;
 
             foreach ($liste_note as $note) {
                 $note_global += $note["Note"];
             }
 
-            //$liste_comment = 
+            $check = 0;
+            if (!empty($_POST)) {
+                if (isset($_POST['rating'])) { //;
+                    foreach ($liste_note as $note) {
+                        if ($note["Id_Account"] == $id) {
+                            $error = 'Vous avez déjà notez cette entreprise';
+                            $check = 1;
+                        }
+                    }
+                    if ($check == 0) {
+                        $rating = [$_POST['rating'] ?? '', $id, $id_company];
+                        $this->notesController->createNote($rating);
+                        $check = 0 ;
+                    }
+
+
+                }
+            }
 
 
 
             // baniere 
+
 
             $Home_Page = [
                 'firstname' => $this->accountController->getAccount('Email_Account', $username, 'FirstName_Account'),
@@ -133,15 +158,13 @@ class Controller extends Abstract_Controller
                 'descriptionaccount' => $this->accountController->getAccount('Email_Account', $username, 'Description_Account'),
                 'numberaccount' => $this->accountController->getAccount('Email_Account', $username, 'PhoneNumber_Account'),
                 'idrole' => $role,
-
                 'companies' => $companies,
                 'company_page' => $company_page,
                 'totalPages' => $totalPages,
-                'noteglobal' => $note_global / count($liste_note)
+                'noteglobal' => $note_global / count($liste_note),
+                'error' => $error
 
             ];
-
-
 
 
 
@@ -208,9 +231,10 @@ class Controller extends Abstract_Controller
                         header("Location: ?page=Account");
                         exit();
                     }
-                } 
-                elseif (isset($_POST['delete_account'])) {
+                } elseif (isset($_POST['delete_account'])) {
                     $this->accountController->removeAccount($id);
+                    setcookie("email", "", time() - 3600, "/");
+
                     echo $this->templateEngine->render('Page_Connection.twig', [
                         'error' => 'Compte suprimer avec succès.'
                     ]);

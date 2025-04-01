@@ -27,13 +27,6 @@ class NotesController {
     
     
     public function createNote($newdata) {
-        $requiredFields = ['Note', 'Comment'];
-        
-        foreach ($requiredFields as $field) {
-            if (empty($newdata[$field])) {
-                return "Le champ '$field' est requis!";
-            }
-        }
         
         $result = $this->notesModel->storeNote($newdata);
         return $result ? "Note Créée !" : "Échec de la création";
@@ -72,18 +65,9 @@ class NotesController {
         return $result ? "Modification Réussie !" : "Échec de la Modification";
     }
 
-
-
-
-
-
     public function getAllNotesArg($argument) {
         $notes = $this->notesModel->getAllNotesArg($argument);
         return !empty($notes) ? $notes : "Aucune Note Trouvée !";
     }
-
-
-
-
 }
 ?>
