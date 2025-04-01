@@ -36,7 +36,7 @@ class Controller extends Abstract_Controller {
         $this->notesController = new NotesController($this->pdo);
         $this->permissionController = new PermissionController($this->pdo);
         $this->applyController = new ApplyController($this->pdo);
-        $this->companyController = new CompanyController($this->pdo);
+        $this->companyController = new CompanyController($this->pdo, $this->templateEngine);
     }
 
     public function welcomePage() {       
@@ -72,24 +72,44 @@ class Controller extends Abstract_Controller {
             }
         }
     }
+    
     public function Company() {
         $limit = 10; // Nombre d'entreprises par page
         $company_page = isset($_GET['company_page']) ? (int)$_GET['company_page'] : 1;
         $offset = ($company_page - 1) * $limit;
     
+        $searchName = $_POST['search_name'] ?? '';
+    $searchLocation = $_POST['search_location'] ?? '';
+
+    // Si des critères de recherche sont définis
+    if (!empty($searchName) || !empty($searchLocation)) {
+        // Recherche d'entreprises avec les filtres de recherche
+        $companies = $this->companyController->searchCompanies($searchName, $searchLocation, $limit, $offset);
+        $totalCompanies = count($companies); // Total d'entreprises trouvées selon la recherche
+    } else {
+        // Si aucune recherche, récupérer toutes les entreprises avec pagination
         $companies = $this->companyController->getCompaniesWithPagination($limit, $offset);
         $totalCompanies = $this->companyController->getTotalCompanies();
-        $totalPages = ceil($totalCompanies / $limit);
-    
-        echo $this->templateEngine->render('Company.twig', [
-            'companies' => $companies,
-            'company_page' => $company_page,
-            'totalPages' => $totalPages
-        ]);
-        exit();
     }
-    
-    
+
+    // Calcul du nombre total de pages
+    $totalPages = ceil($totalCompanies / $limit);
+
+    // Passer les données à la vue
+    echo $this->templateEngine->render('Company.twig', [
+        'companies' => $companies,
+        'company_page' => $company_page,
+        'totalPages' => $totalPages,
+        'search_name' => $searchName,
+        'search_location' => $searchLocation
+    ]);
+    exit();
+}
+    public function showCompanyDetails($id) {
+        $company = $this->companyController->getCompany('Id_Company', $id);
+        echo $this->templateEngine->render('Company_Details.twig', ['company' => $company]);
+    }
+
 
     public function Accueil() {
         echo $this->templateEngine->render('Accueil.twig');

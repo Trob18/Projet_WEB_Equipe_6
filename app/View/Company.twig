@@ -1,51 +1,49 @@
 {% extends 'base.twig' %}
 
-{% block title %}Company{% endblock %}
+{% block title %}Company
+{% endblock %}
 
 {% block content %}
 
-<main class="Company">
-  <section class="Company_Recherche_Utilisateur">
-    <div class="Company_Barre_Recherche">
-      <label for="Company_Nom_utili">
-        <input type="text" placeholder="Nom de l'entreprise" id="Company_Nom_utili" />
-      </label>
-      <label for="Company_Local">
-        <input type="text" placeholder="Localisation" id="Company_Local" />
-      </label>
-      <button id="Company_Rechercher">Rechercher</button>
-    </div>
+	<main class="Company">
+		<section class="Company_Recherche_Utilisateur">
+			<form method="POST" action="?page=Company" class="Company_Barre_Recherche">
+				<label for="Company_Nom_utili">
+					<input type="text" name="search_name" placeholder="Nom de l'entreprise" id="Company_Nom_utili" value="{{ search_name | default('') }}"/>
+				</label>
+				<label for="Company_Local">
+					<input type="text" name="search_location" placeholder="Localisation" id="Company_Local" value="{{ search_location | default('') }}"/>
+				</label>
+				<button type="submit" id="Company_Rechercher">Rechercher</button>
+			</form>
+			<hr/>
+			<section class="Company_list-entreprise">
+				<div class="Company_ligne">
+					{% for company in companies %}
+						<a href="?page=Company_Details&id={{ company.Id_Company }}">
+							<div class="Company_entrep">
+								<img src="assets/img/{{ company.Image_Company }}"/>
+								<p>{{ company.Name_Company }}</p>
+							</div>
+						</a>
+					{% endfor %}
+				</div>
+			</section>
+			<div class="Company_pagination">
+				{% if company_page > 1 %}
+					<a href="?page=Company&company_page={{ company_page - 1 }}" class="prev">Précédent</a>
+				{% endif %}
 
-    <hr />
+				{% for i in 1..totalPages %}
+					<a href="?page=Company&company_page={{ i }}" class="{% if i == company_page %}active{% endif %}">{{ i }}</a>
+				{% endfor %}
 
-    <section class="Company_list-entreprise">
-      <div class="Company_ligne">
-        {% for company in companies %}
-        <a href="?page=Accueil">
-          <div class="Company_entrep">
-            <img src="assets/img/{{ company.Image_Company }}" />
-            <p>{{ company.Name_Company }}</p>
-          </div>
-        </a>
-        {% endfor %}
-      </div>
-    </section>
-    <div class="Company_pagination">
-    {% if company_page > 1 %}
-        <a href="?page=Company&company_page={{ company_page - 1 }}" class="prev">Précédent</a>
-    {% endif %}
+				{% if company_page < totalPages %}
+					<a href="?page=Company&company_page={{ company_page + 1 }}" class="next">Suivant</a>
+				{% endif %}
+			</div>
 
-    {% for i in 1..totalPages %}
-        <a href="?page=Company&company_page={{ i }}" class="{% if i == company_page %}active{% endif %}">{{ i }}</a>
-    {% endfor %}
-
-    {% if company_page < totalPages %}
-        <a href="?page=Company&company_page={{ company_page + 1 }}" class="next">Suivant</a>
-    {% endif %}
-</div>
-
-      </div>
-  </section>
-</main>
+		</section>
+	</main>
 
 {% endblock %}

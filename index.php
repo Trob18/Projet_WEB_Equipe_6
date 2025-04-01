@@ -16,7 +16,9 @@ if (isset($_GET['page'])) {
 } else {
     $page = 'home';
 }
-//Définit l'url ou on se trouve
+
+
+
 
 
 $controller = new \app\Controller\Controller($twig);
@@ -31,14 +33,20 @@ switch ($page) {
     case 'login':
         echo $controller->loginPage();
         break;
-     case 'Accueil':
-         echo $controller->Accueil();//fonction dans controller.php
-         break;
+    case 'Accueil':
+        echo $controller->Accueil(); //fonction dans controller.php
+        break;
     // case 'Offer':
     //     echo $controller->//fonction dans controller.php
     //     break;
     case 'Company':
-       echo $controller->Company();//fonction dans controller.php
+        echo $controller->Company(); //fonction dans controller.php
+        break;
+    case 'Company_Details':
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+        }
+        $controller->showCompanyDetails($id); //fonction dans controller.php
         break;
     // case 'Wishlist':
     //     echo $controller->//fonction dans controller.php
@@ -51,5 +59,4 @@ switch ($page) {
     default:
         echo '404 Not Found';
         break;
-
 }

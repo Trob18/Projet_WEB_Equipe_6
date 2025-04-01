@@ -98,4 +98,42 @@ class CompanyModel
         $stmt = $this->pdo->query("SELECT COUNT(*) FROM companies");
         return $stmt->fetchColumn();
     }
+
+    public function searchCompanies($searchName, $searchLocation, $limit, $offset)
+    {
+        $query = "SELECT * FROM companies WHERE 1=1";
+    
+        if (!empty($searchName)) {
+            $query .= " AND Name_Company LIKE :searchName";
+        }
+    
+        if (!empty($searchLocation)) {
+            $query .= " AND Address_Company LIKE :searchLocation";
+        }
+    
+        $query .= " ORDER BY Id_Company ASC LIMIT :limit OFFSET :offset";
+        
+        $stmt = $this->pdo->prepare($query);
+    
+        if (!empty($searchName)) {
+            $stmt->bindValue(':searchName', '%' . $searchName . '%', PDO::PARAM_STR);
+        }
+    
+        if (!empty($searchLocation)) {
+            $stmt->bindValue(':searchLocation', '%' . $searchLocation . '%', PDO::PARAM_STR);
+        }
+    
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getCompanyById($id) {
+        $query = "SELECT * FROM companies WHERE Id_Company = :id";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }

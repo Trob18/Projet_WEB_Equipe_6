@@ -11,10 +11,12 @@ require_once __DIR__ . '/../Model/CompanyModel.php';
 class CompanyController
 {
     private $CompanyModel;
+    private $twig;
 
-    public function __construct($pdo)
+    public function __construct($pdo, $twig)
     {
         $this->CompanyModel = new CompanyModel($pdo);
+        $this->twig = $twig;
     }
 
 
@@ -86,5 +88,25 @@ class CompanyController
     public function getTotalCompanies()
     {
         return $this->CompanyModel->getTotalCompanies();
+    }
+
+    public function searchCompanies($searchName, $searchLocation, $limit, $offset)
+    {
+        return $this->CompanyModel->searchCompanies($searchName, $searchLocation, $limit, $offset);
+    }
+
+    public function showCompanyDetails() {
+        if (isset($_GET['id'])) {
+            $companyId = $_GET['id'];
+            $company = $this->CompanyModel->getCompany('Id_Company', $companyId);
+    
+            if ($company) {
+                echo $this->twig->render('Company_Details.twig', ['companies' => [$company]]);
+            } else {
+                echo "Entreprise non trouvée.";
+            }
+        } else {
+            echo "Aucune entreprise sélectionnée.";
+        }
     }
 }
