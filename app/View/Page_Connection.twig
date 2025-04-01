@@ -1,8 +1,20 @@
-{% extends 'base.twig' %}
+<!DOCTYPE html>
+<html lang="fr">
 
-{% block title %}Page_Connection{% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InternShip</title>
+    <link rel="stylesheet" href="assets/style_Login.css">
+    <link rel="stylesheet" href="assets/style.css">
+</head>
 
-{% block content %}
+<body>
+
+    <header>
+        <img src="assets/img/Logo_InternShip.svg" alt="logo" class="logo">
+    </header>
+
     <main>
         <section class="Bloc_Authentification">
             <h2>Authentification</h2>
@@ -23,4 +35,7 @@
         </section>
     </main>
 
-{% endblock %}
+    {% include 'footer.twig' %}
+
+</body>
+</html>
