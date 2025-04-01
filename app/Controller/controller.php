@@ -114,6 +114,7 @@ class Controller extends Abstract_Controller {
     }
 
     public function homePage(){
+        session_start();
         $Home_Page = $_SESSION['user'] ?? []; 
         echo $this->templateEngine->render('Home_Page.twig', $Home_Page);
         exit();
