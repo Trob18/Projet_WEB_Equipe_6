@@ -78,23 +78,29 @@ class Controller extends Abstract_Controller {
     }
 
     public function loginPage() {
+        session_start();
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $username = $_POST['email'] ?? '';
+            setcookie("email", $username, 0, "/");
             $password = $_POST['password'] ?? '';
 
 
             $account = $this->accountController->getAccount('Email_Account', $username, 'Password_Account');
             if ($account && password_verify($password, $account)) {
-                $Home_Page = ['firstname' => $this->accountController->getAccount('Email_Account', $username, 'FirstName_Account'), 
+
+
+
+                $_SESSION['user'] = ['firstname' => $this->accountController->getAccount('Email_Account', $username, 'FirstName_Account'), 
                 'Title_Offer'=> $this->offerController->getOffer('Id_Offer', 1, 'Title_Offer'), 
                 'Notes' => $this->notesController->getNote('Id_Notes', 1, 'Note'),
                 'Permission' => $this->permissionController->GetPermission('Id_Permissions',1, 'Description_Permission'),
                 'Date' => $this->applyController->getApply('Id_Application', 1, 'Date_Application'),
                 'Company' => $this->companyController->getCompany('Id_Company', 1, 'Name_Company')
-            
-            ];
 
-            
+                ];
+                $Home_Page = $_SESSION['user'] ?? [];
+
+
                 echo $this->templateEngine->render('Home_Page.twig', $Home_Page);
                 exit();
             } else {
@@ -105,6 +111,12 @@ class Controller extends Abstract_Controller {
                 exit();
             }
         }
+    }
+
+    public function homePage(){
+        $Home_Page = $_SESSION['user'] ?? []; 
+        echo $this->templateEngine->render('Home_Page.twig', $Home_Page);
+        exit();
     }
     
     public function Company() {
@@ -142,11 +154,6 @@ class Controller extends Abstract_Controller {
     public function showCompanyDetails($id) {
         $company = $this->companyController->getCompany('Id_Company', $id);
         echo $this->templateEngine->render('Company_Details.twig', ['company' => $company]);
-    }
-
-
-    public function Accueil() {
-        echo $this->templateEngine->render('Accueil.twig');
     }
     
 }
