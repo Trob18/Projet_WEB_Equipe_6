@@ -49,6 +49,9 @@ switch ($page) {
     case 'Account':
         echo $controller->AccountPage();//fonction dans controller.php
         break;
+    case 'ModifyAccount':
+        echo $controller->ModifyAccountPage();//fonction dans controller.php
+        break;
     default:
         echo '404 Not Found';
         break;
