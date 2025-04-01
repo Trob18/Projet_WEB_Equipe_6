@@ -44,6 +44,7 @@
 }
 
 .main-modifyaccount .profile-picture img {
+    margin-top: -50px;
     width: 150px;
     height: 150px;
     border-radius: 50%;
@@ -83,7 +84,6 @@
     resize: none;
     height: 80px;
 }
-
 
 
 .btn-primary {

@@ -47,6 +47,8 @@ class AccountController {
 
     // Mettre à jour un compte
     public function editAccount($accountId, $newData) {
+
+
         // Vérifier si le compte existe
         if (!$this->accountModel->getAccount('Id_Account', $accountId)) {
             return "Compte introuvable!";

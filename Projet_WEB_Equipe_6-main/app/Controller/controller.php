@@ -116,7 +116,7 @@ class Controller extends Abstract_Controller
             echo $this->templateEngine->render('Account.twig', $Home_Page);
             exit();
         } else {
-            
+
             // Afficher un message d'erreur et recharger la page de connexion
             echo $this->templateEngine->render('Page_Connection.twig', [
                 'error' => 'Email ou mot de passe incorrect.'
@@ -131,55 +131,66 @@ class Controller extends Abstract_Controller
 
     }
 
+    /*$error = '';
+            echo $this->templateEngine->render('Modifyaccount.twig', ['error' => $error]);*/
+
     public function ModifyAccountPage()
     {
         $username = $_COOKIE['email'] ?? '';
         $account = $this->accountController->getAccount('Email_Account', $username, 'Password_Account');
+
+
         if ($account) {
+
+            $error = '';
+
             $id = $this->accountController->getAccount('Email_Account', $username, 'Id_Account');
-            if (isset($_POST['update_account'])) {
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                
+
+                $username = $_POST['email'] ?? ($_COOKIE['email'] ?? '');
+
+
                 $error = '';
                 $password = $_POST['password'] ?? '';
-                $password2 = $_POST['password2'] ?? '';
+                $password2 = $_POST['confirm-password'] ?? '';
                 if ($password != $password2) {
                     $error = 'Different mot de passe mis';
+                    $_POST = [];
                     echo $this->templateEngine->render('Modifyaccount.twig', ['error' => $error]);
                     exit();
                 } else {
-                    setcookie("email", $_POST['email'] ?? '', 0, "/");
                     $newData = [
-                        'FirstName_Account' => $_POST['details'] ?? '',
-                        'LastName_Account' => $_POST['school'] ?? '',
-                        'Email_Account' => $_POST['email'] ?? '',
-                        'Description_Account' => $_POST['address'] ?? '',
+                        'Description_Account' => $_POST['details'] ?? '',
+                        'Studies_Account' => $_POST['school'] ?? '',
+                        'Address_Account' => $_POST['address'] ?? '',
                         'PhoneNumber_Account' => $_POST['phone'] ?? '',
                         'Password_Account' => $password
                     ];
 
-                    
+                    $result = $this->accountController->editAccount($id, $newData);
+                    $_POST = [];
 
-                    $success = $this->accountController->editAccount($id, $newData);
 
-                    $error = 'Réussite';
-                    echo $this->templateEngine->render('Account.twig',['error' => $error]);
+                    header("Location: ?page=Account");
                     exit();
                 }
-
-
-
 
 
             }
             if (isset($_POST['delete_account'])) {
                 $this->accountController->removeAccount($id);
+                echo $this->templateEngine->render('Page_Connection.twig', [
+                    'error' => 'Compte suprimer avec succès.'
+                ]);
+                exit();
             }
-
-            $error = '';
             echo $this->templateEngine->render('Modifyaccount.twig', ['error' => $error]);
             exit();
+
         } else {
             // Afficher un message d'erreur et recharger la page de connexion
-           echo $this->templateEngine->render('Page_Connection.twig', [
+            echo $this->templateEngine->render('Page_Connection.twig', [
                 'error' => 'Email ou mot de passe incorrect.'
             ]);
             exit();

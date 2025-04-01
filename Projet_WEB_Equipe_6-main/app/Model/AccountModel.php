@@ -103,6 +103,8 @@ class AccountModel {
             return false;
         }
 
+        
+
         $sql = "UPDATE Accounts SET " . implode(', ', $setParts) . " WHERE Id_Account = :id";
         $stmt = $this->pdo->prepare($sql);
 
