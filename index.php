@@ -3,7 +3,6 @@
 require "vendor/autoload.php";
 //Charge Composer et autoload toutes les classes du projet
 
-
 $loader = new \Twig\Loader\FilesystemLoader('app/View');
 $twig = new \Twig\Environment($loader, [
     'debug' => true
@@ -23,7 +22,6 @@ $controller = new \app\Controller\Controller($twig);
 
 
 
-
 switch ($page) {
     case 'home':
         echo $controller->welcomePage();
@@ -34,8 +32,10 @@ switch ($page) {
     // case 'Accueil':
     //     echo $controller->//fonction dans controller.php
     //     break;
-    // case 'Offer':
-    //     echo $controller->//fonction dans controller.php
+    case 'Offer':
+        echo $controller->offerPage(); 
+        
+        
     //     break;
     // case 'Company':
     //     echo $controller->//fonction dans controller.php

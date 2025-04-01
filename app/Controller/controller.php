@@ -8,6 +8,7 @@ require_once __DIR__ . '/OfferController.php';
 require_once __DIR__ . '/PermissionController.php';
 require_once __DIR__ . '/ApplyController.php';
 require_once __DIR__ . '/CompanyController.php';
+require_once __DIR__ . '/abstract_controller.php';
 
 use app\Config\ConfigDatabase;
 use app\Controller\AccountController;
@@ -18,7 +19,7 @@ use app\Controller\ApplyController;
 use app\Controller\CompanyController;
 use PDO;
 
-class Controller extends Abstract_Controller {
+class Controller extends abstract_controller {
     private $accountController;
     private $offerController;
     private $notesController;
@@ -43,11 +44,44 @@ class Controller extends Abstract_Controller {
         echo $this->templateEngine->render('Page_Connection.twig');
     }
 
+    public function offerPage() {
+        $companies = $this->companyController->getAllCompany();
+        
+        // Si le formulaire a été soumis
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $newdata = [
+                'Title_Offer' => $_POST['Title_Offer'] ?? null,
+                'Contract_Offer' => $_POST['Contract_Offer'] ?? null,
+                'Address_Offer' => $_POST['Address_Offer'] ?? null,
+                'ActivitySector_Offer' => $_POST['ActivitySector_Offer'] ?? null,
+                'Salary_Offer' => $_POST['Salary_Offer'] ?? null,
+                'Description_Offer' => $_POST['Description_Offer'] ?? null,
+                'Id_Company' => $_POST['Id_Company'] ?? null
+            ];
+            $company = $this->companyController->getCompany('Id_Company', $newdata['Id_Company']);
+            $result = $this->offerController->createOffer($newdata);
+            var_dump($result);
+        }
+    
+        // Récupérer toutes les offres
+        $offers = $this->offerController->getAllOffers(); // Utilisation de $this->offerController
+    
+        // Rendu de la vue avec Twig
+        return $this->templateEngine->render('Offer_Page.twig', [
+            'offers' => $offers,
+            'companies' => $companies,
+        ]);
+    }
+    
+    
+
+
+
     public function loginPage() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $username = $_POST['email'] ?? '';
+            setcookie("email", $username, 0, "/");
             $password = $_POST['password'] ?? '';
-
 
             $account = $this->accountController->getAccount('Email_Account', $username, 'Password_Account');
             if ($account && password_verify($password, $account)) {

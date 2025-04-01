@@ -1,0 +1,251 @@
+{% extends 'base.twig' %}
+
+{% block title %}Offer_Page{% endblock %}
+
+{% block content %}
+
+<main class="main-container">
+      <section class="sidebar" id="bloc-a-cacher">
+        <div class="recherche">
+          <div class="search-input-container">
+            <input
+              type="text"
+              placeholder="Intitulé du poste, entreprise..."
+              id="job-title"
+            />
+            <button class="clear-input" id="clear-job-title">×</button>
+          </div>
+          <div class="search-input-container">
+            <input type="text" placeholder="Paris (75)" id="location" />
+            <button class="clear-input" id="clear-location">×</button>
+          </div>
+          <button class="rechercher" id="search-button">Rechercher</button>
+
+          <div class="filtres">
+            <div class="filtres-row">
+              <select id="radius">
+                <option value="" disabled selected>Rayon</option>
+                <option value="5">5 km</option>
+                <option value="10">10 km</option>
+                <option value="20">20 km</option>
+                <option value="50">50 km</option>
+              </select>
+              <select id="contract">
+                <option value="" disabled selected>Contrat</option>
+                <option value="cdi">CDI</option>
+                <option value="cdd">CDD</option>
+                <option value="stage">Stage</option>
+                <option value="alternance">Alternance</option>
+                <option value="interim">Intérim</option>
+              </select>
+            </div>
+            <div class="filtres-row">
+              <select id="sector">
+                <option value="" disabled selected>Secteur</option>
+                <option value="informatique">Informatique</option>
+                <option value="btp">BTP</option>
+                <option value="agriculture">Agriculture</option>
+                <option value="hotellerie">Hôtellerie</option>
+                <option value="mecanique">Mécanique</option>
+                <option value="banque">Banque</option>
+              </select>
+              <select id="salary">
+                <option value="" disabled selected>Salaire</option>
+                <option value="20-30">20-30k€</option>
+                <option value="30-40">30-40k€</option>
+                <option value="40-50">40-50k€</option>
+                <option value="50+">50k€ et +</option>
+              </select>
+            </div>
+            <div class="filtres-row">
+              <select id="company">
+                <option value="" disabled selected>Entreprise</option>
+                <option value="startup">Startup</option>
+                <option value="pme">PME</option>
+                <option value="grand-groupe">Grand Groupe</option>
+              </select>
+              <select id="location-type">
+                <option value="" disabled selected>Lieu</option>
+                <option value="presentiel">Présentiel</option>
+                <option value="hybride">Hybride</option>
+                <option value="remote">Télétravail</option>
+              </select>
+            </div>
+            <select id="education">
+              <option value="" disabled selected>Niveau d'Étude</option>
+              <option value="bac">Bac</option>
+              <option value="bac+2">Bac+2</option>
+              <option value="bac+3">Bac+3</option>
+              <option value="bac+5">Bac+5</option>
+              <option value="doctorat">Doctorat</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <div class="container-offre-ajouter">
+        <section class="ajouter-offre-container" id="bloc-a-cacher3">
+          <div class="ajouter-offre" id="mon-bouton">+</div>
+          <div class="ajouter-offre-text">Créer une offre</div>
+        </section>
+        <section class="offres-container" id="bloc-a-cacher2">
+          <div class="offres">
+            <div class="offre">
+              <h3>STAGE de fin d’année - Développeur Full Stack</h3>
+              <p>Channel - Paris (75)</p>
+              <span class="tag">Stage</span>
+              <span class="tag">Informatique</span>
+              <p>
+                Rejoindre un stage Full Stack chez Channel, c'est plonger au
+                cœur d'une startup innovante où vous développerez des
+                applications web de A à Z, tout en étant encadré par des experts
+                passionnés.
+              </p>
+              <button class="voir-plus">Voir plus</button>
+            </div>
+
+            <div class="offre">
+              <h3>STAGE de deuxième année - DATA ANALYST</h3>
+              <p>CIC - Paris (75)</p>
+              <span class="tag">Stage</span>
+              <span class="tag">Informatique</span>
+              <span class="salaire">600 - 700 €</span>
+              <p>
+                Ce stage de deuxième année en tant que Data Analyst au sein du
+                CIC à Paris est une excellente opportunité pour les étudiants
+                souhaitant se spécialiser dans l'analyse de données.
+              </p>
+              <button class="voir-plus">Voir plus</button>
+            </div>
+
+            <div class="offre">
+              <h3>STAGE de fin d’année - Administrateur Réseau</h3>
+              <p>Thales - Paris (75)</p>
+              <span class="tag">Stage</span>
+              <span class="tag">Informatique</span>
+              <p>
+                Stage de fin d’année chez Thales, une opportunité de travailler
+                au sein d’une équipe dynamique...
+              </p>
+              <button class="voir-plus">Voir plus</button>
+            </div>
+            <div class="offre" id="template">
+              <h3>TITRE_DE_L_OFFRE</h3>
+              <p>ENTREPRISE - LIEU</p>
+              <span class="tag">TYPE_CONTRAT</span>
+              <span class="tag">SECTEUR</span>
+              <!-- Ajout conditionnel pour le salaire -->
+              <span class="salaire">SALAIRE_MIN - SALAIRE_MAX €</span>
+              <p>DESCRIPTION_DE_L_OFFRE</p>
+              <button class="voir-plus">Voir plus</button>
+            </div>
+          </div>
+        </section>
+        <section class="creer-offre">
+          <div class="creer-offre-container" id="bloc-a-afficher">
+            <form id="my-form" method="POST" action="index.php?page=Offer">
+              <div class="container-bar">
+                <h2 class="creer-offre-text">Création de votre offre</h2>
+                <hr class="bar-text" />
+              </div>
+              <hr class="classic-hr" />
+              <label class="creer-offre-text2">
+                Nom de l'offre :<span class="etoile-rouge">*</span>
+              </label>
+              <input
+                name = "Title_Offer"
+                type="text"
+                id="nom-offre"
+                placeholder="Entrez le nom de l'offre"
+                required
+              />
+              <br>
+              <br>
+              <br>
+              <label for="company">Entreprise :</label>
+                <select id="company" name="Id_Company" required>
+                <option value="">-- Sélectionnez une entreprise --</option>
+                  {% for company in companies %}
+                <option value="{{ company.Id_Company }}">{{ company.Name_Company }}</option>
+                {% endfor %}
+              </select><br><br>
+
+              <label class="creer-offre-text2">
+                Adresse de l'offre :<span class="etoile-rouge">*</span>
+              </label>
+              <input
+                name = "Address_Offer"
+                type="text"
+                id="adresse-offre"
+                placeholder="Entrez l'adresse"
+                required
+              />
+              <label class="creer-offre-text2">
+                Secteur d'activité (4 max) :<span class="etoile-rouge">*</span>
+              </label>
+
+              <div id="badge-list">
+                <div class="badge">Informatique</div>
+                <div class="badge">BTP</div>
+                <div class="badge">Agriculture</div>
+                <div class="badge">Hôtellerie</div>
+                <div class="badge">Mécanique</div>
+                <div class="badge">Banque</div>
+              </div>
+              <p class="error" id="error-message"></p>
+              <input type="hidden" id="selected-badges" name = "ActivitySector_Offer" value="{{ formData.ActivitySector_Offer|default('') }}"/>
+
+              <label class="creer-offre-text2">
+                Type de Contrat :<span class="etoile-rouge">*</span>
+              </label>
+              <br />
+              <select name = "Contract_Offer" id="contrat"  required>
+                <option value="" disabled selected>
+                  -- Sélectionnez un contrat --
+                </option>
+                <option value="CDI">CDI</option>
+                <option value="CDD">CDD</option>
+                <option value="Stage">Stage</option>
+                <option value="Alternance">Alternance</option>
+              </select>
+              <br />
+              <label class="creer-offre-text2">Salaire Proposé :</label>
+              <br />
+              <input
+                name = "Salary_Offer"
+                class="input-nombre"
+                type="number"
+                id="numberInput1"
+                value=""
+                min="0"
+                step="1"
+                placeholder="Salaire"
+              />
+              <br />
+              <label class="creer-offre-text2">
+                Ajoutez une description au poste :<span class="etoile-rouge"
+                  >*</span
+                >
+              </label>
+              <br />
+              <textarea
+                name = "Description_Offer"
+                id="description"
+                rows="8"
+                cols="89"
+                placeholder="Écrivez la description ici..."
+                required
+              ></textarea>
+              <br /><br />
+              <div class="container-bouton-form">
+                <button id="bouton-annuler" type="reset">Annuler</button>
+                <button id="bouton-reset" type="reset">Reset</button>
+                <button id="creer-button" type="submit">Créer</button>
+              </div>
+            </form>
+          </div>
+        </section>
+      </div>
+    </main>
+
+{% endblock %}
