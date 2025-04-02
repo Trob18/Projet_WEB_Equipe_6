@@ -2,6 +2,7 @@
 
 namespace app\Controller;
 
+require_once __DIR__ . '/../Model/OfferModel.php';
 use app\Model\OfferModel;
 use PDO;
 
@@ -27,19 +28,17 @@ class OfferController {
     }
 
     public function createOffer($newdata) {
-        $requiredFields = ['Title_Offer', 'Skills_Offer', 'Address_Offer', 'Date_Offer', 
-                           'ActivitySector_Offer', 'Salary_Offer', 'Description_Offer'];
+        $requiredFields = ['Title_Offer', 'Contract_Offer', 'Address_Offer',
+                           'ActivitySector_Offer', 'Salary_Offer', 'Description_Offer', 'Id_Company'];
         
         foreach ($requiredFields as $field) {
             if (empty($newdata[$field])) {
                 return "Le champ '$field' est requis!";
             }
         }
-        
         $result = $this->offerModel->storeOffer($newdata);
-        return $result ? "Offre créée avec succès!" : "Échec de la création de l'offre.";
+        return $result ? "Offre créée avec succès!" : "Échec de la création de l'offre.";    
     }
-
 
     public function removeOffer($id) {
         // Vérifier si l'offre existe
@@ -63,8 +62,8 @@ class OfferController {
             return "Offre introuvable!";
         }
         
-        $requiredFields = ['Title_Offer', 'Skills_Offer', 'Address_Offer', 'Date_Offer', 
-                           'ActivitySector_Offer', 'Salary_Offer', 'Description_Offer'];
+        $requiredFields = ['Title_Offer', 'Contract_Offer', 'Address_Offer', 
+                           'ActivitySector_Offer', 'Salary_Offer', 'Description_Offer','Id_Company'];
         
         foreach ($requiredFields as $field) {
             if (empty($newdata[$field])) {
@@ -75,5 +74,5 @@ class OfferController {
         $result = $this->offerModel->editOffer($id, $newdata);
         return $result ? "Offre modifiée avec succès!" : "Échec de la modification de l'offre.";
     }
+    
 }
-?>

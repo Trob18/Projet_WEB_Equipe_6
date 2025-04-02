@@ -8,6 +8,7 @@ require_once __DIR__ . '/OfferController.php';
 require_once __DIR__ . '/PermissionController.php';
 require_once __DIR__ . '/ApplyController.php';
 require_once __DIR__ . '/CompanyController.php';
+require_once __DIR__ . '/WishlistController.php';
 
 use app\Config\ConfigDatabase;
 use app\Controller\AccountController;
@@ -16,6 +17,7 @@ use app\Controller\NotesController;
 use app\Controller\PermissionController;
 use app\Controller\ApplyController;
 use app\Controller\CompanyController;
+use app\Controller\WishlistController;
 use PDO;
 
 class Controller extends Abstract_Controller {
@@ -25,6 +27,7 @@ class Controller extends Abstract_Controller {
     private $permissionController;
     private $applyController;
     private $companyController;
+    private $wishlistController;
     protected $templateEngine;
     private $pdo;
 
@@ -37,6 +40,7 @@ class Controller extends Abstract_Controller {
         $this->permissionController = new PermissionController($this->pdo);
         $this->applyController = new ApplyController($this->pdo);
         $this->companyController = new CompanyController($this->pdo);
+        $this->wishlistController = new WishlistController($this->pdo);
     }
 
     public function welcomePage() {     
@@ -50,7 +54,6 @@ class Controller extends Abstract_Controller {
             setcookie("email", $username, 0, "/");
             $password = $_POST['password'] ?? '';
 
-
             $account = $this->accountController->getAccount('Email_Account', $username, 'Password_Account');
             if ($account && password_verify($password, $account)) {
                 
@@ -62,6 +65,10 @@ class Controller extends Abstract_Controller {
                 'Permission' => $this->permissionController->GetPermission('Id_Permissions',1, 'Description_Permission'),
                 'Date' => $this->applyController->getApply('Id_Application', 1, 'Date_Application'),
                 'Company' => $this->companyController->getCompany('Id_Company', 1, 'Name_Company'),
+                
+                
+                
+                
                 'user_role' => $this->accountController->getAccount('Email_Account', $username, 'Id_Roles')
                 ];
                 $Home_Page = $_SESSION['user'] ?? [];
@@ -319,5 +326,86 @@ class Controller extends Abstract_Controller {
     }
 
 
+
+
+
+
+    public function wishlist(){
+        session_start();
+        $Home_Page_header = $_SESSION['user'] ?? [];
+        $user_role = $_SESSION['user']['user_role'];
+
+        $id_account = $this->accountController->getAccount('Id_Roles', $user_role, "Id_Account");
+        $id_offers = $this->wishlistController->getUserWishlist($id_account);
+        print_r ($id_offers);
+        if ($id_offers==[]){
+            $wishlist = [
+                'error'=>'Wishlist vide'
+            ];
+        } else {
+            $wishlist = [
+                'test'=>$id_offers
+
+            ];
+        }
+        $home_Page= array_merge($Home_Page, $wishlist);
+
+        echo $this->templateEngine->render('Wishlist_Page.twig', $home_Page);
+
+    }
+
+
+
+
+
+
+
+    public function offerPage() {
+        session_start();
+        $Home_Page_header = $_SESSION['user'] ?? []; 
+        $user_role = $_SESSION['user']['user_role'];
+
+        $companies = $this->companyController->getAllCompany();
+        
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $newdata = [
+                'Title_Offer' => $_POST['Title_Offer'] ?? null,
+                'Contract_Offer' => $_POST['Contract_Offer'] ?? null,
+                'Address_Offer' => $_POST['Address_Offer'] ?? null,
+                'ActivitySector_Offer' => $_POST['ActivitySector_Offer'] ?? null,
+                'Salary_Offer' => $_POST['Salary_Offer'] ?? null,
+                'Description_Offer' => $_POST['Description_Offer'] ?? null,
+                'Id_Company' => $_POST['Id_Company'] ?? null
+            ];
+            $company = $this->companyController->getCompany('Id_Company', $newdata['Id_Company']);
+            $result = $this->offerController->createOffer($newdata);
+            if ($result) {
+                header("Location: " . $_SERVER['REQUEST_URI']);
+                exit;
+        }}
+        $offers = $this->offerController->getAllOffers();
+        foreach ($offers as &$offer) {
+            $company = $this->companyController->getCompany('Id_Company', $offer['Id_Company']);
+            $offer['Company_Name'] = $company['Name_Company'] ?? 'Non spécifié';
+        }
+    
+        // Rendu de la vue avec Twig
+        return $this->templateEngine->render('Offer_Page.twig', [
+            'offers' => $offers,
+            'companies' => $companies,
+            'user_role' => $user_role
+
+            
+        ]);
+    }
+
+
+    public function showOfferDetails($id) {
+
+        $offer = $this->offerController->getOffer('Id_Offer', $id);
+        echo $this->templateEngine->render('Voir_plus_page.twig', [
+            'offer' => $offer, 
+        ]);
+    }
 
 }

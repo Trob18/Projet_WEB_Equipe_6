@@ -15,8 +15,8 @@ class OfferModel {
     public function getOffer($column, $value, $selectColumn = '*') {
         // Liste des colonnes valides pour éviter l'injection SQL
         $validColumns = [
-            'Id_Offer', 'Title_Offer', 'Skills_Offer', 'Address_Offer', 
-            'Date_Offer', 'ActivitySector_Offer', 'Salary_Offer', 'Description_Offer'
+            'Id_Offer', 'Title_Offer', 'Contract_Offer', 'Address_Offer', 
+            'ActivitySector_Offer', 'Salary_Offer', 'Description_Offer'
         ];
 
         if (!in_array($column, $validColumns) || (!in_array($selectColumn, $validColumns) && $selectColumn !== '*')) {
@@ -43,20 +43,31 @@ class OfferModel {
     }
 
     public function storeOffer($newdata) {
-        $stmt = $this->pdo->prepare("INSERT INTO offers (Title_Offer, Skills_Offer, Address_Offer, Date_Offer, ActivitySector_Offer, Salary_Offer, Description_Offer) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $this->pdo->prepare("
+                INSERT INTO offers (
+                    Title_Offer, 
+                    Contract_Offer, 
+                    Address_Offer, 
+                    ActivitySector_Offer, 
+                    Salary_Offer, 
+                    Description_Offer, 
+                    Id_Company
+                ) VALUES (?, ?, ?, ?, ?, ?, ?)
+            ");
+    
         $result = $stmt->execute([
-            $newdata['Title_Offer'],
-            $newdata['Skills_Offer'],
-            $newdata['Address_Offer'],
-            $newdata['Date_Offer'],
-            $newdata['ActivitySector_Offer'],
-            $newdata['Salary_Offer'],
-            $newdata['Description_Offer']
-        ]);
-        
+                $newdata['Title_Offer'],
+                $newdata['Contract_Offer'],
+                $newdata['Address_Offer'],
+                $newdata['ActivitySector_Offer'],
+                $newdata['Salary_Offer'],
+                $newdata['Description_Offer'],
+                $newdata['Id_Company']
+            ]);
+    
         return $result ? $this->pdo->lastInsertId() : false;
     }
-
+    
     public function removeOffer($id){
         $stmt = $this->pdo->prepare("DELETE FROM offers WHERE Id_Offer = :id");
         return $stmt->execute(['id' => $id]);
@@ -68,12 +79,11 @@ class OfferModel {
     }
 
     public function editOffer($id, $newdata){
-        $stmt = $this->pdo->prepare("UPDATE offers SET Title_Offer = ?, Skills_Offer = ?, Address_Offer = ?, Date_Offer = ?, ActivitySector_Offer = ?, Salary_Offer = ?, Description_Offer = ? WHERE Id_Offer = ?");
+        $stmt = $this->pdo->prepare("UPDATE offers SET Title_Offer = ?, Contract_Offer = ?, Address_Offer = ?, ActivitySector_Offer = ?, Salary_Offer = ?, Description_Offer = ? WHERE Id_Offer = ?");
         return $stmt->execute([
             $newdata['Title_Offer'],
-            $newdata['Skills_Offer'],
+            $newdata['Contract_Offer'],
             $newdata['Address_Offer'],
-            $newdata['Date_Offer'],
             $newdata['ActivitySector_Offer'],
             $newdata['Salary_Offer'],
             $newdata['Description_Offer'],
@@ -81,4 +91,3 @@ class OfferModel {
         ]);
     }
 }
-?>

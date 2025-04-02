@@ -1,0 +1,17 @@
+{% extends 'base.twig' %}
+
+{% block title %}Voir_Plus{% endblock %}
+
+{% block content %}
+    <div class = "test">
+        <h3>{{ offer.Title_Offer }}</h3>
+        <p>{{offer.Company_Name}} - {{ offer.Address_Offer }}</p>
+        <span class="tag">{{ offer.Contract_Offer }}</span>
+        <span class="tag">{{ offer.ActivitySector_Offer }}</span>
+        <span class="salaire">{{offer.Salary_Offer}}€ </span>
+        <p>{{ offer.Description_Offer }}</p>
+    </div>
+
+
+    
+{% endblock %}

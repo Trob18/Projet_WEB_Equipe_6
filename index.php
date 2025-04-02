@@ -45,25 +45,25 @@ switch ($page) {
         break;
     case 'Search':
         echo $controller->SearchAccount();
-        break;
-    
-    
-    
-    
+        break; 
     case 'Search_Details':
         if (isset($_GET['id'])) {
             $id = $_GET['id'];
         }
         $controller->showSearch_Details($id);
         break;
+    case 'Offer':
+        echo $controller->offerPage(); 
+        break;
 
-
-
-
-
-    // case 'Offer':
-    //     echo $controller->//fonction dans controller.php
-    //     break;
+    case 'DetailOffer':
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+            $controller->showOfferDetails($id);
+        } else {
+        echo 'ID non fourni ou invalide.';
+        }
+        break;
     case 'Company':
         echo $controller->Company(); //fonction dans controller.php
         break;
@@ -73,9 +73,12 @@ switch ($page) {
         }
         $controller->showCompanyDetails($id); //fonction dans controller.php
         break;
-    // case 'Wishlist':
-    //     echo $controller->//fonction dans controller.php
-    //     break;
+    case 'Wishlist':
+        echo $controller->wishlist();
+        break;
+
+
+
     default:
         echo '404 Not Found';
         break;
