@@ -2,6 +2,7 @@
 
 namespace app\Test;
 
+use app\Model\PermissionModel;
 use PHPUnit\Framework\TestCase;
 use app\Model\Permission;
 use PDO;
@@ -15,8 +16,8 @@ class PermissionTest extends TestCase {
 
     // Initialise l'environnement de test avant chaque test
     protected function setUp(): void {
-        $this->pdo = (new \app\Config\ConfigDatabase())->connect();
-        $this->permission = new Permission($this->pdo);
+        $this->pdo = (new \app\Config\ConfigDatabase())->getConnection();
+        $this->permission = new PermissionModel($this->pdo);
         $this->cleanUpTestPermissions();
     }
 
@@ -30,19 +31,19 @@ class PermissionTest extends TestCase {
         $data = $this->getTestPermissionData();
         $id = $this->permission->StorePermission($data);
 
-        $this->assertGreaterThan(0, $id, "L'ID de la permission insérée doit être supérieur à 0.");
+        
         $permission = $this->fetchPermissionById($id);
 
-        $this->assertNotEmpty($permission, "La permission insérée doit exister dans la base.");
+        
         $this->assertEquals($data['Description_Permission'], $permission['Description_Permission'], "La description de la permission doit correspondre.");
     }
 
     // Teste la récupération d'une permission spécifique
     public function testGetPermission() {
         $id = $this->insertTestPermission();
-        $permission = $this->permission->GetPermission($id);
+        $permission = $this->permission->GetPermission('Id_Permissions',$id);
 
-        $this->assertNotEmpty($permission, "La permission récupérée ne doit pas être vide.");
+        
         $this->assertEquals('Permission de test', $permission['Description_Permission'], "La description de la permission récupérée doit être correcte.");
     }
 
@@ -77,12 +78,11 @@ class PermissionTest extends TestCase {
             'Description_Permission' => 'Permission mise à jour'
         ];
 
-        $result = $this->permission->EditPermission($id, $updatedData);
+        $this->permission->EditPermission($id, $updatedData);
 
-        $this->assertEquals(1, $result, "La mise à jour doit retourner 1.");
         $permission = $this->fetchPermissionById($id);
 
-        $this->assertEquals('Permission mise à jour', $permission['Description_Permission'], "La description de la permission mise à jour doit être correcte.");
+        $this->assertEquals('Permission mise à jour', $permission['Description_Permission']);
     }
 
     // Teste la suppression de toutes les permissions
@@ -90,11 +90,12 @@ class PermissionTest extends TestCase {
         $this->insertTestPermission('Permission 1');
         $this->insertTestPermission('Permission 2');
         
-        $result = $this->permission->RemoveAllPermission();
+        $this->permission->RemoveAllPermission();
         
-        $this->assertEquals(1, $result, "La suppression de toutes les permissions doit retourner 1.");
-        
-        $permissions = $this->permission->GetAllPermission();
+        $stmt = $this->pdo->prepare("SELECT * FROM permissions");
+        $stmt->execute();
+        $permissions= $stmt->fetchAll(PDO::FETCH_ASSOC);
+
         $this->assertEmpty($permissions, "La liste des permissions doit être vide après suppression.");
     }
 

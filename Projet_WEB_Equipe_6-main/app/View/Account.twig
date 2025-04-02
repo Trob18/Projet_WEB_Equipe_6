@@ -34,7 +34,8 @@
 
 			<div class="container-note" method='POST'>
 				<div class="entreprises_intéressées">
-					<h3>Note : {{error}}</h3>
+					<h3>Note :
+						{{error}}</h3>
 					<p class="Accueil-infos-titre">{{noteglobal}}/5</p>
 					<div id="entreprises" class="entreprises-container"></div>
 				</div>
@@ -58,17 +59,17 @@
 
 
 					<button type="submit" class="btn-primary">Mettre une note</button>
+				</form>
+
+			</div>
 
 
-		</div>
+			{% if idrole != 'Student' %}
+				<button type="submit" class="btn-primary">Ajouter Compte</button>
+				<button class="btn-primary" onclick="window.location.href='?page=ModifyAccount'">Modification</button>
+				<button type="reset" class="btn-danger">Supprimer</button>
+			{% endif %}
 
 
-		{% if idrole != 'Student' %}
-			<button type="submit" class="btn-primary">Ajouter Compte</button>
-			<button class="btn-primary" onclick="window.location.href='?page=ModifyAccount'">Modification</button>
-			<button type="reset" class="btn-danger">Supprimer</button>
-		{% endif %}
-
-
-	</main>
-{% endblock %}
+		</main>
+	{% endblock %}

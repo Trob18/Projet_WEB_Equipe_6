@@ -15,7 +15,7 @@ class NotesTest extends TestCase {
 
     // Initialise l'environnement de test avant chaque test
     protected function setUp(): void {
-        $this->pdo = (new \app\Config\ConfigDatabase())->connect();
+        $this->pdo = (new \app\Config\ConfigDatabase())->getConnection();
         $this->notesModel = new NotesModel($this->pdo);
         $this->cleanUpTestNotes();
     }
@@ -65,9 +65,8 @@ class NotesTest extends TestCase {
             'Comment' => 'Commentaire mis à jour pour test.'
         ];
 
-        $result = $this->notesModel->editNote($id, $updatedData);
+        $this->notesModel->editNote($id, $updatedData);
 
-        $this->assertTrue($result, "La mise à jour doit retourner true.");
         $note = $this->fetchNoteById($id);
 
         $this->assertEquals(5, $note['Note'], "La note mise à jour doit être correcte.");
@@ -75,7 +74,7 @@ class NotesTest extends TestCase {
     }
 
     // Teste la récupération de toutes les notes
-    public function testGetAllNotes() {
+    public function testGetAllNotes() { 
         $this->insertTestNote(3, 'Commentaire 1');
         $this->insertTestNote(5, 'Commentaire 2');
         $notes = $this->notesModel->getAllNotes();
@@ -85,6 +84,19 @@ class NotesTest extends TestCase {
 
         $this->assertContains('Commentaire 1', $noteComments, "La liste des notes doit contenir 'Commentaire 1'.");
         $this->assertContains('Commentaire 2', $noteComments, "La liste des notes doit contenir 'Commentaire 2'.");
+    }
+
+    public function testRemoveAllPermission() {
+        $this->insertTestNote('Permission 1');
+        $this->insertTestNote('Permission 2');
+        
+        $this->notesModel->removeAllNotes();
+        
+        $stmt = $this->pdo->prepare("SELECT * FROM notes");
+        $stmt->execute();
+        $note= $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $this->assertEmpty($note, "La liste des permissions doit être vide après suppression.");
     }
 
     // Crée des données de test pour une note

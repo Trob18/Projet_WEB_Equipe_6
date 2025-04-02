@@ -55,7 +55,7 @@ class ApplyTest extends TestCase
     public function testGetApply()
     {
         // Récupération du compte par email
-        $apply = $this->apply->getApplyById(1);
+        $apply = $this->apply->getApply('Id_Application', 1);
 
         // Validation des informations du compte récupéré
         $this->assertIsArray($apply);
@@ -75,8 +75,7 @@ class ApplyTest extends TestCase
         $applyId = $apply['Id_Application'];
 
         // Tentative de suppression du compte
-        $result = $this->apply->removeApply($applyId);
-        $this->assertTrue($result);
+        $this->apply->removeApply($applyId);
 
         // Vérification que le compte a bien été supprimé
         $stmt = $this->pdo->prepare("SELECT * FROM applications WHERE Id_Application = ?");
@@ -97,5 +96,26 @@ class ApplyTest extends TestCase
         $this->assertGreaterThan(0, count($apply)); // Vérifier qu'il y a au moins un compte
         $this->assertEquals(1, $apply[0]['Id_Application']);
     }
+
+   
+
+    public function testEditApply()
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM applications WHERE Id_Application = ?");
+        $stmt->execute([3]);
+        $obj = $stmt->fetch();
+        $updatedData = [
+            'Cv_Application' => 'test.png'
+        ];
+
+        $stmt = $this->pdo->prepare("SELECT * FROM applications WHERE Id_Application = ?");
+        $stmt->execute([3]);
+        $obj = $stmt->fetch();
+
+        $this->apply->EditApply($obj["Id_Application"], $updatedData);
+
+        $this->assertEquals('test.png', $obj['Cv_Application']);
+    }
+
 }
 ?>

@@ -35,7 +35,7 @@ class ApplyController
     // Supprimer un compte par ID
     public function removeApply($IdApply)
     {
-        $account = $this->ApplyModel->getApplyById($IdApply);
+        $account = $this->ApplyModel->getApply('Id_Application',$IdApply);
         if (!$account) {
             return false; //"Apply introuvable!"
         }
@@ -68,7 +68,7 @@ class ApplyController
     // Mettre à jour un compte
     public function editApply($IdApply, $newData)
     {
-        $account = $this->ApplyModel->getApplyById($IdApply);
+        $account = $this->ApplyModel->getApply('Id_Application',$IdApply);
         if (!$account) {
             return false; //"Apply introuvable!"
         }
