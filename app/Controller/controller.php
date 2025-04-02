@@ -355,9 +355,9 @@ class Controller extends Abstract_Controller {
     }
 
 
+//---------------------------------------Offre-----------------------------------------------
 
-
-
+// fonction pour la page Offre
 
 
     public function offerPage() {
@@ -399,6 +399,8 @@ class Controller extends Abstract_Controller {
         ]);
     }
 
+// fonction pour la page détail de l'offre (voir plus)
+
 
     public function showOfferDetails($id) {
 
@@ -412,12 +414,17 @@ class Controller extends Abstract_Controller {
         ]);
     }
 
+// fonction pour supprimer l'offre
+
     public function deleteOffer($id) {
         $result = $this->offerController->removeOffer($id);
         header('Location: index.php?page=Offer');
         
         ;
     }
+
+// fonction pour modifier l'offre
+
     public function modifyOffer($id) {
 
         $offer = $this->offerController->getOffer('Id_Offer', $id);
@@ -430,6 +437,8 @@ class Controller extends Abstract_Controller {
             ]);
     }
     
+//fonction pour mettre à jour l'offre
+
     public function updateOffer($id) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $title = $_POST['title'] ?? '';
@@ -472,7 +481,7 @@ class Controller extends Abstract_Controller {
             header('Location: index.php?page=Offer');
         }
     }
-    
+//-------------------------------------------------------------------------------------------- 
     
 
 }
