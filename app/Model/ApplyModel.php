@@ -70,32 +70,33 @@ class ApplyModel
     }
 
     public function StoreApply($IdAccount, $cvPath, $CoverLetter, $dateApply, $IdOffer)
-{
-    // Vérification des données à insérer
-    var_dump($IdAccount, $cvPath, $CoverLetter, $dateApply, $IdOffer); // Vérification des données avant insertion
-    exit; // Arrête l'exécution pour s'assurer que les données sont correctes
+    {
+        // Vérification des données à insérer
+        if (empty($IdAccount) || empty($IdOffer) || empty($cvPath)) {
+            return "Erreur : Informations manquantes pour l'enregistrement.";
+        }
 
-    // Insertion des données dans la base de données
-    $query = 'INSERT INTO applications (IdAccount, IdOffer, CvFile, CoverLetter, DateApply) 
+        // Insertion des données dans la base de données
+        $query = 'INSERT INTO applications (IdAccount, IdOffer, CvFile, CoverLetter, DateApply) 
               VALUES (:IdAccount, :IdOffer, :CvFile, :CoverLetter, :DateApply)';
 
-    // Préparation de la requête SQL
-    $stmt = $this->pdo->prepare($query);
+        // Préparation de la requête SQL
+        $stmt = $this->pdo->prepare($query);
 
-    // Exécution de la requête avec les paramètres
-    if ($stmt->execute([
-        ':IdAccount' => $IdAccount,
-        ':IdOffer' => $IdOffer,
-        ':CvFile' => $cvPath,
-        ':CoverLetter' => $CoverLetter,
-        ':DateApply' => $dateApply
-    ])) {
-        return true; // Retourne true si l'insertion réussit
-    } else {
-        return "Erreur lors de l'enregistrement de la candidature dans la base de données."; // Retourne un message d'erreur si l'insertion échoue
+        // Exécution de la requête avec les paramètres
+        if ($stmt->execute([
+            ':IdAccount' => $IdAccount,
+            ':IdOffer' => $IdOffer,
+            ':CvFile' => $cvPath,
+            ':CoverLetter' => $CoverLetter,
+            ':DateApply' => $dateApply
+        ])) {
+            return true; // Retourne true si l'insertion réussit
+        } else {
+            return "Erreur lors de l'enregistrement de la candidature dans la base de données."; // Retourne un message d'erreur si l'insertion échoue
+        }
     }
-}
-    
+
 
 
     public function editApply($id, $newData)
@@ -104,14 +105,16 @@ class ApplyModel
         return $stmt->execute([$newData['Cv_Application'], $newData['CoverLetterApplication'], $id]);
     }
 
-    public function storeApplication($coverLetter, $cvPath)
-{
-    $query = "INSERT INTO applications (CoverLetter_Application, Cv_Application) VALUES (:coverLetter, :cvPath)";
-    $stmt = $this->pdo->prepare($query);
-    $stmt->bindParam(':coverLetter', $coverLetter);
-    $stmt->bindParam(':cvPath', $cvPath);
-    $stmt->execute();
-}
-
-
+    public function storeApplication($id, $IdOffer, $coverLetter, $cvNameUnique) {
+        $sql = "INSERT INTO Applications (Id_Account, Id_Offer, CoverLetter_Application, Cv_Application) 
+                VALUES (:Id_Account, :Id_Offer, :CoverLetter, :CV)";
+        
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            'Id_Account' => $id,
+            'Id_Offer' => $IdOffer,
+            'CoverLetter' => $coverLetter,
+            'CV' => $cvNameUnique
+        ]);
+    }
 }

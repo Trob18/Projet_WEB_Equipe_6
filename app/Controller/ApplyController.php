@@ -65,8 +65,6 @@ class ApplyController
 
     public function storeApply($IdAccount, $CvFile, $CoverLetter, $IdOffer)
     {
-        var_dump($IdAccount, $CvFile, $CoverLetter, $IdOffer);
-        exit;
         // Vérification si un fichier CV a été uploadé
         if (!isset($CvFile) || $CvFile['error'] !== UPLOAD_ERR_OK) {
             return "Aucun fichier téléchargé ou erreur lors du téléchargement.";
@@ -89,18 +87,17 @@ class ApplyController
         }
 
         // Générer un nom de fichier unique pour éviter les conflits
-        $cvPath = $cvDirectory . uniqid('cv_', true) . '.' . $cvExt;
+        $cvNameUnique = uniqid('cv_', true) . '.' . $cvExt; // Nom unique sans chemin complet
 
         // Déplacement du fichier vers le dossier final
+        $cvPath = $cvDirectory . $cvNameUnique; // Le chemin complet pour le stockage sur le serveur
         if (!move_uploaded_file($cvTmpName, $cvPath)) {
             return "Erreur lors du téléchargement du fichier.";
         }
 
         // Enregistrement de la candidature en base de données
         $dateApply = date('Y-m-d H:i:s');
-        var_dump($IdAccount, $cvPath, $CoverLetter, $dateApply, $IdOffer);
-        exit;
-        $store = $this->ApplyModel->StoreApply($IdAccount, $cvPath, $CoverLetter, $dateApply, $IdOffer);
+        $store = $this->ApplyModel->StoreApply($IdAccount, $cvNameUnique, $CoverLetter, $dateApply, $IdOffer); // Passer le nom du fichier unique
 
         if (!$store) {
             return "Erreur lors de l'enregistrement de la candidature.";
@@ -108,6 +105,8 @@ class ApplyController
 
         return true; // Retourne true en cas de succès
     }
+
+
 
 
 
@@ -123,9 +122,8 @@ class ApplyController
         return $result ? true : false; //"Apply mis à jour avec succès!" : "Échec de la mise à jour du Apply."
     }
 
-    public function storeApplication($coverLetter, $cvPath)
-{
-    $this->ApplyModel->storeApplication($coverLetter, $cvPath);
-}
-
+    public function storeApplication($id, $IdOffer, $coverLetter, $cvPath)
+    {
+        $this->ApplyModel->storeApplication($id, $IdOffer, $coverLetter, $cvPath);
+    }
 }

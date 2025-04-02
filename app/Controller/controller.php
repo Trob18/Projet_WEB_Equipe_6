@@ -76,7 +76,8 @@ class Controller extends Abstract_Controller
                     'Permission' => $this->permissionController->GetPermission('Id_Permissions', 1, 'Description_Permission'),
                     'Date' => $this->applyController->getApply('Id_Application', 1, 'Date_Application'),
                     'Candidatures' => count($allCandidatures),
-                    'Company' => $this->companyController->getCompany('Id_Company', 1, 'Name_Company')
+                    'Company' => $this->companyController->getCompany('Id_Company', 1, 'Name_Company'),
+                    'id' => $this->accountController->getAccount('Email_Account', $username, 'Id_Account')
 
 
 
@@ -151,13 +152,15 @@ class Controller extends Abstract_Controller
         echo $this->templateEngine->render('Wishlist.twig');
     }
 
-    public function offerPage() {
+    public function offerPage()
+    {
         session_start();
-        $Home_Page_header = $_SESSION['user'] ?? []; 
-        $user_role = $_SESSION['user']['user_role'];
+        $Home_Page_header = $_SESSION['user'] ?? [];
+        $user_role = isset($_SESSION['user']['user_role']) ? $_SESSION['user']['user_role'] : 'default';  // Valeur par défaut si la clé n'existe pas
+
 
         $companies = $this->companyController->getAllCompany();
-        
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $newdata = [
                 'Title_Offer' => $_POST['Title_Offer'] ?? null,
@@ -173,45 +176,52 @@ class Controller extends Abstract_Controller
             if ($result) {
                 header("Location: " . $_SERVER['REQUEST_URI']);
                 exit;
-        }}
+            }
+        }
         $offers = $this->offerController->getAllOffers();
         foreach ($offers as &$offer) {
             $company = $this->companyController->getCompany('Id_Company', $offer['Id_Company']);
             $offer['Company_Name'] = $company['Name_Company'] ?? 'Non spécifié';
         }
-    
+
         // Rendu de la vue avec Twig
         return $this->templateEngine->render('Offer_Page.twig', [
             'offers' => $offers,
             'companies' => $companies,
             'user_role' => $user_role
 
-            
+
         ]);
     }
 
 
-    public function showOfferDetails($id) {
-        session_start();
-    
+    public function showOfferDetails($id)
+    {
+        session_start(); // Assurez-vous que la session est démarrée
+
         // Récupération des détails de l'offre
         $offer = $this->offerController->getOffer('Id_Offer', $id);
         if (is_array($offer)) {
             $company = $this->companyController->getCompany('Id_Company', $offer['Id_Company']);
             $offer['Company_Name'] = $company['Name_Company'] ?? 'Non spécifié';
         }
-    
+
+        // Ajouter l'ID de l'offre dans la session
+        $_SESSION['Id_Offer'] = $offer['Id_Offer'];
+
+
         // Initialisation des messages
         $success_message = $error_message = "";
-    
+
         // Traitement du formulaire si soumis
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_application'])) {
             // Récupération des données du formulaire
             $idAccount = $_POST['IdAccount'] ?? null;
-            $idOffer = $_POST['IdOffer'] ?? null;
+            $idOffer = $_POST['Id_Offer'] ?? null;
+            setcookie("Id_Offer", $idOffer, 0, "/");
             $coverLetter = $_POST['Lettre_Motivation'] ?? null;
             $cvFile = $_FILES['cv'] ?? null;
-    
+
             // Vérification des données obligatoires
             if (!$idAccount || !$idOffer) {
                 $error_message = "Erreur : informations manquantes.";
@@ -219,7 +229,7 @@ class Controller extends Abstract_Controller
                 // Appel de la méthode pour stocker la candidature
                 $applyController = new ApplyController($this->pdo);
                 $result = $applyController->storeApply($idAccount, $cvFile, $coverLetter, $idOffer);
-    
+
                 if ($result === true) {
                     $success_message = "Candidature envoyée avec succès.";
                 } else {
@@ -227,23 +237,24 @@ class Controller extends Abstract_Controller
                 }
             }
         }
-    
+
         // Affichage de la page avec Twig
         echo $this->templateEngine->render('Voir_plus_page.twig', [
-            'offer' => $offer, 
+            'offer' => $offer,
             'success_message' => $success_message,
             'error_message' => $error_message
         ]);
     }
-    
 
-    public function deleteOffer($id) {
+
+
+    public function deleteOffer($id)
+    {
         $result = $this->offerController->removeOffer($id);
-        header('Location: index.php?page=Offer');
-        
-        ;
+        header('Location: index.php?page=Offer');;
     }
-    public function modifyOffer($id) {
+    public function modifyOffer($id)
+    {
 
         $offer = $this->offerController->getOffer('Id_Offer', $id);
         if (is_array($offer)) {
@@ -252,10 +263,11 @@ class Controller extends Abstract_Controller
         }
         return $this->templateEngine->render('Modif_Offer.twig', [
             'offer' => $offer,
-            ]);
+        ]);
     }
-    
-    public function updateOffer($id) {
+
+    public function updateOffer($id)
+    {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $title = $_POST['title'] ?? '';
             $company_name = $_POST['company'] ?? '';
@@ -264,24 +276,24 @@ class Controller extends Abstract_Controller
             $sector = $_POST['sector'] ?? '';
             $salary = $_POST['salary'] ?? '';
             $description = $_POST['description'] ?? '';
-    
+
             // Rechercher l'entreprise par son nom en utilisant la méthode getCompany existante
             $company = $this->companyController->getCompany('Name_Company', $company_name);
-            
+
             // Vérifier si l'entreprise existe et n'est pas une chaîne d'erreur
             if (is_string($company) && $company === "Company introuvable!") {
                 // Gérer l'erreur - entreprise non trouvée
                 echo "Erreur : Entreprise non trouvée.";
                 return;
             }
-            
+
             $company_id = $company['Id_Company'] ?? null;
             if (!$company_id) {
                 // Gérer l'erreur - ID d'entreprise non trouvé
                 echo "Erreur : ID d'entreprise non trouvé.";
                 return;
             }
-            
+
             // Créer un tableau avec les données à mettre à jour
             $offerData = [
                 'Title_Offer' => $title,
@@ -292,7 +304,7 @@ class Controller extends Abstract_Controller
                 'Salary_Offer' => $salary,
                 'Description_Offer' => $description
             ];
-            
+
             $result = $this->offerController->editOffer($id, $offerData);
             header('Location: index.php?page=Offer');
         }
@@ -300,19 +312,69 @@ class Controller extends Abstract_Controller
 
     public function submitApplication()
     {
+        session_start();
+        $id = $_SESSION['user']['id'];
+        if (!$id) {
+            echo "Erreur : L'ID de l'utilisateur est manquant.";
+            exit();
+        }
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Vérification si la lettre de motivation est remplie
             $coverLetter = !empty($_POST['cover_letter']) ? $_POST['cover_letter'] : null;
-            
-            // Vérification de l'upload du CV
-            if (isset($_FILES['cv']) && $_FILES['cv']['error'] === 0) {
-                $cvPath = 'assets/cv/' . basename($_FILES['cv']['name']);
-                move_uploaded_file($_FILES['cv']['tmp_name'], $cvPath);
-            } else {
-                $cvPath = null;
+
+            // Vérification si un fichier CV a été téléchargé
+            $cvUploaded = isset($_FILES['cv']) && $_FILES['cv']['error'] === 0;
+
+            // Vérification si au moins un des deux fichiers a été envoyé
+            if (empty($coverLetter) && !$cvUploaded) {
+                echo "Erreur : Vous devez envoyer au moins une lettre de motivation ou un CV.";
+                exit();
             }
 
-            // Sauvegarder la candidature
-            $this->applyController->storeApplication($coverLetter, $cvPath);
+            // Vérifier si les ID de l'offre et du compte sont présents
+            $IdOffer = $_POST['IdOffer'] ?? $_POST['Id_Offer'] ?? null;
+
+            // Si l'ID de l'offre ou l'ID du compte est manquant, afficher une erreur
+            $IdOffer = $_SESSION['Id_Offer'] ?? null;
+            if (!$IdOffer) {
+                echo "⚠️ Avertissement : ID de l'offre non trouvé, mais on continue...";
+            }
+            if (!$id) {
+                echo "⚠️ Avertissement : ID de l'utilisateur non trouvé, mais on continue...";
+            }
+
+
+            // Vérification de l'upload du CV
+            if ($cvUploaded) {
+                $cvTmpName = $_FILES['cv']['tmp_name'];
+                $cvName = $_FILES['cv']['name'];
+                $cvExt = strtolower(pathinfo($cvName, PATHINFO_EXTENSION));
+
+                // Générer un nom de fichier unique pour éviter les conflits
+                $cvNameUnique = uniqid('cv_', true) . '.' . $cvExt;
+
+                // Création du dossier s'il n'existe pas
+                $cvDirectory = 'assets/cv/';
+                if (!is_dir($cvDirectory) && !mkdir($cvDirectory, 0777, true)) {
+                    echo "Erreur lors de la création du dossier de stockage.";
+                    exit();
+                }
+
+                // Déplacement du fichier vers le dossier final
+                $cvPath = $cvDirectory . $cvNameUnique; // Le chemin complet pour le stockage sur le serveur
+                if (!move_uploaded_file($cvTmpName, $cvPath)) {
+                    echo "Erreur lors du téléchargement du fichier.";
+                    exit();
+                }
+            } else {
+                $cvNameUnique = null; // Pas de fichier téléchargé
+            }
+
+
+
+            // Sauvegarder la candidature avec la lettre de motivation et le CV (le cas échéant)
+            $this->applyController->storeApplication($id, $IdOffer, $coverLetter, $cvNameUnique);
 
             echo "Candidature enregistrée avec succès !";
             exit();
