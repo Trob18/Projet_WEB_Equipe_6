@@ -15,26 +15,31 @@ class ApplyModel
         $this->pdo = $pdo;
     }
 
-    public function getApply($column, $value, $selectColumn = '*'){
+    public function getApply($column, $value, $selectColumn = '*')
+    {
         $validColumns = [
-            'Id_Application', 'Cv_Application', 'CoverLetter_Application', 'Date_Application', 
-            'Id_Account', 'Id_Offer'
+            'Id_Application',
+            'Cv_Application',
+            'CoverLetter_Application',
+            'Date_Application',
+            'Id_Account',
+            'Id_Offer'
         ];
-    
+
         if (!in_array($column, $validColumns) || (!in_array($selectColumn, $validColumns) && $selectColumn !== '*')) {
             return "Colonne invalide!";
         }
-    
+
         // Sélectionner la colonne spécifique demandée
         $stmt = $this->pdo->prepare("SELECT $selectColumn FROM applications WHERE $column = :value LIMIT 1");
         $stmt->execute(['value' => $value]);
-    
+
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        
+
         if ($result && $selectColumn !== '*') {
             return $result[$selectColumn] ?? null;
         }
-    
+
         return $result ?: null;
     }
 
@@ -52,7 +57,7 @@ class ApplyModel
 
     public function removeAllApply()
     {
-        $stmt = $this->pdo->prepare("DELETE * FROM applications");
+        $stmt = $this->pdo->prepare("DELETE  FROM applications");
         return $stmt->execute();
     }
 
@@ -68,8 +73,25 @@ class ApplyModel
 
     public function editApply($id, $newData)
     {
-        $stmt = $this->pdo->prepare("UPDATE applications SET Cv_Application = ?, CoverLetterApplication = ? WHERE Id_Application = ?");
-        return $stmt->execute([$newData['Cv_Application'], $newData['CoverLetterApplication'], $id]);
+        $validColumns = ['Cv_Application', 'CoverLetter_Application','Id_Application','Date_Application'];
+        $setParts = [];
+        $params = ['id' => $id];
+
+        foreach ($newData as $key => $value) {
+            if (in_array($key, $validColumns)) {
+                $setParts[] = "$key = :$key";
+                $params[$key] = $value;
+            }
+        }
+
+        if (empty($setParts)) {
+            return false;
+        }
+
+        $sql = "UPDATE applications SET " . implode(', ', $setParts) . " WHERE Id_Application = :id";
+        $stmt = $this->pdo->prepare($sql);
+
+        return $stmt->execute($params);
     }
 }
 

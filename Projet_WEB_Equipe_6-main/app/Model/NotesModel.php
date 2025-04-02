@@ -42,8 +42,8 @@ class NotesModel {
     
 
     public function storeNote($newdata){
-        $stmt = $this->pdo->prepare("INSERT INTO notes (Note, Id_Account,Id_Company) VALUES (?, ?, ?)");
-        $result = $stmt->execute([$newdata[0], $newdata[1], $newdata[2]]);
+        $stmt = $this->pdo->prepare("INSERT INTO notes (Id_Notes,Note, Id_Account,Id_Company) VALUES (?, ?, ?, ?)");
+        $result = $stmt->execute([$newdata['Id_Notes'], $newdata['Note'], $newdata['Id_Account'], $newdata['Id_Company']]);
         return $result ? $this->pdo->lastInsertId() : false;
     }
 

@@ -2,20 +2,26 @@
 
 namespace app\Test;
 
-
 use app\Model\AccountModel;
 use PHPUnit\Framework\TestCase;
-use PDO;
-require_once __DIR__ . '/config/ConfigDatabase.php';
-require_once __DIR__ . '/app/Model/AccountModel.php';
 
-class AccountTest extends TestCase {
+
+require_once 'C:\wamp64\www\Projet_WEB_Equipe_6-main\config\ConfigDatabase.php';
+require_once 'C:\wamp64\www\Projet_WEB_Equipe_6-main\app\Model\AccountModel.php';
+
+
+
+
+class AccountTest extends TestCase
+{
     private $account;
     private $pdo;
     private $accountController;
 
-    protected function setUp(): void {
-        $this->pdo = require __DIR__ . '/../../config/ConfigDatabase.php'; 
+    protected function setUp(): void
+    {
+        $configDatabase = new \app\config\ConfigDatabase();
+        $this->pdo = $configDatabase->getConnection();
         $this->account = new AccountModel($this->pdo);
 
         // Suppression du compte de test s'il existe déjà
@@ -28,12 +34,15 @@ class AccountTest extends TestCase {
         $stmt->execute(['Doe', 'John', 'johndoe@example.com', 'hashedpassword', '', '', '', 123456789, '', 1]);
     }
 
-    protected function tearDown(): void {
+    protected function tearDown(): void
+    {
         // Suppression du compte de test après chaque test
         $this->pdo->exec("DELETE FROM Accounts WHERE Email_Account = 'johndoe@example.com'");
     }
 
-    public function testStoreAccount() {
+    public function testStoreAccount()
+    {
+        $this->pdo->exec("DELETE FROM Accounts WHERE Email_Account = 'johndoe@example.com'");
         // Tentative d'insertion du compte
         $result = $this->account->storeAccount("Doe", "John", "johndoe@example.com", "password123");
         $this->assertTrue($result);
@@ -49,7 +58,8 @@ class AccountTest extends TestCase {
         $this->assertEquals("John", $account['FirstName_Account']);
     }
 
-    public function testGetAccountByEmail() {
+    public function testGetAccountByEmail()
+    {
         // Récupération du compte par email avec la méthode getAccount
         $account = $this->account->getAccount('Email_Account', 'johndoe@example.com');
 
@@ -60,32 +70,34 @@ class AccountTest extends TestCase {
         $this->assertEquals('johndoe@example.com', $account['Email_Account']);
     }
 
-    public function testRemoveAccount() {
+    public function testRemoveAccount()
+    {
         // Récupérer l'ID du compte avant la suppression
         $stmt = $this->pdo->prepare("SELECT Id_Account FROM Accounts WHERE Email_Account = ?");
         $stmt->execute(['johndoe@example.com']);
         $account = $stmt->fetch();
-    
+
         $this->assertNotEmpty($account);
         $accountId = $account['Id_Account'];
-    
+
         // Tentative de suppression du compte
         $result = $this->account->removeAccount($accountId);
         $this->assertTrue($result);
-    
+
         // Vérification que le compte a bien été supprimé
         $stmt = $this->pdo->prepare("SELECT * FROM Accounts WHERE Id_Account = ?");
         $stmt->execute([$accountId]);
         $account = $stmt->fetch();
-    
+
         // Vérification que le compte n'existe plus dans la base de données
         $this->assertEmpty($account);
     }
 
-    public function testGetAllAccounts() {
+    public function testGetAllAccounts()
+    {
         // Récupération du compte de John Doe par son email
         $account = $this->account->getAccount('Email_Account', 'johndoe@example.com');
-    
+
         // Vérification que le compte est bien récupéré
         $this->assertNotEmpty($account);
         $this->assertEquals('Doe', $account['LastName_Account']);
@@ -94,7 +106,8 @@ class AccountTest extends TestCase {
     }
 
 
-    public function testEditAccounts() {
+    public function testEditAccounts()
+    {
         $stmt = $this->pdo->prepare("SELECT Id_Account FROM Accounts WHERE Email_Account = ?");
         $stmt->execute(['johndoe@example.com']);
         $account = $stmt->fetch();
@@ -104,11 +117,15 @@ class AccountTest extends TestCase {
         ];
 
         // Récupération du compte de John Doe par son email
-        $account = $this->account->editAccount($account['Id_Account'], 'johndoe@example.com');
-    
+        $this->account->editAccount($account['Id_Account'], $newData);
+
+        $stmt = $this->pdo->prepare("SELECT * FROM Accounts WHERE Email_Account = ?");
+        $stmt->execute(['johndoe@example.com']);
+        $account = $stmt->fetch();
+
         // Vérification que le compte est bien récupéré
         $this->assertNotEmpty($account);
-        $this->assertEquals('Doe', $account['LastName_Account']);
+        $this->assertEquals('Doe', $account['LastName_Account'],'oui');
         $this->assertEquals('Pierre', $account['FirstName_Account']);
         $this->assertEquals('johndoe@example.com', $account['Email_Account']);
     }

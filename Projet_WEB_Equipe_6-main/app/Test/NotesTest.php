@@ -6,8 +6,8 @@ use PHPUnit\Framework\TestCase;
 use app\Model\NotesModel;
 use PDO;
 
-require_once __DIR__ . '/../../config/ConfigDatabase.php';
-require_once __DIR__ . '/../Model/NotesModel.php';
+require_once 'C:\wamp64\www\Projet_WEB_Equipe_6-main\config\ConfigDatabase.php';
+require_once 'C:\wamp64\www\Projet_WEB_Equipe_6-main\app\Model\AccountModel.php';
 
 class NotesTest extends TestCase {
     private $notesModel;
@@ -15,7 +15,8 @@ class NotesTest extends TestCase {
 
     // Initialise l'environnement de test avant chaque test
     protected function setUp(): void {
-        $this->pdo = (new \app\Config\ConfigDatabase())->getConnection();
+        $configDatabase = new \app\config\ConfigDatabase();
+        $this->pdo = $configDatabase->getConnection();
         $this->notesModel = new NotesModel($this->pdo);
         $this->cleanUpTestNotes();
     }
@@ -27,11 +28,13 @@ class NotesTest extends TestCase {
 
     // Teste la création d'une note dans la base de données
     public function testStoreNote() {
+        $this->pdo->exec("DELETE FROM notes WHERE Id_Notes = 15");
         $data = $this->getTestNoteData();
         $id = $this->notesModel->storeNote($data);
 
         $this->assertGreaterThan(0, $id, "L'ID de la note insérée doit être supérieur à 0.");
         $note = $this->fetchNoteById($id);
+  
 
         $this->assertNotEmpty($note, "La note insérée doit exister dans la base.");
         $this->assertEquals($data['Note'], $note['Note'], "La note doit correspondre.");
@@ -102,8 +105,10 @@ class NotesTest extends TestCase {
     // Crée des données de test pour une note
     private function getTestNoteData($noteValue = 4) {
         return [
+            'Id_Notes' => 15,
             'Note' => $noteValue,
-            'Comment' => 'Ceci est un commentaire de test.'
+            'Id_Account'=> 19,
+            'Id_Company'=> 3
         ];
     }
 

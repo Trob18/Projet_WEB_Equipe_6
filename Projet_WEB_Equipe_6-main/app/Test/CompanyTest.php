@@ -6,8 +6,8 @@ namespace app\Test;
 use PHPUnit\Framework\TestCase;
 use app\Model\CompanyModel;
 use PDO;
-require_once __DIR__ . '/../../config/ConfigDatabase.php';
-require_once __DIR__ . '/../Model/ApplyModel.php';
+require_once 'C:\wamp64\www\Projet_WEB_Equipe_6-main\config\ConfigDatabase.php';
+require_once 'C:\wamp64\www\Projet_WEB_Equipe_6-main\app\Model\AccountModel.php';
 
 class CompanyTest extends TestCase
 {
@@ -17,7 +17,8 @@ class CompanyTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->pdo = require __DIR__ . '/../../config/ConfigDatabase.php';
+        $configDatabase = new \app\config\ConfigDatabase();
+        $this->pdo = $configDatabase->getConnection();
         $this->company = new CompanyModel($this->pdo);
 
         // Suppression du compte de test s'il existe déjà
@@ -37,6 +38,8 @@ class CompanyTest extends TestCase
     }
     public function testStoreApply()
     {
+        $this->pdo->exec("DELETE FROM companies WHERE Id_Company = 15");
+
         // Tentative d'insertion du compte
         $result = $this->company->storeCompany(15, "company", "imagetest.jpg", "e-mail.test", "27 rue des tests, 44000 Groland", "test_insert_into");
         $this->assertTrue($result);
@@ -66,9 +69,10 @@ class CompanyTest extends TestCase
     public function testRemoveApply()
     {
         // Récupérer l'ID du compte avant la suppression
-        $stmt = $this->pdo->prepare("SELECT Id_Company FROM companies WHERE Id_Company = ?");
-        $stmt->execute([2]);
+        $stmt = $this->pdo->prepare("SELECT * FROM companies WHERE Id_Company = ?");
+        $stmt->execute([10]);
         $company = $stmt->fetch();
+
 
         $this->assertNotEmpty($company);
         $companyId = $company['Id_Company'];

@@ -76,7 +76,7 @@ class CompanyModel
     public function editCompany($id, $newData)
     {
         $stmt = $this->pdo->prepare("UPDATE companies SET Name_Company = ?, Image_Company = ?, Email_Company = ?, Address_Company = ?, Description_Company = ? WHERE Id_Company = ?");
-        return $stmt->execute([$newData['Name_Company'], $newData['Image_Company'], $newData['Email_Company'], $newData['Adresse_Company'], $newData['Description_Company'], $newData['CoverLetterApplication'], $id]);
+        return $stmt->execute([$newData['Name_Company'], $newData['Image_Company'], $newData['Email_Company'], $newData['Adresse_Company'], $newData['Description_Company'], $id]);
     }
 
     public function getCompaniesWithPagination($limit, $offset)
