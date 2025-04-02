@@ -1,0 +1,226 @@
+/* -------- BODY -------- */
+body.Company {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-image: url("./img/Blured_Background(upscaled).jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  /* -------- HEADER -------- */
+  header.Company {
+    background-color: rgba(255, 255, 255, 0.4);
+    z-index: 1;
+    position: relative;
+    width: 100%;
+    padding: 10px 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  
+  /* -------- RECHERCHE UTILISATEUR/ENTREPRISE -------- */
+  .Company_Recherche_Utilisateur {
+    width: 50%;
+    background-color: rgba(224, 231, 234, 0.6667);
+    border-radius: 12px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .Company_Barre_Recherche {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 10px;
+  }
+  
+  .Company_Barre_Recherche input {
+    flex: 1;
+    min-width: 150px;
+    padding: 10px;
+    border: 2px solid rgba(6, 71, 137, 0.9);
+    border-radius: 5px;
+  }
+  
+  /* Assurer que le bouton "Rechercher" garde sa taille */
+  #Company_Rechercher {
+    padding: 10px;
+    background-color: rgba(6, 71, 137, 0.9);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: auto;
+    min-width: 120px;
+  }
+  
+  #Company_Rechercher:hover {
+    background-color: rgba(6, 71, 137, 1);
+  }
+  
+  /* -------- LISTE ENTREPRISES -------- */
+  .Company_list-entreprise {
+    width: 90%;
+    max-width: 100%;
+    background-color: rgba(224, 231, 234, 0.6667);
+    padding: 20px; /* Ajout d'un padding pour équilibrer les marges */
+    border-radius: 12px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    display: flex;
+    justify-content: center; /* Centre les entreprises */
+    overflow-x: hidden;
+  }
+  
+  /* Afficher exactement 5 entreprises par ligne */
+  .Company_ligne {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 20px;
+    width: 100%; /* Permet d'éviter le débordement */
+    max-width: 100%;
+  }
+  
+  .Company_ligne a {
+    text-decoration: none; /* Supprime le soulignement */
+    color: inherit; /* Garde la couleur du texte */
+  }
+  
+  /* Style des blocs entreprise */
+  .Company_entrep {
+    background-color: #eff5f7;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    padding: 10px;
+    width: 120px;
+    height: 120px;
+  }
+  
+  .Company_entrep img {
+    max-width: 80px;
+    max-height: 80px;
+    margin-bottom: 10px;
+  }
+  
+  .Company_list-entreprise p {
+    margin-top: 5px;
+    font-size: 15px;
+    color: black;
+  }
+  
+  /* -------- PAGINATION -------- */
+  .Company_pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .Company_pagination button {
+    background-color: rgba(6, 71, 137, 0.9);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .Company_pagination button:hover {
+    background-color: rgba(6, 71, 137, 1);
+  }
+  
+  /* -------- RESPONSIVE DESIGN -------- */
+  @media screen and (max-width: 1024px) {
+    .Company_Recherche_Utilisateur {
+      width: 90%;
+    }
+  
+    .Company_list-entreprise {
+      width: 95%;
+    }
+  
+    .Company_Barre_Recherche {
+      flex-direction: column;
+    }
+  
+    .Company_Barre_Recherche input {
+      width: 100%;
+    }
+  
+    .Company_Barre_Recherche button {
+      width: auto;
+    }
+  
+    /* Passer à 3 entreprises par ligne sur tablette */
+    .Company_ligne {
+      grid-template-columns: repeat(3, minmax(120px, 1fr)); /* 3 par ligne sur tablette */
+    }
+  }
+  
+  @media screen and (max-width: 600px) {
+    .Company_top-search {
+      width: 90%;
+    }
+  
+    /* Passer à 2 entreprises par ligne sur mobile */
+    .Company_ligne {
+      grid-template-columns: repeat(2, minmax(120px, 1fr)); /* 2 par ligne sur mobile */
+    }
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  /* -------- PAGINATION -------- */
+  .Company_pagination {
+    display: flex;
+    justify-content: center; /* Centrer */
+    align-items: center;
+    margin-top: 20px;
+    width: 100%;
+    padding: 15px 0;
+    text-align: center;
+  }
+  
+  
+  .Company_pagination a {
+    text-decoration: none; /* Supprimer le soulignement */
+    background-color: rgba(224, 231, 234, 0.8);
+    color: black;
+    border: 1px solid rgba(6, 71, 137, 0.5);
+    padding: 8px 12px;
+    margin: 5px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .Company_pagination a:hover, 
+  .Company_pagination a.active {
+    background-color: rgba(6, 71, 137, 0.9);
+    color: white;
+  }
+  

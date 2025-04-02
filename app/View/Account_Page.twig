@@ -1,0 +1,45 @@
+{% extends 'base.twig' %}
+
+{% block title %}Account_Page{% endblock %}
+
+{% block content %}
+
+<main class="main-account">
+
+    <div class="container">
+        <h2 class="blue_txt">{{firstname}}
+            {{lastname}}</h2>
+
+        <div class="profile-picture">
+            <img id="profile-img" src="assets/img/{{imageaccount}}" alt="Photo de profil" style="cursor: pointer;">
+            <input type="file" id="file-input" accept="image/png, image/jpeg" style="display: none;">
+        </div>
+        <form class="form-account">
+            <label class="title">Qui suis je ? :</label>
+            <label for="description2">{{descriptionaccount}}</label>
+            <div class="form-group">
+                <label class="title">Compte :</label>
+                <label class="title">{{idrole}}</label>
+            </div>
+            <label class="title">Email :</label>
+            <label class="blue_txt">{{emailaccount}}</label>
+
+            <label class="title">Numéro de téléphone :</label>
+            <label class="blue_txt">+33
+                {{numberaccount}}</label>
+
+        </form>
+    </div>
+
+    {% if idrole != 'Student' %}
+        <a href="?page=CreateAccount">
+            <button class="btn-primary" onclick="window.location.href='?page=CreateAccount">Ajouter Compte</button>
+        </a>
+        <button class="btn-primary" onclick="window.location.href='?page=ModifyAccount'"  >Modification</button>
+        <button type="reset" class="btn-danger">Supprimer</button>
+    {% endif %}
+
+</main>
+
+
+{% endblock %}

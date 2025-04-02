@@ -3,13 +3,16 @@
 {% block title %}Voir_Plus{% endblock %}
 
 {% block content %}
-    <div class = "test">
-        <h3>{{ offer.Title_Offer }}</h3>
-        <p>{{offer.Company_Name}} - {{ offer.Address_Offer }}</p>
+    <div class = "bloc_detail">
+        <h3>Titre :  {{ offer.Title_Offer }}</h3>
+        <p> Lieu : {{ offer.Address_Offer }}</p>
+        <p>Entreprise : {{offer.Company_Name}}</p>
         <span class="tag">{{ offer.Contract_Offer }}</span>
         <span class="tag">{{ offer.ActivitySector_Offer }}</span>
         <span class="salaire">{{offer.Salary_Offer}}€ </span>
-        <p>{{ offer.Description_Offer }}</p>
+        <p class = "Description">{{ offer.Description_Offer }}</p>
+        <a href="?page=DeleteOffer&id={{ offer.Id_Offer }}" id="bouton-supprimer">Supprimer</a>
+        <a href="?page=ModifyOffer&id={{ offer.Id_Offer }}" id="bouton-modifier">Modifier Offre</a>
     </div>
 
 

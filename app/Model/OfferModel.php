@@ -79,7 +79,7 @@ class OfferModel {
     }
 
     public function editOffer($id, $newdata){
-        $stmt = $this->pdo->prepare("UPDATE offers SET Title_Offer = ?, Contract_Offer = ?, Address_Offer = ?, ActivitySector_Offer = ?, Salary_Offer = ?, Description_Offer = ? WHERE Id_Offer = ?");
+        $stmt = $this->pdo->prepare("UPDATE offers SET Title_Offer = ?, Contract_Offer = ?, Address_Offer = ?, ActivitySector_Offer = ?, Salary_Offer = ?, Description_Offer = ?, Id_Company = ? WHERE Id_Offer = ?");
         return $stmt->execute([
             $newdata['Title_Offer'],
             $newdata['Contract_Offer'],
@@ -87,8 +87,8 @@ class OfferModel {
             $newdata['ActivitySector_Offer'],
             $newdata['Salary_Offer'],
             $newdata['Description_Offer'],
+            $newdata['Id_Company'],
             $id
         ]);
     }
 }
-?>

@@ -2,9 +2,9 @@
 
 {% block title %}Home_Page{% endblock %}
 
-
-
 {% block content %}
+
+
 <main>
   <section class="accueil-container">
     <div class="tableau_de_bord_profil">
@@ -17,7 +17,7 @@
         <p class="Accueil-infos-titre">Candidature(s)</p>
         <span class="Accueil-infos">{{Company}}</span>
         <p class="Accueil-infos-titre">Wishlist(s)</p>
-        <span class="Accueil-infos">0</span>
+        <span class="Accueil-infos">{{user_role}}</span>
         <p class="Accueil-infos-titre">Vue(s) de Profil</p>
       </div>
       <div class="profil">
@@ -44,6 +44,6 @@
     </div>
   </section>
 </main>
+
+
 {% endblock %}
-
-

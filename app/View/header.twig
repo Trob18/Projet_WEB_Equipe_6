@@ -11,16 +11,16 @@
 
 		<div class="header-links">
 			<nav>
-				<a href="?page=Accueil">Accueil</a>
+				<a href="?page=HOME">Accueil</a>
 				<a href="?page=Offer">Offres</a>
 				<a href="?page=Company">Entreprises</a>
+				{% if user_role in [1, 2] %}
+                    <a href="?page=Search">Explorer</a>
+                {% endif %}
 				<a href="?page=Wishlist">Wishlist</a>
 			</nav>
 		</div>
 		<div class="header-actions">
-			<a href="?page=Settings">
-				<img src="assets/img/Windows_Settings_app_icon 2.png" alt="parametre" class="parametre" onclick="create()"/>
-			</a>
             <a href="?page=Account">
                 <button class="mon-compte">Mon Compte</button>
             </a>
