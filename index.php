@@ -34,6 +34,16 @@ switch ($page) {
     //     break;
     case 'Offer':
         echo $controller->offerPage(); 
+        break;
+
+    case 'DetailOffer':
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+            $controller->showOfferDetails($id);
+        } else {
+        echo 'ID non fourni ou invalide.';
+        }
+        break;
         
         
     //     break;

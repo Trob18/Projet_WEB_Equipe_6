@@ -7,7 +7,7 @@
             <span class="tag">{{ offer.ActivitySector_Offer }}</span>
             <span class="salaire">{{offer.Salary_Offer}}€ </span>
             <p>{{ offer.Description_Offer }}</p>
-            <button class="voir-plus">Voir plus</button>
+            <a href="?page=DetailOffer&id={{ offer.Id_Offer }}" class="voir-plus">Voir plus</a>
         </div>
     {% endfor %}
 

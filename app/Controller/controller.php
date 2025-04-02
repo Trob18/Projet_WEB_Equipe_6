@@ -76,6 +76,16 @@ class Controller extends abstract_controller {
             
         ]);
     }
+
+
+    public function showOfferDetails($id) {
+
+        $offer = $this->offerController->getOffer('Id_Offer', $id);
+        echo $this->templateEngine->render('Voir_plus_page.twig', [
+            'offer' => $offer, 
+        ]);
+    }
+
     
     
 
@@ -111,5 +121,6 @@ class Controller extends abstract_controller {
                 exit();
             }
         }
+
     }
 }
