@@ -11,10 +11,12 @@ require_once __DIR__ . '/../Model/CompanyModel.php';
 class CompanyController
 {
     private $CompanyModel;
+    private $twig;
 
-    public function __construct(PDO $pdo)
+    public function __construct($pdo, $twig)
     {
         $this->CompanyModel = new CompanyModel($pdo);
+        $this->twig = $twig;
     }
 
 

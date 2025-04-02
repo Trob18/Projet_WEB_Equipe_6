@@ -1,17 +1,43 @@
 {% extends 'base.twig' %}
 
-{% block title %}Voir_Plus{% endblock %}
+{% block title %}Voir_Plus
+{% endblock %}
 
 {% block content %}
-    <div class = "test">
-        <h3>{{ offer.Title_Offer }}</h3>
-        <p>{{offer.Company_Name}} - {{ offer.Address_Offer }}</p>
-        <span class="tag">{{ offer.Contract_Offer }}</span>
-        <span class="tag">{{ offer.ActivitySector_Offer }}</span>
-        <span class="salaire">{{offer.Salary_Offer}}€ </span>
-        <p>{{ offer.Description_Offer }}</p>
+	<div class="bloc_detail">
+		<h3>Titre :
+			{{ offer.Title_Offer }}</h3>
+		<p>
+			Lieu :
+			{{ offer.Address_Offer }}</p>
+		<p>Entreprise :
+			{{offer.Company_Name}}</p>
+		<span class="tag">{{ offer.Contract_Offer }}</span>
+		<span class="tag">{{ offer.ActivitySector_Offer }}</span>
+		<span class="salaire">{{offer.Salary_Offer}}€
+		</span>
+		<p class="Description">{{ offer.Description_Offer }}</p>
+		<a href="?page=DeleteOffer&id={{ offer.Id_Offer }}" id="bouton-supprimer">Supprimer</a>
+		<a href="?page=ModifyOffer&id={{ offer.Id_Offer }}" id="bouton-modifier">Modifier Offre</a>
+	</div>
+	<form method="POST" action="?page=Submit_Application" enctype="multipart/form-data">
+    <div>
+        <label for="cover_letter">Lettre de motivation :</label><br>
+        <textarea name="cover_letter" id="cover_letter" rows="10" cols="50"></textarea>
     </div>
+    <div>
+        <label for="cv">CV (image) :</label><br>
+        <input type="file" name="cv" id="cv" accept="pdf, image/*">
+    </div>
+    <button type="submit">Envoyer la candidature</button>
+</form>
 
+{% if success_message is defined %}
+    <p style="color: green;">{{ success_message }}</p>
+{% endif %}
 
-    
+{% if error_message is defined %}
+    <p style="color: red;">{{ error_message }}</p>
+{% endif %}
+
 {% endblock %}

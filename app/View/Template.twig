@@ -8,6 +8,7 @@
             <span class="salaire">{{offer.Salary_Offer}}€ </span>
             <p>{{ offer.Description_Offer }}</p>
             <a href="?page=DetailOffer&id={{ offer.Id_Offer }}" class="voir-plus">Voir plus</a>
+			<a href="?page=Apply&id={{ offer.Id_Offer }}">Postuler</a>
         </div>
     {% endfor %}
 

@@ -1,0 +1,24 @@
+{% extends 'base.twig' %}
+
+{% block title %}Apply{% endblock %}
+
+{% block content %}
+
+<h1>Postuler pour : {{ offer.title }}</h1>
+<p>{{ offer.description }}</p>
+
+<form method="post" action="submit_application.php" enctype="multipart/form-data">
+    <label for="cv">CV (PDF ou image) :</label>
+    <input type="file" id="cv" name="cv" accept=".pdf, image/*" required>
+    <button type="button" onclick="document.getElementById('cv').value = ''">Supprimer</button>
+
+    <label for="Lettre_Motivation">Lettre de motivation (facultatif) :</label>
+    <input type="text" id="Lettre_Motivation" name="Lettre_Motivation">
+
+    <input type="hidden" name="IdAccount" value="{{ account.id }}">
+    <input type="hidden" name="IdOffer" value="{{ offer.id }}">
+
+    <button type="submit">Envoyer la candidature</button>
+</form>
+
+{% endblock %}

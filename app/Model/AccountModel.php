@@ -48,28 +48,28 @@ class AccountModel {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function storeAccount($lastName, $firstName, $dateNaissance, $email, $telephone, $password, $type) {
-        if (empty($lastName) || empty($firstName)|| empty($dateNaissance) || empty($email) || empty($telephone) || empty($password) || empty($type)) {
+    public function storeAccount($lastName, $firstName, $email, $password) {
+        if (empty($lastName) || empty($firstName) || empty($email) || empty($password)) {
             return false;
         }
 
+        // Vérifier si l'email existe déjà
+        if ($this->getAccount('Email_Account', $email)) {
+            return "Email déjà utilisé!";
+        }
 
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
         $stmt = $this->pdo->prepare("
-            INSERT INTO accounts (LastName_Account, FirstName_Account, DateNaissance_Account, Email_Account, PhoneNumber_Account, Password_Account, Id_Roles) 
-            VALUES (:lastName, :firstName, :dateNaissance, :email, :telephone, :password, :type)
+            INSERT INTO Accounts (LastName_Account, FirstName_Account, Email_Account, Password_Account) 
+            VALUES (:lastName, :firstName, :email, :password)
         ");
-        $stmt->execute([
+        return $stmt->execute([
             'lastName' => $lastName,
             'firstName' => $firstName,
-            'dateNaissance' => $dateNaissance,
             'email' => $email,
-            'telephone' => $telephone,
-            'password' => $hashedPassword,
-            'type' => $type
+            'password' => $hashedPassword
         ]);
-        return TRUE;
     }
 
     public function removeAccount($id) {
@@ -108,58 +108,4 @@ class AccountModel {
 
         return $stmt->execute($params);
     }
-
-
-
-
-    public function getTotalAccount(){
-        $stmt = $this->pdo->query("SELECT COUNT(*) FROM accounts");
-        return $stmt->fetchColumn();
-    }
-
-    public function getAccountWithPagination($limit, $offset){
-        $limit = max(1, (int) $limit);  // S'assurer que la limite est au moins 1
-        $offset = max(0, (int) $offset); // S'assurer que l'offset est au moins 0
-    
-        $stmt = $this->pdo->prepare("SELECT * FROM accounts ORDER BY Id_Account ASC LIMIT :limit OFFSET :offset");
-        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-        $stmt->execute();
-    
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-
-
-
-    public function searchAccounts($searchName, $limit, $offset){
-        $query = "SELECT * FROM accounts WHERE 1=1";
-    
-        if (!empty($searchName)) {
-            $query .= " AND FirstName_Account LIKE :searchName";
-        }
-    
-        $query .= " ORDER BY Id_Account ASC LIMIT :limit OFFSET :offset";
-        
-        $stmt = $this->pdo->prepare($query);
-    
-        if (!empty($searchName)) {
-            $stmt->bindValue(':searchName', '%' . $searchName . '%', PDO::PARAM_STR);
-        }
-    
-    
-        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-        
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-
-
-
-
-
-
-
 }

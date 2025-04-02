@@ -60,7 +60,6 @@ class CompanyModel
     {
         $stmt = $this->pdo->prepare("DELETE FROM companies");
         return $stmt->execute();
-
     }
 
     public function StoreCompany($IdCompany, $NameCompany, $ImageCompany, $EmailCompany, $AdresseCompany, $DescriptionCompany)
@@ -80,17 +79,17 @@ class CompanyModel
     }
 
     public function getCompaniesWithPagination($limit, $offset)
-{
-    $limit = max(1, (int) $limit);  // S'assurer que la limite est au moins 1
-    $offset = max(0, (int) $offset); // S'assurer que l'offset est au moins 0
+    {
+        $limit = max(1, (int) $limit);  // S'assurer que la limite est au moins 1
+        $offset = max(0, (int) $offset); // S'assurer que l'offset est au moins 0
 
-    $stmt = $this->pdo->prepare("SELECT * FROM companies ORDER BY Id_Company ASC LIMIT :limit OFFSET :offset");
-    $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-    $stmt->execute();
+        $stmt = $this->pdo->prepare("SELECT * FROM companies ORDER BY Id_Company ASC LIMIT :limit OFFSET :offset");
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
 
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
 
     public function getTotalCompanies()
@@ -102,35 +101,36 @@ class CompanyModel
     public function searchCompanies($searchName, $searchLocation, $limit, $offset)
     {
         $query = "SELECT * FROM companies WHERE 1=1";
-    
+
         if (!empty($searchName)) {
             $query .= " AND Name_Company LIKE :searchName";
         }
-    
+
         if (!empty($searchLocation)) {
             $query .= " AND Address_Company LIKE :searchLocation";
         }
-    
+
         $query .= " ORDER BY Id_Company ASC LIMIT :limit OFFSET :offset";
-        
+
         $stmt = $this->pdo->prepare($query);
-    
+
         if (!empty($searchName)) {
             $stmt->bindValue(':searchName', '%' . $searchName . '%', PDO::PARAM_STR);
         }
-    
+
         if (!empty($searchLocation)) {
             $stmt->bindValue(':searchLocation', '%' . $searchLocation . '%', PDO::PARAM_STR);
         }
-    
+
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-        
+
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getCompanyById($id) {
+    public function getCompanyById($id)
+    {
         $query = "SELECT * FROM companies WHERE Id_Company = :id";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute(['id' => $id]);

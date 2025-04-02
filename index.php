@@ -1,5 +1,6 @@
 <?php
-
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require "vendor/autoload.php";
 //Charge Composer et autoload toutes les classes du projet
 
@@ -16,11 +17,10 @@ if (isset($_GET['page'])) {
 } else {
     $page = 'home';
 }
-//Définit l'url ou on se trouve
+
 
 
 $controller = new \app\Controller\Controller($twig);
-
 
 
 
@@ -31,77 +31,42 @@ switch ($page) {
     case 'login':
         echo $controller->loginPage();
         break;
-    case 'HOME':
+    case 'Accueil':
         echo $controller->homePage();
         break;
-    case 'Account':
-        echo $controller->accountPage();
-       break;
-    case 'CreateAccount':
-        echo $controller->CreateAccount();
-        break;
-    case 'ModifyAccount':
-        echo $controller->ModifyAccount();
-        break;
-    case 'Search':
-        echo $controller->SearchAccount();
-        break; 
-    case 'Search_Details':
-        if (isset($_GET['id'])) {
-            $id = $_GET['id'];
-        }
-        $controller->showSearch_Details($id);
-        break;
     case 'Offer':
-        echo $controller->offerPage(); 
+        echo $controller->offerPage();
         break;
-
     case 'DetailOffer':
         if (isset($_GET['id'])) {
             $id = $_GET['id'];
             $controller->showOfferDetails($id);
         } else {
-        echo 'ID non fourni ou invalide.';
+            echo 'ID non fourni ou invalide.';
         }
         break;
     case 'Company':
-        echo $controller->Company(); //fonction dans controller.php
+        echo $controller->Company();
         break;
     case 'Company_Details':
         if (isset($_GET['id'])) {
             $id = $_GET['id'];
         }
-        $controller->showCompanyDetails($id); //fonction dans controller.php
+        $controller->showCompanyDetails($id);
         break;
     case 'Wishlist':
-        echo $controller->wishlist();
+        echo $controller->Wishlist();
+        break;
+    case 'Submit_Application':
+        echo $controller->submitApplication();
         break;
 
-
-
+    // case 'Settings':
+    //     echo $controller->//fonction dans controller.php
+    //     break;
+    // case 'Account':
+    //     echo $controller->//fonction dans controller.php
     default:
         echo '404 Not Found';
         break;
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

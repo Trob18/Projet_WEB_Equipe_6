@@ -16,15 +16,15 @@ class AccountController {
     }
 
     // Créer un compte
-    public function createAccount($lastName, $firstName, $dateNaissance, $email, $telephone, $password, $type) {
+    public function createAccount($lastName, $firstName, $email, $password) {
         // Vérifier si l'email existe déjà
         if ($this->accountModel->getAccount('Email_Account', $email)) {
             return "Email déjà utilisé!";
         }
         
         // Créer le compte
-        $result = $this->accountModel->storeAccount($lastName, $firstName, $dateNaissance, $email, $telephone, $password, $type);
-        return $result;
+        $result = $this->accountModel->storeAccount($lastName, $firstName, $email, $password);
+        return $result ? "Compte créé avec succès!" : "Échec de la création du compte.";
     }
 
     // Obtenir un compte par une colonne spécifique
@@ -56,30 +56,9 @@ class AccountController {
         return $result ? "Compte mis à jour avec succès!" : "Échec de la mise à jour du compte.";
     }
 
-
-
-
+    // Récupérer tous les comptes
     public function getAllAccounts() {
-        return $this->accountModel->getAllAccounts();
-    }
-
-
-    public function searchAccounts($searchName, $limit, $offset)
-    {
-        return $this->accountModel->searchAccounts($searchName, $limit, $offset);
-    }
-
-
-    
-
-    public function getTotalAccount(){
-        return $this->accountModel->getTotalAccount();
-    }
-
-
-
-    public function getAccountWithPagination($limit, $offset)
-    {
-        return $this->accountModel->getAccountWithPagination($limit, $offset);
+        $accounts = $this->accountModel->getAllAccounts();
+        return !empty($accounts) ? $accounts : "Aucun compte trouvé.";
     }
 }

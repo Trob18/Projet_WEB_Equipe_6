@@ -1,6 +1,7 @@
 <?php
 
 namespace app\Model;
+
 use PDO;
 
 
@@ -15,32 +16,44 @@ class ApplyModel
         $this->pdo = $pdo;
     }
 
-    public function getApply($column, $value, $selectColumn = '*'){
+    public function getApply($column, $value, $selectColumn = '*')
+    {
         $validColumns = [
-            'Id_Application', 'Cv_Application', 'CoverLetter_Application', 'Date_Application', 
-            'Id_Account', 'Id_Offer'
+            'Id_Application',
+            'Cv_Application',
+            'CoverLetter_Application',
+            'Date_Application',
+            'Id_Account',
+            'Id_Offer'
         ];
-    
+
         if (!in_array($column, $validColumns) || (!in_array($selectColumn, $validColumns) && $selectColumn !== '*')) {
             return "Colonne invalide!";
         }
-    
+
         // Sélectionner la colonne spécifique demandée
         $stmt = $this->pdo->prepare("SELECT $selectColumn FROM applications WHERE $column = :value LIMIT 1");
         $stmt->execute(['value' => $value]);
-    
+
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        
+
         if ($result && $selectColumn !== '*') {
             return $result[$selectColumn] ?? null;
         }
-    
+
         return $result ?: null;
     }
 
     public function getAllApply()
     {
         $stmt = $this->pdo->query("SELECT * FROM applications ORDER BY Id_Application ASC");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function CountgetAllApply($id)
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM applications WHERE Id_Account = :id ORDER BY Id_Application ASC");
+        $stmt->execute(['id' => $id]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -56,22 +69,49 @@ class ApplyModel
         return $stmt->execute();
     }
 
-    public function storeApply($IdApply, $CvApply, $LetterApply, $DateApply)
-    {
-        if (empty($CvApply) || empty($LetterApply) || empty($DateApply) || empty($IdApply)) {
-            return false;
-        }
+    public function StoreApply($IdAccount, $cvPath, $CoverLetter, $dateApply, $IdOffer)
+{
+    // Vérification des données à insérer
+    var_dump($IdAccount, $cvPath, $CoverLetter, $dateApply, $IdOffer); // Vérification des données avant insertion
+    exit; // Arrête l'exécution pour s'assurer que les données sont correctes
 
-        $stmt = $this->pdo->prepare("INSERT INTO applications (Id_Application, Cv_Application, CoverLetter_Application, Date_Application) VALUES (?, ?, ?, ?)");
-        return $stmt->execute([$IdApply, $CvApply, $LetterApply, $DateApply]);
+    // Insertion des données dans la base de données
+    $query = 'INSERT INTO applications (IdAccount, IdOffer, CvFile, CoverLetter, DateApply) 
+              VALUES (:IdAccount, :IdOffer, :CvFile, :CoverLetter, :DateApply)';
+
+    // Préparation de la requête SQL
+    $stmt = $this->pdo->prepare($query);
+
+    // Exécution de la requête avec les paramètres
+    if ($stmt->execute([
+        ':IdAccount' => $IdAccount,
+        ':IdOffer' => $IdOffer,
+        ':CvFile' => $cvPath,
+        ':CoverLetter' => $CoverLetter,
+        ':DateApply' => $dateApply
+    ])) {
+        return true; // Retourne true si l'insertion réussit
+    } else {
+        return "Erreur lors de l'enregistrement de la candidature dans la base de données."; // Retourne un message d'erreur si l'insertion échoue
     }
+}
+    
+
 
     public function editApply($id, $newData)
     {
         $stmt = $this->pdo->prepare("UPDATE applications SET Cv_Application = ?, CoverLetterApplication = ? WHERE Id_Application = ?");
         return $stmt->execute([$newData['Cv_Application'], $newData['CoverLetterApplication'], $id]);
     }
+
+    public function storeApplication($coverLetter, $cvPath)
+{
+    $query = "INSERT INTO applications (CoverLetter_Application, Cv_Application) VALUES (:coverLetter, :cvPath)";
+    $stmt = $this->pdo->prepare($query);
+    $stmt->bindParam(':coverLetter', $coverLetter);
+    $stmt->bindParam(':cvPath', $cvPath);
+    $stmt->execute();
 }
 
 
-?>
+}

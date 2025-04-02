@@ -1,0 +1,30 @@
+{% extends 'base.twig' %}
+
+{% block title %}Wishlist{% endblock %}
+
+{% block content %}
+    <h2>Votre Liste de Favoris</h2>
+    
+    {% if wishlistOffers is empty %}
+        <p>Votre liste de favoris est vide.</p>
+    {% else %}
+        {% for offer in wishlistOffers %}
+            <div class="offre">
+                <h3>{{ offer.Title_Offer }}</h3>
+                <p>{{ offer.Company_Name }} - {{ offer.Address_Offer }}</p>
+                <span class="tag">{{ offer.Contract_Offer }}</span>
+                <span class="tag">{{ offer.ActivitySector_Offer }}</span>
+                <span class="salaire">{{ offer.Salary_Offer }}€</span>
+                <p>{{ offer.Description_Offer }}</p>
+                
+                <button class="voir-plus">Voir plus</button>
+
+                <form action="?page=Wishlist&action=remove" method="GET">
+                    <input type="hidden" name="offer_id" value="{{ offer.id }}">
+                    <button type="submit" class="remove-favoris-btn">Retirer des favoris</button>
+                </form>
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+{% endblock %}
