@@ -298,6 +298,10 @@ footer a:hover {
 /*Style Mentions Légales*/
 
 /* Style du conteneur principal */
+/*Gestion bouton*/
+.mention {
+  color: black;
+}
 
 
 .legalmain .legalcontain {
