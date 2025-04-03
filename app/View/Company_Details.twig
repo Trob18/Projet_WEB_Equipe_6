@@ -1,0 +1,48 @@
+{% extends 'base.twig' %}
+
+{% block title %}Company_Details{% endblock %}
+
+{% block content %}
+    <main class="Company">
+        <section class="Company_Recherche_Utilisateur">
+                <h1>{{ company.Name_Company }}</h1>
+                <img id="img_search" src="assets/img/{{ company.Image_Company }}" alt="Logo de {{ company.Name_Company }}">
+                <p>Email: {{ company.Email_Company }}</p>
+                <p>Adresse: {{ company.Address_Company }}</p>
+                <p>Description: {{ company.Description_Company }}</p>
+
+                <h3>Noter l'entreprise</h3>
+                <form method="POST">
+				    <div class="rating">
+                        <input type="radio" id="star5" name="rating" value="5">
+                        <label for="star5">&#9733;</label>
+
+                        <input type="radio" id="star4" name="rating" value="4">
+                        <label for="star4">&#9733;</label>
+
+                        <input type="radio" id="star3" name="rating" value="3">
+                        <label for="star3">&#9733;</label>
+
+                        <input type="radio" id="star2" name="rating" value="2">
+                        <label for="star2">&#9733;</label>
+
+                        <input type="radio" id="star1" name="rating" value="1">
+                        <label for="star1">&#9733;</label>
+				    </div>
+                    <button type="submit" name="rating">Noter</button>
+                </form>
+
+                {% if user_role in [1, 2] %}
+                    <form method="POST">
+                        <button class="btn-primary" name="modify_company" >Modification</button>
+                    </form>
+                    
+
+                    <form method="POST">
+                            <button type="submit" name="delete_company" class="btn-danger">Supprimer</button>
+                    </form>
+                {% endif %}
+                
+        </section>
+    </main>
+{% endblock %}

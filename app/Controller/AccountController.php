@@ -16,15 +16,15 @@ class AccountController {
     }
 
     // Créer un compte
-    public function createAccount($lastName, $firstName, $email, $password) {
+    public function createAccount($lastName, $firstName, $dateNaissance, $email, $telephone, $password, $type) {
         // Vérifier si l'email existe déjà
         if ($this->accountModel->getAccount('Email_Account', $email)) {
             return "Email déjà utilisé!";
         }
         
         // Créer le compte
-        $result = $this->accountModel->storeAccount($lastName, $firstName, $email, $password);
-        return $result ? "Compte créé avec succès!" : "Échec de la création du compte.";
+        $result = $this->accountModel->storeAccount($lastName, $firstName, $dateNaissance, $email, $telephone, $password, $type);
+        return $result;
     }
 
     // Obtenir un compte par une colonne spécifique
@@ -46,19 +46,55 @@ class AccountController {
     }
 
     // Mettre à jour un compte
-    public function editAccount($accountId, $newLastName, $newFirstName, $newEmail, $newPassword) {
+    public function editAccount($accountId, $newData) {
         // Vérifier si le compte existe
         if (!$this->accountModel->getAccount('Id_Account', $accountId)) {
             return "Compte introuvable!";
         }
 
-        $result = $this->accountModel->editAccount($accountId, $newLastName, $newFirstName, $newEmail, $newPassword);
+        $result = $this->accountModel->editAccount($accountId, $newData);
         return $result ? "Compte mis à jour avec succès!" : "Échec de la mise à jour du compte.";
     }
 
-    // Récupérer tous les comptes
+
+
+
     public function getAllAccounts() {
-        $accounts = $this->accountModel->getAllAccounts();
-        return !empty($accounts) ? $accounts : "Aucun compte trouvé.";
+        return $this->accountModel->getAllAccounts();
+    }
+
+
+    public function searchAccounts($searchName, $limit, $offset)
+    {
+        return $this->accountModel->searchAccounts($searchName, $limit, $offset);
+    }
+
+
+    
+
+    public function getTotalAccount(){
+        return $this->accountModel->getTotalAccount();
+    }
+
+
+
+    public function getAccountWithPagination($limit, $offset)
+    {
+        return $this->accountModel->getAccountWithPagination($limit, $offset);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    public function uploadimg($userId, $imageUrl){
+        return $this->accountModel->uploadimg($userId, $imageUrl);
     }
 }

@@ -1,0 +1,35 @@
+{% extends 'base.twig' %}
+
+{% block title %}Voir_Plus{% endblock %}
+
+{% block content %}
+    <div class = "bloc_detail">
+        <a href = "?page=Offer" id ="return">X</a>
+        <h3 id = "nom_offre">{{ offer.Title_Offer }}</h3>
+        <div class = "contenu">
+            <h3>Indication :</h3>
+            
+            <p> Lieu : <span class="tag"> {{ offer.Address_Offer }}</span></p>
+            <p>Entreprise : <span class="tag"> {{offer.Company_Name}}</span></p>
+            <p> Contrat de l'offre : <span class="tag">{{ offer.Contract_Offer }}</span>
+            <p> Secteur d'activité : <span class="tag">{{ offer.ActivitySector_Offer }}</span></p>
+
+            <p>Salaire : <span class="tag">{{offer.Salary_Offer}}€ </span></p>
+            <h3>Description :</h3>
+            <p class = "Description">{{ offer.Description_Offer }}</p>
+
+            </div>
+            {% if user_role in [1, 2] %}
+                <div class = "Placement_button">
+                    <a href="?page=DeleteOffer&id={{ offer.Id_Offer }}" id="bouton-supprimer">Supprimer</a>
+                    <a href="?page=ModifyOffer&id={{ offer.Id_Offer }}" id="bouton-modifier">Modifier Offre</a>
+                </div>
+            {% endif %}
+
+
+            
+    </div>
+
+
+    
+{% endblock %}

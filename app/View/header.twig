@@ -1,9 +1,30 @@
+{# header.twig #}
+
+
 <header>
-    <nav>
-        <ul>
-            <li><a href="/">Accueil</a></li>
-            <li><a href="/login">Connexion</a></li>
-            <li><a href="/register">Inscription</a></li>
-        </ul>
-    </nav>
+    <img src="assets/img/Logo_InternShip.svg" alt="logo" class="logo"/>
+	<div class="burger-menu" onclick="toggleMenu()">
+		☰
+	</div>
+	<div class="header-container" id="header-container">
+		
+
+		<div class="header-links">
+			<nav>
+				<a href="?page=HOME">Accueil</a>
+				<a href="?page=Offer">Offres</a>
+				<a href="?page=Company">Entreprises</a>
+				{% if user_role in [1, 2] %}
+                    <a href="?page=Search">Explorer</a>
+                {% endif %}
+				<a href="?page=Wishlist">Wishlist</a>
+			</nav>
+		</div>
+		<div class="header-actions">
+            <a href="?page=Account">
+                <button class="mon-compte">Mon Compte</button>
+            </a>
+			
+		</div>
+	</div>
 </header>

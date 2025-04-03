@@ -1,0 +1,179 @@
+{% extends 'base.twig' %}
+
+{% block title %}Offer_Page{% endblock %}
+
+{% block content %}
+
+<main class="main-container">
+      <section class="sidebar" id="bloc-a-cacher">
+        <div class="recherche">
+          <div class="search-input-container">
+            <input
+              type="text"
+              placeholder="Intitulé du poste, entreprise..."
+              id="job-title"
+            />
+          </div>
+          <button class="rechercher" id="search-button">Rechercher</button>
+
+          <div class="filtres">
+            <div class="filtres-row">
+              <select id="contract">
+                <option value="">-- Contrat-- </option>
+                <option value="cdi">CDI</option>
+                <option value="cdd">CDD</option>
+                <option value="stage">Stage</option>
+                <option value="alternance">Alternance</option>
+                <option value="interim">Intérim</option>
+              </select>
+            </div>
+            <div class="filtres-row">
+              <select id="sector">
+                <option value="">-- Secteur --</option>
+                <option value="informatique">Informatique</option>
+                <option value="btp">BTP</option>
+                <option value="agriculture">Agriculture</option>
+                <option value="hotellerie">Hôtellerie</option>
+                <option value="mecanique">Mécanique</option>
+                <option value="banque">Banque</option>
+              </select>
+              <select id="salaryfiltre" name="salary_range">
+                <option value="">-- Salaire --</option>
+                <option value="0-30000">Moins de 30 000€</option>
+                <option value="30000-50000">30 000€ - 50 000€</option>
+                <option value="50000-70000">50 000€ - 70 000€</option>
+                <option value="70000-100000">70 000€ - 100 000€</option>
+                <option value="100000-999999">Plus de 100 000€</option>
+            </select>
+            </div>
+            <div class="filtres-row">
+              <select id="companyfiltre" name="Id_Company">
+                <option value="">-- Entreprise --</option>
+                  {% for company in companies %}
+                <option value="{{ company.Id_Company }}">{{ company.Name_Company }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="container-offre-ajouter">
+        <section class="ajouter-offre-container" id="bloc-a-cacher3">
+          <div class="ajouter-offre" id="mon-bouton">+</div>
+          <div class="ajouter-offre-text">Créer une offre</div>
+        </section>
+        <section class="offres-container" id="bloc-a-cacher2">
+          <div class="offres">
+            {% include 'Template.twig' %}
+        </section>
+        <section class="creer-offre">
+          <div class="creer-offre-container" id="bloc-a-afficher">
+            <form id="my-form" method="POST" action="index.php?page=Offer">
+              <div class="container-bar">
+                <h2 class="creer-offre-text">Création de votre offre</h2>
+                <hr class="bar-text" />
+              </div>
+              <hr class="classic-hr" />
+              <label class="creer-offre-text2">
+                Nom de l'offre :<span class="etoile-rouge">*</span>
+              </label>
+              <input
+                name = "Title_Offer"
+                type="text"
+                id="nom-offre"
+                placeholder="Entrez le nom de l'offre"
+                required
+              />
+              <br>
+              <br>
+              <br>
+              <label for="company">Entreprise :</label>
+                <select id="company" name="Id_Company" required>
+                <option value="">-- Sélectionnez une entreprise --</option>
+                  {% for company in companies %}
+                <option value="{{ company.Id_Company }}">{{ company.Name_Company }}</option>
+                {% endfor %}
+              </select><br><br>
+
+              <label class="creer-offre-text2">
+                Adresse de l'offre :<span class="etoile-rouge">*</span>
+              </label>
+              <input
+                name = "Address_Offer"
+                type="text"
+                id="adresse-offre"
+                placeholder="Entrez l'adresse"
+                required
+              />
+              <label class="creer-offre-text2">
+                Secteur d'activité (1 max) :<span class="etoile-rouge">*</span>
+              </label>
+
+              <div id="badge-list">
+                <div class="badge">Informatique</div>
+                <div class="badge">BTP</div>
+                <div class="badge">Agriculture</div>
+                <div class="badge">Hôtellerie</div>
+                <div class="badge">Mécanique</div>
+                <div class="badge">Banque</div>
+              </div>
+              <p class="error" id="error-message"></p>
+              <input type="hidden" id="selected-badges" name = "ActivitySector_Offer" value="{{ formData.ActivitySector_Offer|default('') }}"/>
+
+              <label class="creer-offre-text2">
+                Type de Contrat :<span class="etoile-rouge">*</span>
+              </label>
+              <br />
+              <select name = "Contract_Offer" id="contrat"  required>
+                <option value="" disabled selected>
+                  -- Sélectionnez un contrat --
+                </option>
+                <option value="CDI">CDI</option>
+                <option value="CDD">CDD</option>
+                <option value="Stage">Stage</option>
+                <option value="Alternance">Alternance</option>
+              </select>
+              <br />
+              <label class="creer-offre-text2">Salaire Proposé :</label>
+              <br />
+              <input
+                name = "Salary_Offer"
+                class="input-nombre"
+                type="number"
+                id="numberInput1"
+                value=""
+                min="0"
+                step="1"
+                placeholder="Salaire"
+              />
+              <br />
+              <label class="creer-offre-text2">
+                Ajoutez une description au poste :<span class="etoile-rouge"
+                  >*</span
+                >
+              </label>
+              <br />
+              <textarea
+                name = "Description_Offer"
+                id="description"
+                rows="8"
+                cols="89"
+                placeholder="Écrivez la description ici..."
+                required
+              ></textarea>
+              <br /><br />
+              <div class="container-bouton-form">
+                <button id="bouton-annuler" type="reset">Annuler</button>
+                <button id="bouton-reset" type="reset">Reset</button>
+                {% if user_role in [1, 2] %}
+                  <button id="creer-button" type="submit">Créer</button>
+                {% endif %}  
+              </div>
+            </form>
+          </div>
+        </section>
+      </div>
+    </main>
+
+{% endblock %}
