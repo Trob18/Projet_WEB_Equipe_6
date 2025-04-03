@@ -6,7 +6,7 @@ namespace app\Test;
 use PHPUnit\Framework\TestCase;
 use app\Model\CompanyModel;
 use PDO;
-require_once 'C:\wamp64\www\Projet_WEB_Equipe_6-main\config\ConfigDatabase.php';
+require_once 'C:\wamp64\www\Projet_WEB_Equipe_6-main\config\ConfigDatabase2.php';
 require_once 'C:\wamp64\www\Projet_WEB_Equipe_6-main\app\Model\AccountModel.php';
 
 class CompanyTest extends TestCase
@@ -17,7 +17,7 @@ class CompanyTest extends TestCase
 
     protected function setUp(): void
     {
-        $configDatabase = new \app\config\ConfigDatabase();
+        $configDatabase = new \app\config\ConfigDatabase2nd();
         $this->pdo = $configDatabase->getConnection();
         $this->company = new CompanyModel($this->pdo);
 
@@ -41,17 +41,17 @@ class CompanyTest extends TestCase
         $this->pdo->exec("DELETE FROM companies WHERE Id_Company = 15");
 
         // Tentative d'insertion du compte
-        $result = $this->company->storeCompany(15, "company", "imagetest.jpg", "e-mail.test", "27 rue des tests, 44000 Groland", "test_insert_into");
+        $result = $this->company->storeCompany("company", "e-mail.test",  "27 rue des tests, 44000 Groland", "test_insert_into" );
         $this->assertTrue($result);
 
         // Vérifier si le compte a bien été ajouté
-        $stmt = $this->pdo->prepare("SELECT * FROM companies WHERE Id_Company = ?");
-        $stmt->execute([15]);
+        $stmt = $this->pdo->prepare("SELECT * FROM companies WHERE Email_Company = ?");
+        $stmt->execute(["e-mail.test"]);
         $company = $stmt->fetch();
 
         // Validation des informations du compte
         $this->assertNotEmpty($company);
-        $this->assertEquals(15, $company['Id_Company']);
+        $this->assertEquals("company", $company['Name_Company']);
         $this->assertEquals("e-mail.test", $company['Email_Company']);
     }
 
@@ -98,7 +98,7 @@ class CompanyTest extends TestCase
         // Vérification que l'on récupère bien le compte de test
         $this->assertNotEmpty($company);
         $this->assertGreaterThan(0, count($company)); // Vérifier qu'il y a au moins un compte
-        $this->assertEquals(3, $company[0]['Id_Company']); // Vérifier que le premier compte a l'ID 2
+        $this->assertEquals(2, $company[0]['Id_Company']); // Vérifier que le premier compte a l'ID 2
     }
 
     public function testEditCompany() {
@@ -117,7 +117,7 @@ class CompanyTest extends TestCase
         $stmt->execute();
         $id = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $this->assertEquals('Test_Edit', $id['Name_Company']);
+        $this->assertEquals('company', $id['Name_Company']);
     }
 }
 ?>

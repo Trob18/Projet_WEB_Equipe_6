@@ -69,52 +69,28 @@ class ApplyModel
         return $stmt->execute();
     }
 
-    public function StoreApply($IdAccount, $cvPath, $CoverLetter, $dateApply, $IdOffer)
-    {
-        // Vérification des données à insérer
-        if (empty($IdAccount) || empty($IdOffer) || empty($cvPath)) {
-            return "Erreur : Informations manquantes pour l'enregistrement.";
-        }
-
-        // Insertion des données dans la base de données
-        $query = 'INSERT INTO applications (IdAccount, IdOffer, CvFile, CoverLetter, DateApply) 
-              VALUES (:IdAccount, :IdOffer, :CvFile, :CoverLetter, :DateApply)';
-
-        // Préparation de la requête SQL
-        $stmt = $this->pdo->prepare($query);
-
-        // Exécution de la requête avec les paramètres
-        if ($stmt->execute([
-            ':IdAccount' => $IdAccount,
-            ':IdOffer' => $IdOffer,
-            ':CvFile' => $cvPath,
-            ':CoverLetter' => $CoverLetter,
-            ':DateApply' => $dateApply
-        ])) {
-            return true; // Retourne true si l'insertion réussit
-        } else {
-            return "Erreur lors de l'enregistrement de la candidature dans la base de données."; // Retourne un message d'erreur si l'insertion échoue
-        }
+  
+    public function storeApplication( $IdOffer, $coverLetter, $cvNameUnique, $id_account, $date_application) {
+        $sql = "INSERT INTO applications ( Id_Offer, CoverLetter_Application, Cv_Application, Id_Account, Date_Application) 
+                VALUES (:Id_Offer, :CoverLetter_Application, :Cv_Application, :Id_Account, :Date_Application)";
+        
+        $stmt = $this->pdo->prepare($sql);
+        
+        return $stmt->execute([
+            ':Id_Offer' => $IdOffer,
+            ':CoverLetter_Application' => $coverLetter,
+            ':Cv_Application' => $cvNameUnique,
+            ':Id_Account' => $id_account,
+            ':Date_Application' => $date_application
+        ]);
     }
-
 
 
     public function editApply($id, $newData)
     {
-        $stmt = $this->pdo->prepare("UPDATE applications SET Cv_Application = ?, CoverLetterApplication = ? WHERE Id_Application = ?");
-        return $stmt->execute([$newData['Cv_Application'], $newData['CoverLetterApplication'], $id]);
+        $stmt = $this->pdo->prepare("UPDATE applications SET Cv_Application = ?, CoverLetter_Application = ? WHERE Id_Application = ?");
+        return $stmt->execute([$newData['Cv_Application'], $newData['CoverLetter_Application'], $id]);
     }
 
-    public function storeApplication($id, $IdOffer, $coverLetter, $cvNameUnique) {
-        $sql = "INSERT INTO Applications (Id_Account, Id_Offer, CoverLetter_Application, Cv_Application) 
-                VALUES (:Id_Account, :Id_Offer, :CoverLetter, :CV)";
-        
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([
-            'Id_Account' => $id,
-            'Id_Offer' => $IdOffer,
-            'CoverLetter' => $coverLetter,
-            'CV' => $cvNameUnique
-        ]);
-    }
+
 }

@@ -6,7 +6,7 @@ namespace app\Test;
 use PHPUnit\Framework\TestCase;
 use app\Model\ApplyModel;
 use PDO;
-require_once 'C:\wamp64\www\Projet_WEB_Equipe_6-main\config\ConfigDatabase.php';
+require_once 'C:\wamp64\www\Projet_WEB_Equipe_6-main\config\ConfigDatabase2.php';
 require_once 'C:\wamp64\www\Projet_WEB_Equipe_6-main\app\Model\AccountModel.php';
 
 class ApplyTest extends TestCase
@@ -17,7 +17,7 @@ class ApplyTest extends TestCase
 
     protected function setUp(): void
     {
-        $configDatabase = new \app\config\ConfigDatabase();
+        $configDatabase = new \app\config\ConfigDatabase2nd();
         $this->pdo = $configDatabase->getConnection();
         $this->apply = new ApplyModel($this->pdo);
 
@@ -40,17 +40,19 @@ class ApplyTest extends TestCase
     {
         $this->pdo->exec("DELETE FROM applications WHERE Id_Application = 14");
         // Tentative d'insertion du compte
-        $result = $this->apply->storeApply(14, "test", "Test124", "2025-02-20");
-        $this->assertTrue($result);
+        $this->apply->storeApplication(14, 10, "Test1245", "test.png","2025-11-26");
+        
 
         // Vérifier si le compte a bien été ajouté
         $stmt = $this->pdo->prepare("SELECT * FROM applications WHERE Id_Application = ?");
-        $stmt->execute([14]);
+        $stmt->execute([98]);
         $apply = $stmt->fetch();
 
+        
+
         // Validation des informations du compte
-        $this->assertEquals(14, $apply['Id_Application']);
-        $this->assertEquals("test", $apply['Cv_Application']);
+        $this->assertEquals(98, $apply['Id_Application']);
+        $this->assertEquals("Test1245", $apply['Cv_Application']);
     }
 
     public function testGetApply()

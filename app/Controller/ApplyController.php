@@ -42,7 +42,7 @@ class ApplyController
     // Supprimer un compte par ID
     public function removeApply($IdApply)
     {
-        $account = $this->ApplyModel->getApplyById($IdApply);
+        $account = $this->ApplyModel->getApply('Id_Application' ,$IdApply);
         if (!$account) {
             return false; //"Apply introuvable!"
         }
@@ -63,7 +63,7 @@ class ApplyController
         return $result ? true : false; //"Apply supprimé avec succès!" : "Échec de la suppression du Apply."
     }
 
-    public function storeApply($IdAccount, $CvFile, $CoverLetter, $IdOffer)
+    public function storeApplication($IdAccount, $CvFile, $CoverLetter, $IdOffer)
     {
         // Vérification si un fichier CV a été uploadé
         if (!isset($CvFile) || $CvFile['error'] !== UPLOAD_ERR_OK) {
@@ -97,7 +97,7 @@ class ApplyController
 
         // Enregistrement de la candidature en base de données
         $dateApply = date('Y-m-d H:i:s');
-        $store = $this->ApplyModel->StoreApply($IdAccount, $cvNameUnique, $CoverLetter, $dateApply, $IdOffer); // Passer le nom du fichier unique
+        $store = $this->ApplyModel->storeApplication( $IdOffer, $CoverLetter, $cvNameUnique, $IdAccount, $dateApply); // Passer le nom du fichier unique
 
         if (!$store) {
             return "Erreur lors de l'enregistrement de la candidature.";
@@ -113,7 +113,7 @@ class ApplyController
     // Mettre à jour un compte
     public function editApply($IdApply, $newData)
     {
-        $account = $this->ApplyModel->getApplyById($IdApply);
+        $account = $this->ApplyModel->getApply('Id_Application' ,$IdApply);
         if (!$account) {
             return false; //"Apply introuvable!"
         }
@@ -122,8 +122,5 @@ class ApplyController
         return $result ? true : false; //"Apply mis à jour avec succès!" : "Échec de la mise à jour du Apply."
     }
 
-    public function storeApplication($id, $IdOffer, $coverLetter, $cvPath)
-    {
-        $this->ApplyModel->storeApplication($id, $IdOffer, $coverLetter, $cvPath);
-    }
+    
 }
