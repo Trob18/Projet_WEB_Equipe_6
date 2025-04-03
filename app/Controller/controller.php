@@ -326,35 +326,6 @@ class Controller extends Abstract_Controller {
     }
 
 
-
-
-
-
-    public function wishlist(){
-        session_start();
-        $Home_Page_header = $_SESSION['user'] ?? [];
-        $user_role = $_SESSION['user']['user_role'];
-
-        $id_account = $this->accountController->getAccount('Id_Roles', $user_role, "Id_Account");
-        $id_offers = $this->wishlistController->getUserWishlist($id_account);
-        print_r ($id_offers);
-        if ($id_offers==[]){
-            $wishlist = [
-                'error'=>'Wishlist vide'
-            ];
-        } else {
-            $wishlist = [
-                'test'=>$id_offers
-
-            ];
-        }
-        $home_Page= array_merge($Home_Page, $wishlist);
-
-        echo $this->templateEngine->render('Wishlist_Page.twig', $home_Page);
-
-    }
-
-
 //---------------------------------------Offre-----------------------------------------------
 
 // fonction pour la page Offre
@@ -384,9 +355,13 @@ class Controller extends Abstract_Controller {
                 exit;
         }}
         $offers = $this->offerController->getAllOffers();
+        $id_account = $this->accountController->getAccount('Email_Account', $_COOKIE['email'], "Id_Account");
+        $wishlistIds = $this->wishlistController->getUserWishlist($id_account);
+
         foreach ($offers as &$offer) {
             $company = $this->companyController->getCompany('Id_Company', $offer['Id_Company']);
             $offer['Company_Name'] = $company['Name_Company'] ?? 'Non spécifié';
+            $offer['inWishlist'] = in_array($offer['Id_Offer'], $wishlistIds);
         }
     
         // Rendu de la vue avec Twig
@@ -483,5 +458,88 @@ class Controller extends Abstract_Controller {
     }
 //-------------------------------------------------------------------------------------------- 
     
-
+        
+public function wishlist() {
+    session_start();
+    $user_role = $_SESSION['user']['user_role'] ?? null;
+    
+    // Récupérer l'ID de l'utilisateur
+    $id_account = $this->accountController->getAccount('Email_Account', $_COOKIE['email'], "Id_Account");
+    
+    // Vérifier que $id_account est bien un ID valide et pas une chaîne d'erreur
+    if (is_string($id_account) && !is_numeric($id_account)) {
+        echo $this->templateEngine->render('Wishlist_Page.twig', [
+            'user_role' => $user_role,
+            'error' => 'Erreur lors de la récupération du compte utilisateur'
+        ]);
+        return;
+    }
+    
+    // Récupérer les IDs des offres dans la wishlist
+    $wishlistIds = $this->wishlistController->getUserWishlist($id_account);
+    
+    // Vérifier que $wishlistIds est bien un tableau
+    if (!is_array($wishlistIds)) {
+        echo $this->templateEngine->render('Wishlist_Page.twig', [
+            'user_role' => $user_role,
+            'error' => 'Erreur lors de la récupération de la wishlist'
+        ]);
+        return;
+    }
+    
+    // Si la wishlist est vide
+    if (empty($wishlistIds)) {
+        echo $this->templateEngine->render('Wishlist_Page.twig', [
+            'user_role' => $user_role
+        ]);
+        return;
+    }
+    
+    // Récupérer les détails des offres
+    $wishlistOffers = [];
+    foreach ($wishlistIds as $offerId) {
+        $offer = $this->offerController->getOffer('Id_Offer', $offerId);
+        if ($offer && is_array($offer)) {  // Vérifier que $offer est un tableau
+            // Ajouter le nom de l'entreprise
+            $company = $this->companyController->getCompany('Id_Company', $offer['Id_Company']);
+            if (is_array($company)) {  // Vérifier que $company est un tableau
+                $offer['Company_Name'] = $company['Name_Company'] ?? 'Non spécifié';
+                $wishlistOffers[] = $offer;
+            }
+        }
+    }
+    
+    echo $this->templateEngine->render('Wishlist_Page.twig', [
+        'wishlistOffers' => $wishlistOffers,
+        'user_role' => $user_role
+    ]);
 }
+
+
+    // Ajouter ou supprimer une offre de la wishlist
+    public function toggleWishlist($id) {
+        session_start();
+        
+        // Récupérer l'ID de l'utilisateur
+        $id_account = $this->accountController->getAccount('Email_Account', $_COOKIE['email'], "Id_Account");
+        
+        // Vérifier si l'offre est déjà dans la wishlist
+        if ($this->wishlistController->isInWishlist($id_account, $id)) {
+            // Supprimer de la wishlist
+            $this->wishlistController->removeFromWishlist($id_account, $id);
+        } else {
+            // Ajouter à la wishlist
+            $this->wishlistController->addToWishlist($id_account, $id);
+        }
+        
+        // Redirection vers la page précédente
+        $referer = $_SERVER['HTTP_REFERER'] ?? 'index.php?page=Offer';
+        header("Location: $referer");
+        exit;
+    }
+
+
+
+
+
+    }

@@ -104,10 +104,20 @@ switch ($page) {
         }
         $controller->showCompanyDetails($id); //fonction dans controller.php
         break;
+
+//-----------------------------------------------
     case 'Wishlist':
         echo $controller->wishlist();
         break;
-
+    
+    case 'ToggleWishlist':
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+            $controller->toggleWishlist($id);
+        } else {
+            echo 'ID non fourni ou invalide.';
+        }
+        break;
 
 
     default:

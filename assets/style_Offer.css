@@ -483,3 +483,71 @@ textarea {
 #load-more-btn:hover {
   background-color: rgba(32, 89, 146, 0.9);
 }
+
+.bouton-favori {
+  text-decoration: none;
+  font-size: 200%;
+  color: rgba(6, 71, 137, 0.9);
+  cursor: pointer;
+  display: inline-block;
+  margin-bottom: 1.6%;
+  right: 0;
+}
+
+.bouton-favori:hover {
+  color: rgba(32, 89, 146, 0.9);
+}
+
+.bouton-favori.active {
+  color: rgba(6, 71, 137, 0.9);
+}
+#titre_wishlist {
+  color: rgba(6, 71, 137, 0.9);
+  text-align: center;
+  font-size: 150%;
+}
+.offres-container-wishlist {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2%;
+  margin-bottom: 4%;
+  width: 40%;
+  max-height: 60vh;
+  overflow-y: auto;
+  background-color: rgba(224, 231, 234, 0.6667);
+  padding: 2%;
+  border-radius: 2vh;
+  box-shadow: 0vh 1vh 2vh rgba(0, 0, 0, 0.1);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+.offre-wishlist {
+  background: #f7f8f9;
+  border: 1% solid #ccc;
+  padding: 2%;
+  border-radius: 2vh;
+  box-shadow: 0vh 1vh 2vh rgba(0, 0, 0, 0.1);
+  margin-bottom: 5%;
+}
+
+.offre-wishlist h3 {
+  margin: 0 0 1.2%;
+  font-size: 100%;
+}
+
+.offre-wishlist p {
+  margin: 1% 0;
+  color: #555;
+}
+.contour_wishlist {
+  width: fit-content;
+  background-color: #f7f8f9;
+  padding: 0.5%;
+  padding-left: 2%;
+  padding-right: 2%;
+  border-radius: 2vh;
+
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2%;
+}
