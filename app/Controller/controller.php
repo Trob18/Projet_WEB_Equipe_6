@@ -69,7 +69,7 @@ class Controller extends Abstract_Controller {
                     'Date' => $this->applyController->getApply('Id_Application', 1, 'Date_Application'),
                     'Candidatures' => count($allCandidatures),
                     'Company' => $this->companyController->getCompany('Id_Company', 1, 'Name_Company'),
-                    'Wishlist' => count($this->wishlistController->getWishlist('Id_Account',$id_account)),
+                    'Wishlist' => is_array($this->wishlistController->getWishlist('Id_Account', $id_account)) ? count($this->wishlistController->getWishlist('Id_Account', $id_account)) : 0,
                     'id'=> $this->accountController->getAccount('Email_Account', $username, 'Id_Account'),
                     'user_role' => $this->accountController->getAccount('Email_Account', $username, 'Id_Roles')
                 ];
@@ -86,9 +86,38 @@ class Controller extends Abstract_Controller {
             }
         }
     }
-    public function homePage(){
+    public function homePage() {
         session_start();
-        $Home_Page = $_SESSION['user'] ?? []; 
+        
+        // Vérifier si l'utilisateur est connecté
+        if (isset($_SESSION['user']) && isset($_SESSION['user']['id'])) {
+            $username = $_COOKIE['email'] ?? null;
+            $id_account = $_SESSION['user']['id'];
+            
+
+            if ($username) {
+                $allCandidatures = $this->applyController->CountgetAllApply($id_account);
+                
+                // Mettre à jour les informations de l'utilisateur
+                $_SESSION['user'] = [
+                    'Email_Account' => $username, // Stocker l'email pour les futures mises à jour
+                    'lastname' => $this->accountController->getAccount('Email_Account', $username, 'LastName_Account'),
+                    'firstname' => $this->accountController->getAccount('Email_Account', $username, 'FirstName_Account'),
+                    'Description' => $this->accountController->getAccount('Email_Account', $username, 'Description_Account'),
+                    'Title_Offer' => $this->offerController->getOffer('Id_Offer', 1, 'Title_Offer'),
+                    'Notes' => $this->notesController->getNote('Id_Notes', 1, 'Note'),
+                    'Permission' => $this->permissionController->GetPermission('Id_Permissions', 1, 'Description_Permission'),
+                    'Date' => $this->applyController->getApply('Id_Application', 1, 'Date_Application'),
+                    'Candidatures' => count($allCandidatures),
+                    'Company' => $this->companyController->getCompany('Id_Company', 1, 'Name_Company'),
+                    'Wishlist' => is_array($this->wishlistController->getWishlist('Id_Account', $id_account)) ? count($this->wishlistController->getWishlist('Id_Account', $id_account)) : 0,
+                    'id' => $id_account,
+                    'user_role' => $this->accountController->getAccount('Email_Account', $username, 'Id_Roles')
+                ];
+            }
+        }
+        
+        $Home_Page = $_SESSION['user'] ?? [];
         echo $this->templateEngine->render('Home_Page.twig', $Home_Page);
         exit();
     }
@@ -354,19 +383,19 @@ class Controller extends Abstract_Controller {
         $Home_Page_header = $_SESSION['user'] ?? [];
         $user_role = $_SESSION['user']['user_role'];
         $username = $_COOKIE['email'] ?? '';
-
-        $error ='';
+    
+        $error = '';
         if(isset($_POST['rating'])) {
             $id_company = $id;
             $id_account = $this->accountController->getAccount('Email_Account', $username, 'Id_Account');
             
-            
-            
-
             $liste_note = $this->notesController->getAllNotesArg("{$id} = Id_Company");
+            if (!is_array($liste_note)) {
+                $liste_note = [];
+            }
             $check = 0;
             if (!empty($_POST)) {
-                if (isset($_POST['rating'])) { //;
+                if (isset($_POST['rating'])) {
                     foreach ($liste_note as $note) {
                         if ($note["Id_Account"] == $id_account) {
                             $error = 'Vous avez déjà notez cette entreprise';
@@ -374,27 +403,63 @@ class Controller extends Abstract_Controller {
                         }
                     }
                     if ($check == 0) {
-                        $rating = ['Note' => $_POST['rating'] ?? '','Id_Account' =>  $id_account, 'Id_Company' => $id_company];
+                        $rating = ['Note' => $_POST['rating'] ?? '', 'Id_Account' => $id_account, 'Id_Company' => $id_company];
                         $this->notesController->createNote($rating);
                         $check = 0;
                     }
-
-
                 }
             }
         }
+        
         $liste_note = $this->notesController->getAllNotesArg("{$id} = Id_Company");
         $note_global = 0;
-
-        foreach ($liste_note as $note) {
-            $note_global += $note["Note"];
+        $note_message = '';
+        $note_moyenne = 0;
+        
+        // Vérifier si des notes existent
+        if (empty($liste_note) || $liste_note === "Aucune Note Trouvée !") {
+            $note_message = "Soyez le premier à noter cette entreprise";
+        } else {
+            foreach ($liste_note as $note) {
+                $note_global += $note["Note"];
+            }
+            $note_moyenne = count($liste_note) > 0 ? round($note_global / count($liste_note), 1) : 0;
         }
+        
         if (isset($_POST['delete_company'])) {
             if ($user_role==3) {
                 exit("Erreur : L'utilisateur n'a pas les permissions requises.");
             }
             $this->companyController->removeCompany($id);
-            echo $this->templateEngine->render('Home_Page.twig', ['user_role' => $user_role]);
+            if (isset($_SESSION['user']) && isset($_SESSION['user']['id'])) {
+                $username = $_COOKIE['email'] ?? null;
+                $id_account = $_SESSION['user']['id'];
+                
+    
+                if ($username) {
+                    $allCandidatures = $this->applyController->CountgetAllApply($id_account);
+                    
+                    // Mettre à jour les informations de l'utilisateur
+                    $_SESSION['user'] = [
+                        'Email_Account' => $username, // Stocker l'email pour les futures mises à jour
+                        'lastname' => $this->accountController->getAccount('Email_Account', $username, 'LastName_Account'),
+                        'firstname' => $this->accountController->getAccount('Email_Account', $username, 'FirstName_Account'),
+                        'Description' => $this->accountController->getAccount('Email_Account', $username, 'Description_Account'),
+                        'Title_Offer' => $this->offerController->getOffer('Id_Offer', 1, 'Title_Offer'),
+                        'Notes' => $this->notesController->getNote('Id_Notes', 1, 'Note'),
+                        'Permission' => $this->permissionController->GetPermission('Id_Permissions', 1, 'Description_Permission'),
+                        'Date' => $this->applyController->getApply('Id_Application', 1, 'Date_Application'),
+                        'Candidatures' => count($allCandidatures),
+                        'Company' => $this->companyController->getCompany('Id_Company', 1, 'Name_Company'),
+                        'Wishlist' => is_array($this->wishlistController->getWishlist('Id_Account', $id_account)) ? count($this->wishlistController->getWishlist('Id_Account', $id_account)) : 0,
+                        'id' => $id_account,
+                        'user_role' => $this->accountController->getAccount('Email_Account', $username, 'Id_Roles')
+                    ];
+                }
+            }
+            
+            $Home_Page = $_SESSION['user'] ?? [];
+            echo $this->templateEngine->render('Home_Page.twig', $Home_Page);
             exit();
         }
         elseif (isset($_POST['update_company'])) {
@@ -412,7 +477,8 @@ class Controller extends Abstract_Controller {
                 'company' => $this->companyController->getCompany('Id_Company', $id),
                 'user_role' => $user_role,
                 'success' => 'Compte mis à jour avec succès',
-                'noteglobal' => round($note_global / count($liste_note),1),
+                'noteglobal' => $note_moyenne,
+                'note_message' => $note_message,
                 'error' => $error
             ]);
             exit();
@@ -424,17 +490,16 @@ class Controller extends Abstract_Controller {
             echo $this->templateEngine->render('Modifycompany_Page.twig', ['user_role' => $user_role]);
             exit();
         }
-
         else {
             $company = $this->companyController->getCompany('Id_Company', $id);
             echo $this->templateEngine->render('Company_Details.twig', [
                 'company' => $company, 
-                'noteglobal' => round($note_global / count($liste_note),1),                
-                'user_role' => $user_role
+                'noteglobal' => $note_moyenne,
+                'note_message' => $note_message,                
+                'user_role' => $user_role,
+                'error' => $error
             ]);  
         }
-
-        
     }
 
 
@@ -449,7 +514,7 @@ class Controller extends Abstract_Controller {
         if ($user_role==3) {
             exit("Erreur : L'utilisateur n'a pas les permissions requises.");
         }
-        $limit = 10;
+        $limit = 14;
         $account_page = isset($_GET['account_page']) ? (int)$_GET['account_page'] : 1;
         $offset = ($account_page - 1) * $limit;
 
@@ -462,7 +527,6 @@ class Controller extends Abstract_Controller {
             $accounts = $this->accountController->getAccountWithPagination($limit, $offset);
             $totalAccounts = $this->accountController->getTotalAccount();
         }
-
 
 
 
@@ -492,7 +556,34 @@ class Controller extends Abstract_Controller {
                 exit("Erreur : L'utilisateur n'a pas les permissions requises.");
             }
             $this->accountController->removeAccount($id);
-            echo $this->templateEngine->render('Home_Page.twig', ['user_role' => $user_role]);
+            $username = $_COOKIE['email'] ?? null;
+                $id_account = $_SESSION['user']['id'];
+                
+    
+                if ($username) {
+                    $allCandidatures = $this->applyController->CountgetAllApply($id_account);
+                    
+                    // Mettre à jour les informations de l'utilisateur
+                    $_SESSION['user'] = [
+                        'Email_Account' => $username, // Stocker l'email pour les futures mises à jour
+                        'lastname' => $this->accountController->getAccount('Email_Account', $username, 'LastName_Account'),
+                        'firstname' => $this->accountController->getAccount('Email_Account', $username, 'FirstName_Account'),
+                        'Description' => $this->accountController->getAccount('Email_Account', $username, 'Description_Account'),
+                        'Title_Offer' => $this->offerController->getOffer('Id_Offer', 1, 'Title_Offer'),
+                        'Notes' => $this->notesController->getNote('Id_Notes', 1, 'Note'),
+                        'Permission' => $this->permissionController->GetPermission('Id_Permissions', 1, 'Description_Permission'),
+                        'Date' => $this->applyController->getApply('Id_Application', 1, 'Date_Application'),
+                        'Candidatures' => count($allCandidatures),
+                        'Company' => $this->companyController->getCompany('Id_Company', 1, 'Name_Company'),
+                        'Wishlist' => is_array($this->wishlistController->getWishlist('Id_Account', $id_account)) ? count($this->wishlistController->getWishlist('Id_Account', $id_account)) : 0,
+                        'id' => $id_account,
+                        'user_role' => $this->accountController->getAccount('Email_Account', $username, 'Id_Roles')
+                    ];
+                }
+            
+            
+            $Home_Page = $_SESSION['user'] ?? [];
+            echo $this->templateEngine->render('Home_Page.twig', $Home_Page);
             exit();
         }
         elseif (isset($_POST['update_account'])) {
@@ -602,6 +693,7 @@ class Controller extends Abstract_Controller {
             $offer['Company_Name'] = $company['Name_Company'] ?? 'Non spécifié';
         }
         echo $this->templateEngine->render('Voir_plus_page.twig', [
+            'id_offer' => $id,
             'offer' => $offer, 
             'user_role' => $user_role
         ]);
@@ -747,7 +839,9 @@ class Controller extends Abstract_Controller {
 
     public function Legal_NoticePage()
     {
-        echo $this->templateEngine->render('Legal_Notice.twig', ['error' => ""]);
+        session_start();
+        $user_role = $_SESSION['user']['user_role'] ?? null;
+        echo $this->templateEngine->render('Legal_Notice.twig', ['error' => "", 'user_role' => $user_role]);
         exit();
     }
 
@@ -760,7 +854,7 @@ class Controller extends Abstract_Controller {
 
 
 
-    public function submitApplication()
+    public function submitApplication($id_offer)
     {
         session_start();
         $id = $_SESSION['user']['id'];
@@ -783,10 +877,10 @@ class Controller extends Abstract_Controller {
             }
 
             // Vérifier si les ID de l'offre et du compte sont présents
-            $IdOffer = $_POST['IdOffer'] ?? $_POST['Id_Offer'] ?? null;
+            $IdOffer = $id_offer;
 
             // Si l'ID de l'offre ou l'ID du compte est manquant, afficher une erreur
-            $IdOffer = $_SESSION['Id_Offer'] ?? null;
+        
             if (!$IdOffer) {
                 echo "⚠️ Avertissement : ID de l'offre non trouvé, mais on continue...";
             }

@@ -20,7 +20,7 @@
     <section class="Account_list">
       <div class="Account_ligne">
           {% for account in accounts %}
-              {% if account.Id_Roles != 1 and (user_role != 2 or account.Id_Roles == 3) %}
+              {% if  ((user_role == 1 and account.Id_Roles != 1) or (user_role == 2 and account.Id_Roles != 1 and account.Id_Roles != 2)) %}
                   <a href="?page=Search_Details&id={{ account.Id_Account }}">
                       <div class="Account_card">
                           <img src="assets/img/{{ account.Image_Account }}" />
@@ -33,17 +33,17 @@
   </section>
 
     <div class="Account_pagination">
-      {% if account_page > 1 %}
-        <a href="?page=Accounts&account_page={{ account_page - 1 }}" class="prev">Précédent</a>
-      {% endif %}
+        {% if account_page > 1 %}
+          <a href="?page=Search&account_page={{ account_page - 1 }}" class="prev">Précédent</a>
+        {% endif %}
 
-      {% for i in 1..totalPages %}
-        <a href="?page=Accounts&account_page={{ i }}" class="{% if i == account_page %}active{% endif %}">{{ i }}</a>
-      {% endfor %}
+        {% for i in 1..totalPages %}
+          <a href="?page=Search&account_page={{ i }}" class="{% if i == account_page %}active{% endif %}">{{ i }}</a>
+        {% endfor %}
 
-      {% if account_page < totalPages %}
-        <a href="?page=Accounts&account_page={{ account_page + 1 }}" class="next">Suivant</a>
-      {% endif %}
+        {% if account_page < totalPages %}
+          <a href="?page=Search&account_page={{ account_page + 1 }}" class="next">Suivant</a>
+        {% endif %}
     </div>
   </section>
 </main>

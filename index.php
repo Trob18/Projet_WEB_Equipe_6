@@ -132,7 +132,8 @@ switch ($page) {
         break;
 
     case 'Submit_Application':
-        echo $controller->submitApplication();
+        $id_offer = $_POST['IdOffer'] ?? null;
+        echo $controller->submitApplication($id_offer);
         break;
 
     default:

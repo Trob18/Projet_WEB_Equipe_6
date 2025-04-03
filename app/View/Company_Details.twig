@@ -21,7 +21,11 @@
 				<div class="entreprises_intéressées">
 					<h3>Note :
 						{{error}}</h3>
-					<p class="Accueil-infos-titre">{{noteglobal}}/5</p>
+					{% if note_message %}
+						<p class="no-rating-message">{{ note_message }}</p>
+					{% else %}
+						<p class="Accueil-infos-titre">{{noteglobal}}/5</p>
+					{% endif %}
 					<div id="entreprises" class="entreprises-container"></div>
 				</div>
 				<form method='POST'>
