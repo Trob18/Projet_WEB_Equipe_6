@@ -32,11 +32,14 @@
     </div>
 
     {% if idrole != 'Student' %}
-        <a href="?page=CreateAccount">
+        <a class="button_modify" href="?page=CreateAccount">
             <button class="btn-primary" onclick="window.location.href='?page=CreateAccount">Ajouter Compte</button>
         </a>
-        <button class="btn-primary" onclick="window.location.href='?page=ModifyAccount'"  >Modification</button>
-        <button type="reset" class="btn-danger">Supprimer</button>
+        <a class="button_modify" href="?page=CreateCompany">
+            <button class="btn-primary" onclick="window.location.href='?page=CreateCompany">Ajouter Entreprise</button>
+        </a>
+        
+        
     {% endif %}
 
 </main>

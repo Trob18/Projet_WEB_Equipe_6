@@ -68,7 +68,7 @@ class Controller extends Abstract_Controller {
                 
                 
                 
-                
+                'id'=> $this->accountController->getAccount('Email_Account', $username, 'Id_Account'),
                 'user_role' => $this->accountController->getAccount('Email_Account', $username, 'Id_Roles')
                 ];
                 $Home_Page = $_SESSION['user'] ?? [];
@@ -153,7 +153,7 @@ class Controller extends Abstract_Controller {
             exit("Erreur : L'utilisateur n'a pas les permissions requises.");
         }
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (isset($_FILES['image']) && $_SERVER['REQUEST_METHOD'] === 'POST') {     
             $id = $_POST['choix'] ?? null;
             $id = ($id === 'Etudiant') ? 3 : (($id === 'Pilote') ? 2 : 0);
 
@@ -172,10 +172,28 @@ class Controller extends Abstract_Controller {
             } else {
                 $result = $this->accountController->createAccount($nom, $prenom, $dateNaissance, $email, $telephone, $password, $id);
                 if ($result == TRUE) {
-                    echo $this->templateEngine->render('CreateAccount.twig', [
-                        'Success' => 'Compte créé avec succès !'
-                    ]);
-                    exit();
+
+                    $uploadDir = "C:/CESI/Code/Livrable/assets/img/"; 
+                    $fileName = basename($_FILES['image']['name']);
+                    $targetFilePath = $uploadDir . $fileName;
+                    $fileType = strtolower(pathinfo($targetFilePath, PATHINFO_EXTENSION));
+                
+                    $allowedTypes = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+                
+                    if (in_array($fileType, $allowedTypes)) {
+                        if (move_uploaded_file($_FILES['image']['tmp_name'], $targetFilePath)) {
+                            $this->accountController->uploadimg($email, $fileName);
+                            echo $this->templateEngine->render('CreateAccount.twig', [
+                                'user_role' => $user_role,
+                                'Success' => 'Compte créé avec succès !'
+                            ]);
+                            exit();
+                        } else {
+                            echo "Erreur lors du téléversement.";
+                        }
+                    } else {
+                        echo "Format d'image non valide. Formats autorisés : jpg, jpeg, png, gif, webp.";
+                    }          
                 } else {
                     echo $this->templateEngine->render('CreateAccount.twig', [
                         'Error' => 'Erreur lors de la création du compte.'
@@ -196,14 +214,95 @@ class Controller extends Abstract_Controller {
 
 
 
+    public function CreateCompany(){
+        session_start();
+        $Home_Page_header = $_SESSION['user'] ?? [];
+        $user_role = $_SESSION['user']['user_role'];
+
+        if (!isset($_COOKIE['email'])) {
+            exit("Erreur : Aucun email trouvé dans les cookies.");
+        }
+
+        $type_Account = $this->accountController->getAccount('Email_Account', $_COOKIE['email'], 'Id_Roles');
 
 
+        if (!in_array($type_Account, [1, 2])) {
+            exit("Erreur : L'utilisateur n'a pas les permissions requises.");
+        }
+
+        if (isset($_FILES['image']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = $_POST['choix'] ?? null;
+            $id = ($id === 'Etudiant') ? 3 : (($id === 'Pilote') ? 2 : 0);
+
+            $nom = $_POST['nom'] ?? null;
+            $email = $_POST['email'] ?? null;
+            $address = $_POST['addressCompany'] ?? null;
+            $description = $_POST['descriptionCompany'] ?? null;
 
 
+            $result = $this->companyController->createCompany($nom, $email, $address, $description);
+            if ($result == TRUE) {
 
-    public function ModifyAccount(){
-        echo $this->templateEngine->render('Modifyaccount_Page.twig');
+                $uploadDir = "C:/CESI/Code/Livrable/assets/img/"; 
+                $fileName = basename($_FILES['image']['name']);
+                $targetFilePath = $uploadDir . $fileName;
+                $fileType = strtolower(pathinfo($targetFilePath, PATHINFO_EXTENSION));
+            
+                $allowedTypes = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+            
+                if (in_array($fileType, $allowedTypes)) {
+                    if (move_uploaded_file($_FILES['image']['tmp_name'], $targetFilePath)) {
+                        $this->companyController->uploadimg($email, $fileName);
+                        echo $this->templateEngine->render('CreateCompany.twig', [
+                            'user_role' => $user_role,
+                            'Success' => 'Compte créé avec succès !'
+                        ]);
+                        exit();
+                    } else {
+                        echo "Erreur lors du téléversement.";
+                    }
+                } else {
+                    echo "Format d'image non valide. Formats autorisés : jpg, jpeg, png, gif, webp.";
+                }          
+
+                    
+                
+                exit();
+            } else {
+                echo $this->templateEngine->render('CreateCompany.twig', [
+                    'Error' => 'Erreur lors de la création du compte.'
+                ]);
+                exit();
+            }
+            }  
+        
+
+        
+        
+        $CreaPage=['user_role' => $user_role];
+        if ($type_Account == 1){
+            $CreaPage = array_merge($CreaPage, ['Admin' => 1]);
+        }
+        echo $this->templateEngine->render('CreateCompany.twig', $CreaPage);
+
     }
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
 
 
 
@@ -320,14 +419,66 @@ class Controller extends Abstract_Controller {
         session_start();
         $Home_Page_header = $_SESSION['user'] ?? [];
         $user_role = $_SESSION['user']['user_role'];
-
-        $account = $this->accountController->getAccount('Id_Account', $id);
-        echo $this->templateEngine->render('SearchAccount_Details_Page.twig', ['account' => $account, 'user_role' => $user_role]);
+        
+        // Gestion de la suppression du compte
+        if (isset($_POST['delete_account'])) {
+            $this->accountController->removeAccount($id);
+            echo $this->templateEngine->render('Home_Page.twig', ['user_role' => $user_role]);
+            exit();
+        }
+        // Gestion de la mise à jour du compte
+        elseif (isset($_POST['update_account'])) {
+            $error = '';
+            $password = $_POST['password'] ?? '';
+            $password2 = $_POST['confirm-password'] ?? '';
+            
+            if ($password != $password2) {
+                $error = 'Différents mots de passe saisis';
+                echo $this->templateEngine->render('Modifyaccount_Page.twig', [
+                    'error' => $error,
+                    'user_role' => $user_role
+                ]);
+                exit();
+            } else {
+                $newData = [
+                    'Description_Account' => $_POST['details'] ?? '',
+                    'Studies_Account' => $_POST['school'] ?? '',
+                    'Address_Account' => $_POST['address'] ?? '',
+                    'PhoneNumber_Account' => $_POST['phone'] ?? '',
+                    'user_role' => $user_role
+                ];
+                if (!empty($password)) {
+                    $newData['Password_Account'] = $password;
+                }
+                $result = $this->accountController->editAccount($id, $newData);
+                
+                // Afficher un message de confirmation ou rediriger vers une page de détails
+                echo $this->templateEngine->render('SearchAccount_Details_Page.twig', [
+                    'account' => $this->accountController->getAccount('Id_Account', $id),
+                    'user_role' => $user_role,
+                    'success' => 'Compte mis à jour avec succès'
+                ]);
+                exit();
+            }
+        }
+        // Affichage du formulaire de modification
+        elseif (isset($_POST['modify_account'])) {
+            echo $this->templateEngine->render('Modifyaccount_Page.twig', ['user_role' => $user_role]);
+            exit();
+        }
+        // Affichage des détails du compte
+        else {
+            $account = $this->accountController->getAccount('Id_Account', $id);
+            echo $this->templateEngine->render('SearchAccount_Details_Page.twig', [
+                'account' => $account, 
+                'user_role' => $user_role
+            ]);    
+        }
     }
 
 
 
-
+   
 
 
     public function wishlist(){

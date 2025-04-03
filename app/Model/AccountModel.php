@@ -162,4 +162,19 @@ class AccountModel {
 
 
 
+
+
+    public function uploadimg($userId, $imageUrl){
+        $stmt = $this->pdo->prepare("
+        UPDATE accounts 
+        SET Image_Account = :image_url 
+        WHERE Email_Account = :userId
+        ");
+        $stmt->execute([
+            'image_url' => $imageUrl,
+            'userId' => $userId
+        ]);
+        return TRUE;
+    }
+
 }

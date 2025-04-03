@@ -14,6 +14,13 @@
                 <p>Adresse: {{ account.Address_Account }}</p>
                 <p>Etude: {{ account.Studies_Account }}</p>
                 <p>Description: {{ account.Description_Account }}</p>
+                <form method="POST">
+                        <button class="btn-primary" name="modify_account" >Modification</button>
+                </form>
+                
+                <form method="POST">
+                        <button type="submit" name="delete_account" class="btn-danger">Supprimer</button>
+                </form>
         </section>
 </main>
 

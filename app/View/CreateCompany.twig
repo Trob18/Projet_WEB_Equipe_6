@@ -1,0 +1,51 @@
+{% extends 'base.twig' %}
+
+{% block title %}CreateCompany{% endblock %}
+
+{% block content %}
+
+<main class="EditAccount">
+    <section class="creation" id="creation">
+
+        <h2>Création d'entreprise</h2>
+        
+        {% if Error %}
+            <p style="color: red;">{{ error }}</p>
+        {% endif %}
+        {% if Success %}
+            <p style="color: green;">{{ Success }}</p>
+        {% endif %}
+
+        <section class="create-etudiant" id="create-etudiant">
+            <form method="POST" enctype="multipart/form-data">
+                <div class="form-container">
+                    <label for="adresse">Photo de Profil :</label>
+                    <input type="file" name="image" required>
+                    <label for="adresse">Nom entreprise :</label>
+                    <input type="text" id="nom" name="nom" placeholder="Votre nom" required>
+
+                    <label for="email">Email Entreprise :</label>
+                    <input type="email" id="email" name="email" placeholder="L'email" autocomplete="email" required>
+
+                    <label for="adresse">Adresse Entreprise:</label>
+                    <input type="text" id="nom" name="addressCompany" placeholder="Votre nom" required>
+
+                    <label for="adresse">Description Entreprise:</label>
+                    <input type="text" id="nom" name="descriptionCompany" placeholder="Votre nom" required>
+
+                    <button type="submit" class="btn-primary">Enregistrement</button>
+                    <hr>
+                    <label>En créant un compte, vous acceptez nos Conditions de service et notre Politique de
+                        confidentialité.
+                    </label>
+                </div>
+            </form>
+        </section>
+    </section>
+            
+
+</main>
+
+
+
+{% endblock %}

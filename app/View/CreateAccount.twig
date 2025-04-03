@@ -18,7 +18,7 @@
         {% endif %}
 
         <section class="create-etudiant" id="create-etudiant">
-            <form method="POST">
+            <form method="POST" enctype="multipart/form-data">
                 <div class="checkbox">
                     <label>
                         <input type="checkbox" name="choix" value="Etudiant" id="checkbox1" class="checkbox1" onchange="toggleMessage1()"> Étudiant
@@ -30,7 +30,17 @@
                         </label>
                     {% endif %}
                 </div>
+                
                 <div class="form-container">
+
+                    <label for="adresse">Photo de Profil :</label>
+                    <input type="file" name="image" required>
+
+
+
+
+
+
                     <label for="adresse">Nom :</label>
                     <input type="text" id="nom" name="nom" placeholder="Votre nom" required>
 
@@ -59,7 +69,7 @@
                     <input type="password" id="confirm-password" name="confirm-password"
                         placeholder="Confirmez le mot de passe" minlength="6" required>
 
-                    <button type="submit" class="btn-primary">Enregistrement</button>
+                    <button type="submit" class="btn-primary">Créer Compte</button>
                     <hr>
                     <label>En créant un compte, vous acceptez nos Conditions de service et notre Politique de
                         confidentialité.

@@ -25,6 +25,11 @@ class CompanyController
         return $account ? $account : "Company introuvable!";
     }
 
+    public function createCompany($firstName, $email, $address, $description) {
+        $result = $this->CompanyModel->storeCompany($firstName, $email, $address, $description);
+        return $result;
+    }
+
     // Récupérer tous les comptes
     public function getAllCompany()
     {
@@ -106,5 +111,13 @@ class CompanyController
         } else {
             echo "Aucune entreprise sélectionnée.";
         }
+    }
+
+
+
+
+
+    public function uploadimg($userId, $imageUrl){
+        return $this->CompanyModel->uploadimgC($userId, $imageUrl);
     }
 }

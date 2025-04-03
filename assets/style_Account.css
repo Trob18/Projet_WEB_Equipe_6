@@ -17,8 +17,6 @@
 }
 
 
-
-
 .main-account .container {
     background: rgba(255, 255, 255, 0.75);
     padding: 20px;
@@ -78,7 +76,9 @@
     margin: 5px 0 2px;
 }
 
-
+.button_modify{
+    text-decoration: none;
+}
 .main-account .btn-primary {
     background: #004090;
     width: 150px;

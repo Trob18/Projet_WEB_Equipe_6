@@ -44,6 +44,37 @@ class CompanyModel
         return $result ?: null;
     }
 
+
+
+
+
+
+    public function storeCompany($firstName, $email, $address, $description) {
+        if (empty($firstName) || empty($email) || empty($address) || empty($description)) {
+            return false;
+        }
+        
+        $stmt = $this->pdo->prepare("
+            INSERT INTO companies (Name_Company, Email_Company, Address_Company, Description_Company)
+            VALUES (:Name_Company, :Email_Company, :Address_Company, :Description_Company)
+        ");
+        
+        $stmt->execute([
+            'Name_Company' => $firstName,
+            'Email_Company' => $email,
+            'Address_Company' => $address,
+            'Description_Company' => $description
+        ]);
+        
+        return true;
+    }
+
+
+
+
+
+
+
     public function getAllCompany()
     {
         $stmt = $this->pdo->query("SELECT * FROM companies ORDER BY Id_Company ASC"); // dans l'ordre croissant pour éviter les renvoie dans tous le sens
@@ -63,15 +94,7 @@ class CompanyModel
 
     }
 
-    public function StoreCompany($IdCompany, $NameCompany, $ImageCompany, $EmailCompany, $AdresseCompany, $DescriptionCompany)
-    {
-        if (empty($IdCompany) || empty($NameCompany) || empty($ImageCompany) || empty($EmailCompany) || empty($AdresseCompany) || empty($DescriptionCompany)) {
-            return false;
-        }
-
-        $stmt = $this->pdo->prepare("INSERT INTO companies (Id_Company,Name_Company,Image_Company,Email_Company,Address_Company,Description_Company) VALUES (?, ?, ?, ?,?, ?)");
-        return $stmt->execute([$IdCompany, $NameCompany, $ImageCompany, $EmailCompany, $AdresseCompany, $DescriptionCompany]);
-    }
+    
 
     public function editCompany($id, $newData)
     {
@@ -136,4 +159,66 @@ class CompanyModel
         $stmt->execute(['id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+
+
+
+
+
+
+    public function uploadimgC($userId, $imageUrl){
+        $stmt = $this->pdo->prepare("
+        UPDATE companies 
+        SET Image_Company = :image_url 
+        WHERE Email_Company = :userId
+        ");
+        $stmt->execute([
+            'image_url' => $imageUrl,
+            'userId' => $userId
+        ]);
+        return TRUE;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

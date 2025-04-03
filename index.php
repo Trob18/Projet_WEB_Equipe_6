@@ -40,6 +40,9 @@ switch ($page) {
     case 'CreateAccount':
         echo $controller->CreateAccount();
         break;
+    case 'CreateCompany':
+        echo $controller->CreateCompany();
+        break;
     case 'ModifyAccount':
         echo $controller->ModifyAccount();
         break;
