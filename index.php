@@ -55,6 +55,38 @@ switch ($page) {
         }
         $controller->showSearch_Details($id);
         break;
+
+
+
+
+
+    case 'DeleteOffer':
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+            $controller->deleteOffer($id);
+        } else {
+            echo 'ID non fourni ou invalide.';
+        }
+        break;
+
+    case 'ModifyOffer':
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+            echo $controller->modifyOffer($id);
+        } else {
+            echo 'ID non fourni ou invalide.';
+        }
+        break;
+    
+    case 'UpdateOffer':
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+            echo $controller->updateOffer($id);
+        } else {
+            echo 'ID non fourni ou invalide.';
+        }
+        break;
+        
     case 'Offer':
         echo $controller->offerPage(); 
         break;
@@ -67,6 +99,14 @@ switch ($page) {
         echo 'ID non fourni ou invalide.';
         }
         break;
+
+
+
+
+
+
+
+
     case 'Company':
         echo $controller->Company(); //fonction dans controller.php
         break;
@@ -79,8 +119,21 @@ switch ($page) {
     case 'Wishlist':
         echo $controller->wishlist();
         break;
+    case 'LegalNotice':
+        echo $controller->Legal_NoticePage();//fonction dans controller.php
+        break;   
+    case 'ToggleWishlist':
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+            $controller->toggleWishlist($id);
+        } else {
+            echo 'ID non fourni ou invalide.';
+        }
+        break;
 
-
+    case 'Submit_Application':
+        echo $controller->submitApplication();
+        break;
 
     default:
         echo '404 Not Found';

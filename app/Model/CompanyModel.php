@@ -83,8 +83,8 @@ class CompanyModel
 
     public function removeCompany($id)
     {
-        $stmt = $this->pdo->prepare("DELETE FROM companies WHERE Id_Company = ?");
-        return $stmt->execute([$id]);
+        $stmt = $this->pdo->prepare("DELETE FROM companies WHERE Id_Company = :id");
+        return $stmt->execute(['id' => $id]);
     }
 
     public function removeAllCompany()
@@ -98,9 +98,49 @@ class CompanyModel
 
     public function editCompany($id, $newData)
     {
-        $stmt = $this->pdo->prepare("UPDATE companies SET Name_Company = ?, Image_Company = ?, Email_Company = ?, Address_Company = ?, Description_Company = ? WHERE Id_Company = ?");
-        return $stmt->execute([$newData['Name_Company'], $newData['Image_Company'], $newData['Email_Company'], $newData['Adresse_Company'], $newData['Description_Company'], $newData['CoverLetterApplication'], $id]);
+        $validColumns = [
+            'Description_Company', 'Address_Company'
+        ];
+
+        $setParts = [];
+        $params = ['id' => $id];
+
+        foreach ($newData as $key => $value) {
+            if (in_array($key, $validColumns)) {
+                $setParts[] = "$key = :$key";
+                $params[$key] = $value;
+            }
+        }
+
+        if (empty($setParts)) {
+            return false;
+        }
+
+        $sql = "UPDATE companies SET " . implode(', ', $setParts) . " WHERE Id_Company = :id";
+        $stmt = $this->pdo->prepare($sql);
+
+        return $stmt->execute($params);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function getCompaniesWithPagination($limit, $offset)
 {

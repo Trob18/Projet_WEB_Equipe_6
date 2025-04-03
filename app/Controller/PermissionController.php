@@ -75,5 +75,3 @@ class PermissionController{
         }
     }
 }
-
-?>

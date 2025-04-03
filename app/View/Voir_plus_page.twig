@@ -3,13 +3,60 @@
 {% block title %}Voir_Plus{% endblock %}
 
 {% block content %}
-    <div class = "test">
-        <h3>{{ offer.Title_Offer }}</h3>
-        <p>{{offer.Company_Name}} - {{ offer.Address_Offer }}</p>
-        <span class="tag">{{ offer.Contract_Offer }}</span>
-        <span class="tag">{{ offer.ActivitySector_Offer }}</span>
-        <span class="salaire">{{offer.Salary_Offer}}€ </span>
-        <p>{{ offer.Description_Offer }}</p>
+    <div class = "bloc_detail">
+        <a href = "?page=Offer" id ="return">X</a>
+        <h3 id = "nom_offre">{{ offer.Title_Offer }}</h3>
+        <div class = "contenu">
+            <h3>Indication :</h3>
+            
+            <p> Lieu : <span class="tag"> {{ offer.Address_Offer }}</span></p>
+            <p>Entreprise : <span class="tag"> {{offer.Company_Name}}</span></p>
+            <p> Contrat de l'offre : <span class="tag">{{ offer.Contract_Offer }}</span>
+            <p> Secteur d'activité : <span class="tag">{{ offer.ActivitySector_Offer }}</span></p>
+
+            <p>Salaire : <span class="tag">{{offer.Salary_Offer}}€ </span></p>
+            <h3>Description :</h3>
+            <p class = "Description">{{ offer.Description_Offer }}</p>
+
+            </div>
+            {% if user_role in [1, 2] %}
+                <div class = "Placement_button">
+                    <a href="?page=DeleteOffer&id={{ offer.Id_Offer }}" id="bouton-supprimer">Supprimer</a>
+                    <a href="?page=ModifyOffer&id={{ offer.Id_Offer }}" id="bouton-modifier">Modifier Offre</a>
+                </div>
+            {% endif %}
+            {% if user_role in [1, 3] %}
+                <div class="bloc_detail">
+                    <form method="POST" action="?page=Submit_Application" enctype="multipart/form-data">
+                        <input type="hidden" name="IdOffer" value="{{ offer.Id_Offer }}">
+                        <div>
+                            <p>
+                                <label for="cover_letter">Lettre de motivation</label>
+                            </p>
+                            <textarea name="cover_letter" id="cover_letter" rows="10" cols="50"></textarea>
+                        </div>
+                        <div>
+                            <p>
+                                <label for="cv">CV</label>
+                            </p>
+                            <input type="file" name="cv" id="cv" accept="pdf, image/*">
+                        </div>
+                        <button type="submit">Envoyer la candidature</button>
+                    </form>
+                </div>
+
+                {% if success_message is defined %}
+                    <p style="color: green;">{{ success_message }}</p>
+                {% endif %}
+
+                {% if error_message is defined %}
+                    <p style="color: red;">{{ error_message }}</p>
+                {% endif %}
+            {% endif %}
+            
+
+
+            
     </div>
 
 

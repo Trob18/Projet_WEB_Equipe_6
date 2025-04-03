@@ -80,7 +80,7 @@
     text-decoration: none;
 }
 .main-account .btn-primary {
-    background: #004090;
+    background: rgba(6, 71, 137, 0.5);
     width: 150px;
     color: white;
     border: none;

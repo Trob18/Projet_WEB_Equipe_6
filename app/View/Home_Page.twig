@@ -6,44 +6,38 @@
 
 
 <main>
-  <section class="accueil-container">
-    <div class="tableau_de_bord_profil">
-      <div class="tableau_de_bord">
-        <h3>
-          Mon tableau de bord
-          <img src="assets/img/voilier.png" class="icone-voilier" />
-        </h3>
-        <span class="Accueil-infos">{{Date}}</span>
-        <p class="Accueil-infos-titre">Candidature(s)</p>
-        <span class="Accueil-infos">{{Company}}</span>
-        <p class="Accueil-infos-titre">Wishlist(s)</p>
-        <span class="Accueil-infos">{{user_role}}</span>
-        <p class="Accueil-infos-titre">Vue(s) de Profil</p>
-      </div>
-      <div class="profil">
-        <h3>Mon Profil</h3>
-        <p class="Accueil-infos-titre">
-          Nom : <span class="Accueil-infos">{{ firstname }} </span>
-        </p>
-        <p class="Accueil-infos-titre">
-          Prénom : <span class="Accueil-infos">{{Title_Offer}}</span>
-        </p>
-        <p class="Accueil-infos-titre">
-          Compte : <span class="Accueil-infos">{{Notes}}</span>
-        </p>
-        <p class="Accueil-infos-titre">
-          Depuis : <span class="Accueil-infos">{{Permission}}</span>
-        </p>
-      </div>
-    </div>
-
-    <div class="entreprises_intéressées">
-      <h3>Ces entreprises se sont intéressées à mon profil</h3>
-      <p class="Accueil-infos-titre">Au cours des 30 derniers jours :</p>
-      <div id="entreprises" class="entreprises-container"></div>
-    </div>
-  </section>
-</main>
+		<section class="accueil-container">
+			<div class="tableau_de_bord_profil">
+				<div class="tableau_de_bord">
+					<h3>
+						Mon tableau de bord
+						<img src="assets/img/voilier.png" class="icone-voilier"/>
+					</h3>
+					<p class="Accueil-infos-titre">Candidatures</p>
+					<span class="Accueil-infos">{{Candidatures}}</span>
+					<p class="Accueil-infos-titre">Wishlist</p>
+					<span class="Accueil-infos">{{Wishlist}}</span>
+          <p class="Accueil-infos-titre">Description</p>
+					<span class="Accueil-infos">{{Description}}</span>
+				</div>
+				<div class="profil">
+					<h3>Mon Profil</h3>
+					<p class="Accueil-infos-titre">
+						Nom
+						<span class="Accueil-infos">{{lastname}}</span>
+					</p>
+					<p class="Accueil-infos-titre">
+						Prénom
+						<span class="Accueil-infos">{{firstname}}</span>
+					</p>
+					<p class="Accueil-infos-titre">
+						Compte
+						<span class="Accueil-infos">{{Permission}}</span>
+					</p>
+				</div>
+			</div>
+		</section>
+	</main>
 
 
 {% endblock %}

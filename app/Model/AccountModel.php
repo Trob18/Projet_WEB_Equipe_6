@@ -57,7 +57,7 @@ class AccountModel {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
         $stmt = $this->pdo->prepare("
-            INSERT INTO accounts (LastName_Account, FirstName_Account, DateNaissance_Account, Email_Account, PhoneNumber_Account, Password_Account, Id_Roles) 
+            INSERT INTO accounts (LastName_Account, FirstName_Account, BirthDate_Account, Email_Account, PhoneNumber_Account, Password_Account, Id_Roles) 
             VALUES (:lastName, :firstName, :dateNaissance, :email, :telephone, :password, :type)
         ");
         $stmt->execute([
@@ -110,6 +110,20 @@ class AccountModel {
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 
 
     public function getTotalAccount(){

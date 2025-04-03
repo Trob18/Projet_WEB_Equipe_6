@@ -1,0 +1,68 @@
+{% extends 'base.twig' %}
+
+{% block title %}Modifier une offre{% endblock %}
+
+{% block content %}
+<div id = "modif" class="creer-offre-container" style="display: block;">
+    <h2 class="creer-offre-text">Modifier une offre</h2>
+    <div class="container-bar">
+        <div class="bar-text"></div>
+    </div>
+
+    <form id="modify-offer-form" action="?page=UpdateOffer&id={{ offer.Id_Offer }}" method="post">
+        <hr class="classic-hr">
+
+        <label class="creer-offre-text3" for="title">Titre de l'offre <span class="etoile-rouge">*</span></label>
+        <input type="text" id="title" name="title" value="{{ offer.Title_Offer }}" required>
+
+        <br><br>
+      
+
+        <label class="creer-offre-text3" for="company">Nom de l'entreprise <span class="etoile-rouge">*</span></label>
+        <input type="text" id="company" name="company" value="{{ offer.Company_Name }}" required>
+
+        <br><br>
+
+        <label class="creer-offre-text3" for="address">Adresse <span class="etoile-rouge">*</span></label>
+        <input type="text" id="address" name="address" value="{{ offer.Address_Offer }}" required>
+
+        <br><br>
+
+
+        <label class="creer-offre-text3" for="contract">Type de contrat <span class="etoile-rouge">*</span></label>
+        <select id="contract" name="contract" required>
+            <option value="CDI" {% if offer.Contract_Offer == 'CDI' %}selected{% endif %}>CDI</option>
+            <option value="CDD" {% if offer.Contract_Offer == 'CDD' %}selected{% endif %}>CDD</option>
+            <option value="Stage" {% if offer.Contract_Offer == 'Stage' %}selected{% endif %}>Stage</option>
+            <option value="Alternance" {% if offer.Contract_Offer == 'Alternance' %}selected{% endif %}>Alternance</option>
+        </select>
+
+        <br><br>
+
+        <label class="creer-offre-text3" for="sector">Secteur d'activité <span class="etoile-rouge">*</span></label>
+        <select id="sector" name="sector" required>
+            <option value="Informatique" {% if offer.ActivitySector_Offer == 'Informatique' %}selected{% endif %}>Informatique</option>
+            <option value="BTP" {% if offer.ActivitySector_Offer == 'BTP' %}selected{% endif %}>BTP</option>
+            <option value= "Agriculture" {% if offer.ActivitySector_Offer == 'Agriculture' %}selected{% endif %}>Agriculture</option>
+            <option value="Hôtellerie" {% if offer.ActivitySector_Offer == 'Hôtellerie' %}selected{% endif %}>Hôtellerie</option>
+            <option value="Mécanique" {% if offer.ActivitySector_Offer == 'Mécanique' %}selected{% endif %}>Mécanique</option>
+            <option value="Banque" {% if offer.ActivitySector_Offer == 'Banque' %}selected{% endif %}>Banque</option>
+        </select>
+
+        <br><br>
+
+        <label class="creer-offre-text3" for="salary">Salaire (€) <span class="etoile-rouge">*</span></label>
+        <input type="number" id="salary" name="salary" class="input-nombre" value="{{ offer.Salary_Offer }}" required min="0">
+
+        <br><br>
+
+        <label class="creer-offre-text3" for="description">Description <span class="etoile-rouge">*</span></label>
+        <textarea id="description" name="description" rows="6" required>{{ offer.Description_Offer }}</textarea>
+
+        <div class="container-bouton-form">
+            <a href = "?page=Offer" id="bouton-supprimer">Annuler</a>
+            <button type="submit" id="creer-button">Enregistrer les modifications</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

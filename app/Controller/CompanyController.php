@@ -42,11 +42,11 @@ class CompanyController
     {
         $account = $this->CompanyModel->getCompany('Id_Company', $IdCompany);
         if (!$account) {
-            return false; //"Company introuvable!"
+            return "Compte introuvable!";
         }
 
         $result = $this->CompanyModel->removeCompany($IdCompany);
-        return $result ? true : false; //"Company supprimé avec succès!" : "Échec de la suppression du Company."
+        return $result ? "Compte supprimé avec succès!" : "Échec de la suppression du compte."; 
     }
 
     // Supprimer tous les compte par ID
@@ -80,7 +80,7 @@ class CompanyController
         }
 
         $result = $this->CompanyModel->editCompany($IdCompany, $newData);
-        return $result ? true : false; //"Company mis à jour avec succès!" : "Échec de la mise à jour du Company."
+        return $result ? "Compte mis à jour avec succès!" : "Échec de la mise à jour du compte.";
     }
 
     public function getCompaniesWithPagination($limit, $offset)
