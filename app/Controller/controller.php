@@ -809,4 +809,86 @@ class Controller extends Abstract_Controller {
         exit();
     }
 
+
+
+
+
+
+
+
+
+
+    public function submitApplication()
+    {
+        session_start();
+        $id = $_SESSION['user']['id'];
+        if (!$id) {
+            echo "Erreur : L'ID de l'utilisateur est manquant.";
+            exit();
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Vérification si la lettre de motivation est remplie
+            $coverLetter = !empty($_POST['cover_letter']) ? $_POST['cover_letter'] : null;
+
+            // Vérification si un fichier CV a été téléchargé
+            $cvUploaded = isset($_FILES['cv']) && $_FILES['cv']['error'] === 0;
+
+            // Vérification si au moins un des deux fichiers a été envoyé
+            if (empty($coverLetter) && !$cvUploaded) {
+                echo "Erreur : Vous devez envoyer au moins une lettre de motivation ou un CV.";
+                exit();
+            }
+
+            // Vérifier si les ID de l'offre et du compte sont présents
+            $IdOffer = $_POST['IdOffer'] ?? $_POST['Id_Offer'] ?? null;
+
+            // Si l'ID de l'offre ou l'ID du compte est manquant, afficher une erreur
+            $IdOffer = $_SESSION['Id_Offer'] ?? null;
+            if (!$IdOffer) {
+                echo "⚠️ Avertissement : ID de l'offre non trouvé, mais on continue...";
+            }
+            if (!$id) {
+                echo "⚠️ Avertissement : ID de l'utilisateur non trouvé, mais on continue...";
+            }
+
+
+            // Vérification de l'upload du CV
+            if ($cvUploaded) {
+                $cvTmpName = $_FILES['cv']['tmp_name'];
+                $cvName = $_FILES['cv']['name'];
+                $cvExt = strtolower(pathinfo($cvName, PATHINFO_EXTENSION));
+
+                // Générer un nom de fichier unique pour éviter les conflits
+                $cvNameUnique = uniqid('cv_', true) . '.' . $cvExt;
+
+                // Création du dossier s'il n'existe pas
+                $cvDirectory = 'assets/cv/';
+                if (!is_dir($cvDirectory) && !mkdir($cvDirectory, 0777, true)) {
+                    echo "Erreur lors de la création du dossier de stockage.";
+                    exit();
+                }
+
+                // Déplacement du fichier vers le dossier final
+                $cvPath = $cvDirectory . $cvNameUnique; // Le chemin complet pour le stockage sur le serveur
+                if (!move_uploaded_file($cvTmpName, $cvPath)) {
+                    echo "Erreur lors du téléchargement du fichier.";
+                    exit();
+                }
+            } else {
+                $cvNameUnique = null; // Pas de fichier téléchargé
+            }
+
+
+
+            // Sauvegarder la candidature avec la lettre de motivation et le CV (le cas échéant)
+            $this->applyController->storeApplication($id, $IdOffer, $coverLetter, $cvNameUnique);
+
+            echo "Candidature enregistrée avec succès !";
+            exit();
+        } else {
+            echo "Méthode invalide.";
+            exit();
+        }
+    }
 }

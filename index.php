@@ -136,7 +136,9 @@ switch ($page) {
         }
         break;
 
-
+    case 'Submit_Application':
+        echo $controller->submitApplication();
+        break;
 
     default:
         echo '404 Not Found';
