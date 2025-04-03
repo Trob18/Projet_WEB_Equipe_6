@@ -85,19 +85,7 @@ class OfferTest extends TestCase {
         $this->assertContains('Offre 2', $titles, "La liste des offres doit contenir 'Offre 2'.");
     }
 
-    // Crée des données de test pour une offre
-    private function getTestOfferData($title = 'Offre de test') {
-        return [
-            'Title_Offer' => $title,
-            'Address_Offer' => 'Paris',
-            'ActivitySector_Offer' => 'Informatique',
-            'Salary_Offer' => 45000,
-            'Description_Offer' => 'Ceci est une offre de test.',
-            'Id_Company'=> 4,
-            'Contract_Offer' => 'CDI',
-        ];
-    }
-
+    
     // Insère une offre de test dans la base de données
     private function insertTestOffer($title = 'Offre de test') {
         $data = $this->getTestOfferData($title);
@@ -141,5 +129,20 @@ class OfferTest extends TestCase {
 
         $this->assertEmpty($permissions, "La liste des permissions doit être vide après suppression.");
     }
+
+
+    // Crée des données de test pour une offre
+    private function getTestOfferData($title = 'Offre de test') {
+        return [
+            'Title_Offer' => $title,
+            'Address_Offer' => 'Paris',
+            'ActivitySector_Offer' => 'Informatique',
+            'Salary_Offer' => 45000,
+            'Description_Offer' => 'Ceci est une offre de test.',
+            'Id_Company'=> 4,
+            'Contract_Offer' => 'CDI',
+        ];
+    }
+
 }
 
