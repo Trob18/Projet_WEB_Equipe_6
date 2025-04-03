@@ -25,10 +25,10 @@ class AccountTest extends TestCase
         $this->account = new AccountModel($this->pdo);
 
         // Suppression du compte de test s'il existe déjà
-        $this->pdo->exec("DELETE FROM Accounts WHERE Email_Account = 'johndoe@example.com'");
+        $this->pdo->exec("DELETE FROM accounts WHERE Email_Account = 'johndoe@example.com'");
 
         // Insertion du compte de test
-        $stmt = $this->pdo->prepare("INSERT INTO Accounts 
+        $stmt = $this->pdo->prepare("INSERT INTO accounts 
             (LastName_Account, FirstName_Account, Email_Account, Password_Account, Image_Account, Description_Account, Address_Account, PhoneNumber_Account, Studies_Account, Id_Roles) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute(['Doe', 'John', 'johndoe@example.com', 'hashedpassword', '', '', '', 123456789, '', 1]);
@@ -37,20 +37,21 @@ class AccountTest extends TestCase
     protected function tearDown(): void
     {
         // Suppression du compte de test après chaque test
-        $this->pdo->exec("DELETE FROM Accounts WHERE Email_Account = 'johndoe@example.com'");
+        $this->pdo->exec("DELETE FROM accounts WHERE Email_Account = 'johndoe@example.com'");
     }
 
     public function testStoreAccount()
     {
-        $this->pdo->exec("DELETE FROM Accounts WHERE Email_Account = 'johndoe@example.com'");
+        $this->pdo->exec("DELETE FROM accounts WHERE Email_Account = 'johndoe@example.com'");
         // Tentative d'insertion du compte
-        $result = $this->account->storeAccount("Doe", "John", "johndoe@example.com", "password123","0326154815", "test12345", "2");
+        $result = $this->account->storeAccount("Doe", "John", "johndoe@example.com", "0326154815","password123",2);
         $this->assertTrue($result);
 
         // Vérifier si le compte a bien été ajouté
-        $stmt = $this->pdo->prepare("SELECT * FROM Accounts WHERE Email_Account = ?");
+        $stmt = $this->pdo->prepare("SELECT * FROM accounts WHERE Email_Account = ?");
         $stmt->execute(['johndoe@example.com']);
         $account = $stmt->fetch();
+
 
         // Validation des informations du compte
         $this->assertNotEmpty($account);
@@ -73,7 +74,7 @@ class AccountTest extends TestCase
     public function testRemoveAccount()
     {
         // Récupérer l'ID du compte avant la suppression
-        $stmt = $this->pdo->prepare("SELECT Id_Account FROM Accounts WHERE Email_Account = ?");
+        $stmt = $this->pdo->prepare("SELECT Id_Account FROM accounts WHERE Email_Account = ?");
         $stmt->execute(['johndoe@example.com']);
         $account = $stmt->fetch();
 
@@ -85,7 +86,7 @@ class AccountTest extends TestCase
         $this->assertTrue($result);
 
         // Vérification que le compte a bien été supprimé
-        $stmt = $this->pdo->prepare("SELECT * FROM Accounts WHERE Id_Account = ?");
+        $stmt = $this->pdo->prepare("SELECT * FROM accounts WHERE Id_Account = ?");
         $stmt->execute([$accountId]);
         $account = $stmt->fetch();
 
@@ -93,7 +94,7 @@ class AccountTest extends TestCase
         $this->assertEmpty($account);
     }
 
-    public function testGetAllAccounts()
+    public function testGetAllaccounts()
     {
         // Récupération du compte de John Doe par son email
         $account = $this->account->getAccount('Email_Account', 'johndoe@example.com');
@@ -106,9 +107,9 @@ class AccountTest extends TestCase
     }
 
 
-    public function testEditAccounts()
+    public function testEditaccounts()
     {
-        $stmt = $this->pdo->prepare("SELECT Id_Account FROM Accounts WHERE Email_Account = ?");
+        $stmt = $this->pdo->prepare("SELECT Id_Account FROM accounts WHERE Email_Account = ?");
         $stmt->execute(['johndoe@example.com']);
         $account = $stmt->fetch();
 
@@ -119,7 +120,7 @@ class AccountTest extends TestCase
         // Récupération du compte de John Doe par son email
         $this->account->editAccount($account['Id_Account'], $newData);
 
-        $stmt = $this->pdo->prepare("SELECT * FROM Accounts WHERE Email_Account = ?");
+        $stmt = $this->pdo->prepare("SELECT * FROM accounts WHERE Email_Account = ?");
         $stmt->execute(['johndoe@example.com']);
         $account = $stmt->fetch();
 

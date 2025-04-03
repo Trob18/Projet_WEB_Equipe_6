@@ -62,8 +62,7 @@ class OfferTest extends TestCase {
     public function testEditOffer() {
         $id = $this->insertTestOffer();
         $updatedData = [
-            'Title_Offer' => 'Offre mise à jour',
-            'Skills_Offer' => 'PHP, Symfony'
+            'Title_Offer' => 'Offre mise à jour'
         ];
 
         $result = $this->offerModel->editOffer($id, $updatedData);
@@ -71,7 +70,6 @@ class OfferTest extends TestCase {
         $offer = $this->fetchOfferById($id);
 
         $this->assertEquals('Offre mise à jour', $offer['Title_Offer'], "Le titre de l'offre mise à jour doit être correct.");
-        $this->assertEquals('PHP, Symfony', $offer['Skills_Offer'], "Les compétences de l'offre mise à jour doivent être correctes.");
     }
 
     // Teste la récupération de toutes les offres
@@ -91,12 +89,12 @@ class OfferTest extends TestCase {
     private function getTestOfferData($title = 'Offre de test') {
         return [
             'Title_Offer' => $title,
-            'Skills_Offer' => 'PHP, MySQL',
             'Address_Offer' => 'Paris',
-            'Date_Offer' => '2025-03-28',
             'ActivitySector_Offer' => 'Informatique',
             'Salary_Offer' => 45000,
-            'Description_Offer' => 'Ceci est une offre de test.'
+            'Description_Offer' => 'Ceci est une offre de test.',
+            'Id_Company'=> 4,
+            'Contract_Offer' => 'CDI',
         ];
     }
 
@@ -104,17 +102,17 @@ class OfferTest extends TestCase {
     private function insertTestOffer($title = 'Offre de test') {
         $data = $this->getTestOfferData($title);
         $stmt = $this->pdo->prepare("
-            INSERT INTO offers (Title_Offer, Skills_Offer, Address_Offer, Date_Offer, ActivitySector_Offer, Salary_Offer, Description_Offer)
+            INSERT INTO offers (Title_Offer, Address_Offer, ActivitySector_Offer, Salary_Offer, Description_Offer, Contract_Offer, Id_Company)
             VALUES (?, ?, ?, ?, ?, ?, ?)
         ");
         $stmt->execute([
             $data['Title_Offer'],
-            $data['Skills_Offer'],
             $data['Address_Offer'],
-            $data['Date_Offer'],
             $data['ActivitySector_Offer'],
             $data['Salary_Offer'],
-            $data['Description_Offer']
+            $data['Description_Offer'],
+            $data['Contract_Offer'],
+            $data['Id_Company']
         ]);
         return $this->pdo->lastInsertId();
     }

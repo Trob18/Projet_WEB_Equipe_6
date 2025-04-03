@@ -48,8 +48,8 @@ class AccountModel {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function storeAccount($lastName, $firstName, $dateNaissance, $email, $telephone, $password, $type) {
-        if (empty($lastName) || empty($firstName)|| empty($dateNaissance) || empty($email) || empty($telephone) || empty($password) || empty($type)) {
+    public function storeAccount($lastName, $firstName, $email, $telephone, $password, $type) {
+        if (empty($lastName) || empty($firstName)|| empty($email) || empty($telephone) || empty($password) || empty($type)) {
             return false;
         }
 
@@ -57,13 +57,12 @@ class AccountModel {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
         $stmt = $this->pdo->prepare("
-            INSERT INTO accounts (LastName_Account, FirstName_Account, BirthDate_Account, Email_Account, PhoneNumber_Account, Password_Account, Id_Roles) 
-            VALUES (:lastName, :firstName, :dateNaissance, :email, :telephone, :password, :type)
+            INSERT INTO accounts (LastName_Account, FirstName_Account, Email_Account, PhoneNumber_Account, Password_Account, Id_Roles) 
+            VALUES (:lastName, :firstName, :email, :telephone, :password, :type)
         ");
         $stmt->execute([
             'lastName' => $lastName,
             'firstName' => $firstName,
-            'dateNaissance' => $dateNaissance,
             'email' => $email,
             'telephone' => $telephone,
             'password' => $hashedPassword,
