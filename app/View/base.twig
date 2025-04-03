@@ -20,7 +20,7 @@
         {% block content %}{% endblock %}
     </main>
 
-    {% include 'footer.twig' %}
+    {% include 'footer.twig' with {'user_role': user_role}%}
 </body>
     <script src="assets/js/header.js" defer></script>
     <script src="assets/js/script_CreateAccount.js" defer></script>

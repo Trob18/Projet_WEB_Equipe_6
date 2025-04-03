@@ -9,7 +9,7 @@ require_once __DIR__ . '/../../config/ConfigDatabase.php';
 
 class CompanyModel
 {
-    private $pdo; // Stocker la connexion à la base de données
+    private $pdo;
 
     public function __construct($pdo)
     {
@@ -31,7 +31,6 @@ class CompanyModel
             return "Colonne invalide!";
         }
 
-        // Sélectionner la colonne spécifique demandée
         $stmt = $this->pdo->prepare("SELECT $selectColumn FROM companies WHERE $column = :value LIMIT 1");
         $stmt->execute(['value' => $value]);
 
@@ -43,11 +42,6 @@ class CompanyModel
 
         return $result ?: null;
     }
-
-
-
-
-
 
     public function storeCompany($firstName, $email, $address, $description) {
         if (empty($firstName) || empty($email) || empty($address) || empty($description)) {
@@ -70,14 +64,9 @@ class CompanyModel
     }
 
 
-
-
-
-
-
     public function getAllCompany()
     {
-        $stmt = $this->pdo->query("SELECT * FROM companies ORDER BY Id_Company ASC"); // dans l'ordre croissant pour éviter les renvoie dans tous le sens
+        $stmt = $this->pdo->query("SELECT * FROM companies ORDER BY Id_Company ASC");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -123,29 +112,10 @@ class CompanyModel
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public function getCompaniesWithPagination($limit, $offset)
 {
-    $limit = max(1, (int) $limit);  // S'assurer que la limite est au moins 1
-    $offset = max(0, (int) $offset); // S'assurer que l'offset est au moins 0
+    $limit = max(1, (int) $limit); 
+    $offset = max(0, (int) $offset); 
 
     $stmt = $this->pdo->prepare("SELECT * FROM companies ORDER BY Id_Company ASC LIMIT :limit OFFSET :offset");
     $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
@@ -199,11 +169,6 @@ class CompanyModel
         $stmt->execute(['id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-
-
-
-
-
 
 
     public function uploadimgC($userId, $imageUrl){

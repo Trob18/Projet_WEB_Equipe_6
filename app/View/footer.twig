@@ -6,7 +6,10 @@
 	<p>Service Client :</p>
 	<p>Numéro : 09.01.02.03.04</p>
 	<p>Adresse mail : InternShip.Contact@internship.fr</p>
-	<a href="?page=LegalNotice" class='mention'>Mentions Légales</a>
+	{% if user_role in [1, 2, 3] %}
+        <a href="?page=LegalNotice" class='mention'>Mentions Légales</a>
+    {% endif %}
+	
         
 	<div>
 		<a href="https://www.linkedin.com"><img src="assets/img/Linkdin_logo.png" alt="footer_logo" class="social-icons"/></a>

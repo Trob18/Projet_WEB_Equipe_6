@@ -7,7 +7,7 @@ use PDO;
 require_once __DIR__ . '/../../config/ConfigDatabase.php';
 
 class AccountModel {
-    private $pdo; // Connexion à la base de données
+    private $pdo; 
 
     public function __construct($pdo) {
         $this->pdo = $pdo;
@@ -16,7 +16,6 @@ class AccountModel {
     
 
     public function getAccount($column, $value, $selectColumn = '*') {
-        // Liste des colonnes valides pour éviter l'injection SQL
         $validColumns = [
             'Id_Account', 'LastName_Account', 'FirstName_Account', 'Email_Account', 
             'Password_Account', 'Image_Account', 'Description_Account', 'Address_Account', 
@@ -26,8 +25,6 @@ class AccountModel {
         if (!in_array($column, $validColumns) || (!in_array($selectColumn, $validColumns) && $selectColumn !== '*')) {
             return "Colonne invalide!";
         }
-    
-        // Sélectionner la colonne spécifique demandée
         $stmt = $this->pdo->prepare("SELECT $selectColumn FROM Accounts WHERE $column = :value LIMIT 1");
         $stmt->execute(['value' => $value]);
     
@@ -110,30 +107,14 @@ class AccountModel {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
     public function getTotalAccount(){
         $stmt = $this->pdo->query("SELECT COUNT(*) FROM accounts");
         return $stmt->fetchColumn();
     }
 
     public function getAccountWithPagination($limit, $offset){
-        $limit = max(1, (int) $limit);  // S'assurer que la limite est au moins 1
-        $offset = max(0, (int) $offset); // S'assurer que l'offset est au moins 0
+        $limit = max(1, (int) $limit);
+        $offset = max(0, (int) $offset); 
     
         $stmt = $this->pdo->prepare("SELECT * FROM accounts ORDER BY Id_Account ASC LIMIT :limit OFFSET :offset");
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
@@ -142,8 +123,6 @@ class AccountModel {
     
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
-
 
 
     public function searchAccounts($searchName, $limit, $offset){
@@ -168,15 +147,6 @@ class AccountModel {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
-
-
-
-
-
-
-
-
 
     public function uploadimg($userId, $imageUrl){
         $stmt = $this->pdo->prepare("

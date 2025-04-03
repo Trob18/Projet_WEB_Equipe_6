@@ -13,14 +13,12 @@ class NotesModel {
     }
 
     public function getNote($column, $value, $selectColumn = '*') {
-        // Liste des colonnes valides pour éviter l'injection SQL
         $validColumns = ['Id_Notes', 'Note', 'Comment'];
 
         if (!in_array($column, $validColumns) || (!in_array($selectColumn, $validColumns) && $selectColumn !== '*')) {
             return "Colonne invalide!";
         }
 
-        // Sélectionner la colonne spécifique demandée
         $stmt = $this->pdo->prepare("SELECT $selectColumn FROM notes WHERE $column = :value LIMIT 1");
         $stmt->execute(['value' => $value]);
 
@@ -40,8 +38,8 @@ class NotesModel {
     }
 
     public function storeNote($newdata){
-        $stmt = $this->pdo->prepare("INSERT INTO notes (Note, Comment) VALUES (?, ?)");
-        $result = $stmt->execute([$newdata['Note'], $newdata['Comment']]);
+        $stmt = $this->pdo->prepare("INSERT INTO notes (Note, Id_Account,Id_Company) VALUES ( ?, ?, ?)");
+        $result = $stmt->execute([$newdata['Note'], $newdata['Id_Account'], $newdata['Id_Company']]);
         return $result ? $this->pdo->lastInsertId() : false;
     }
 
@@ -65,4 +63,3 @@ class NotesModel {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
-?>

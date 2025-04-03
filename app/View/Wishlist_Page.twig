@@ -9,8 +9,8 @@
     </div>
     
     {% if wishlistOffers is empty %}
-        <p>Votre wishlist est vide.</p>
-        <a href="index.php?page=Offer">Voir les offres disponibles</a>
+        <p id="wishlist-vide">Votre wishlist est vide.</p>
+        <a id="offer-disp" href="index.php?page=Offer">Voir les offres disponibles</a>
     {% else %}
         <div class="offres-container-wishlist">
             {% for offer in wishlistOffers %}

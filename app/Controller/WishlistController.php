@@ -13,6 +13,11 @@ class WishlistController {
         $this->wishlistModel = new WishlistModel($pdo);
     }
 
+    public function getWishlist($column, $value, $selectColumn = '*'){
+        $Wishlist = $this->wishlistModel->getWishlist($column, $value, $selectColumn = '*');
+        return $Wishlist ? $Wishlist : "Compte introuvable!";
+    }
+
     public function addToWishlist($userId, $offerId)
     {
         return $this->wishlistModel->addToWishlist($userId, $offerId);

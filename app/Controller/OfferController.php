@@ -14,10 +14,7 @@ class OfferController {
     }
 
     public function getOffer($column, $value, $selectColumn = '*') {
-        // Appel à la méthode du modèle
         $offer = $this->offerModel->getOffer($column, $value, $selectColumn);
-        
-        // Vérification du résultat et retour approprié
         return $offer ? $offer : "Offre introuvable!";
     }
 
@@ -41,7 +38,6 @@ class OfferController {
     }
 
     public function removeOffer($id) {
-        // Vérifier si l'offre existe
         if (!$this->offerModel->getOffer('Id_Offer', $id)) {
             return "Offre introuvable!";
         }
@@ -57,7 +53,6 @@ class OfferController {
 
 
     public function editOffer($id, $newdata) {
-        // Vérifier si l'offre existe
         if (!$this->offerModel->getOffer('Id_Offer', $id)) {
             return "Offre introuvable!";
         }

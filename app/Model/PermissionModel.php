@@ -20,8 +20,6 @@ class PermissionModel{
         if (!in_array($column, $validColumns) || (!in_array($selectColumn, $validColumns) && $selectColumn !== '*')) {
             return "Colonne invalide!";
         }
-    
-        // Sélectionner la colonne spécifique demandée
         $stmt = $this->pdo->prepare("SELECT $selectColumn FROM Permissions WHERE $column = :value LIMIT 1");
         $stmt->execute(['value' => $value]);
     

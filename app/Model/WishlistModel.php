@@ -14,6 +14,26 @@ class WishlistModel {
         $this->pdo = $pdo;
     }
 
+    public function getWishlist($column, $value, $selectColumn = '*') {
+        $validColumns = [
+            'Id_Offer', 'Id_Account'
+        ];
+    
+        if (!in_array($column, $validColumns) || (!in_array($selectColumn, $validColumns) && $selectColumn !== '*')) {
+            return "Colonne invalide!";
+        }
+        $stmt = $this->pdo->prepare("SELECT $selectColumn FROM add_to_wishlist WHERE $column = :value LIMIT 1");
+        $stmt->execute(['value' => $value]);
+    
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if ($result && $selectColumn !== '*') {
+            return $result[$selectColumn] ?? null;
+        }
+    
+        return $result ?: null;
+    }
+
     public function addToWishlist($userId, $offerId)
     {
         $stmt = $this->pdo->prepare("INSERT INTO add_to_wishlist (Id_Account, Id_Offer) VALUES (?, ?)");

@@ -25,20 +25,12 @@ class NotesController {
     }
     
     public function createNote($newdata) {
-        $requiredFields = ['Note', 'Comment'];
-        
-        foreach ($requiredFields as $field) {
-            if (empty($newdata[$field])) {
-                return "Le champ '$field' est requis!";
-            }
-        }
         
         $result = $this->notesModel->storeNote($newdata);
         return $result ? "Note Créée !" : "Échec de la création";
     }
 
     public function removeNote($id) {
-        // Vérifier si la note existe
         if (!$this->notesModel->getNote('Id_Notes', $id)) {
             return "Note Introuvable";
         }
@@ -53,7 +45,6 @@ class NotesController {
     }
 
     public function editNote($id, $newdata) {
-        // Vérifier si la note existe
         if (!$this->notesModel->getNote('Id_Notes', $id)) {
             return "Note Introuvable";
         }
@@ -74,4 +65,3 @@ class NotesController {
         return !empty($notes) ? $notes : "Aucune Note Trouvée !";
     }
 }
-?>

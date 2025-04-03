@@ -17,8 +17,6 @@ class CompanyController
         $this->CompanyModel = new CompanyModel($pdo);
     }
 
-
-    // Obtenir un compte par email
     public function getCompany($column, $value, $selectColumn = '*')
     {
         $account = $this->CompanyModel->getCompany($column, $value, $selectColumn);
@@ -30,14 +28,12 @@ class CompanyController
         return $result;
     }
 
-    // Récupérer tous les comptes
     public function getAllCompany()
     {
         $accounts = $this->CompanyModel->getAllCompany();
         return $accounts ? $accounts : "Aucun Company trouvé.";
     }
 
-    // Supprimer un compte par ID
     public function removeCompany($IdCompany)
     {
         $account = $this->CompanyModel->getCompany('Id_Company', $IdCompany);
@@ -49,34 +45,32 @@ class CompanyController
         return $result ? "Compte supprimé avec succès!" : "Échec de la suppression du compte."; 
     }
 
-    // Supprimer tous les compte par ID
     public function removeAllCompany($IdCompany)
     {
         $account = $this->CompanyModel->getAllCompany();
         if (!$account) {
-            return false; //"Company introuvable!"
+            return false; 
         }
 
         $result = $this->CompanyModel->removeAllCompany();
-        return $result ? true : false; //"Company supprimé avec succès!" : "Échec de la suppression du Company."
+        return $result ? true : false; 
     }
 
     public function storeCompany($IdCompany, $NameCompany, $ImageCompany, $EmailCompany, $AdresseCompany, $DescriptionCompany)
     {
         $store = $this->CompanyModel->StoreCompany($IdCompany, $NameCompany, $ImageCompany, $EmailCompany, $AdresseCompany, $DescriptionCompany);
         if (!$store) {
-            return false; // Erreur de création
+            return false; 
         }
-        return true; // Création réussie
+        return true;
     }
 
-    // Mettre à jour un compte
     public function editCompany($IdCompany, $newData)
     {
         $account = $this->CompanyModel->getCompany('Id_Company', $IdCompany);
 
         if (!$account) {
-            return false; //"Company introuvable!"
+            return false; 
         }
 
         $result = $this->CompanyModel->editCompany($IdCompany, $newData);
@@ -112,10 +106,6 @@ class CompanyController
             echo "Aucune entreprise sélectionnée.";
         }
     }
-
-
-
-
 
     public function uploadimg($userId, $imageUrl){
         return $this->CompanyModel->uploadimgC($userId, $imageUrl);

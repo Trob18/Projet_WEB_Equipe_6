@@ -13,7 +13,6 @@ class OfferModel {
     }
 
     public function getOffer($column, $value, $selectColumn = '*') {
-        // Liste des colonnes valides pour éviter l'injection SQL
         $validColumns = [
             'Id_Offer', 'Title_Offer', 'Contract_Offer', 'Address_Offer', 
             'ActivitySector_Offer', 'Salary_Offer', 'Description_Offer'
@@ -22,8 +21,6 @@ class OfferModel {
         if (!in_array($column, $validColumns) || (!in_array($selectColumn, $validColumns) && $selectColumn !== '*')) {
             return "Colonne invalide!";
         }
-
-        // Sélectionner la colonne spécifique demandée
         $stmt = $this->pdo->prepare("SELECT $selectColumn FROM offers WHERE $column = :value LIMIT 1");
         $stmt->execute(['value' => $value]);
 

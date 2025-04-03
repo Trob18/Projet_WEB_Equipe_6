@@ -16,7 +16,7 @@ class PermissionController{
     
     public function GetPermission($column, $value, $selectColumn = '*'){
         $permission = $this->permissionModel->GetPermission($column, $value, $selectColumn);
-        return $permission ? $permission : "Permission introuvable!";
+        return $permission ;
     }
     
     public function GetAllPermission(){

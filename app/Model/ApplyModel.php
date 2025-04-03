@@ -9,7 +9,7 @@ require_once __DIR__ . '/../../config/ConfigDatabase.php';
 
 class ApplyModel
 {
-    private $pdo; // Stocker la connexion à la base de données
+    private $pdo;
 
     public function __construct($pdo)
     {
@@ -30,8 +30,6 @@ class ApplyModel
         if (!in_array($column, $validColumns) || (!in_array($selectColumn, $validColumns) && $selectColumn !== '*')) {
             return "Colonne invalide!";
         }
-
-        // Sélectionner la colonne spécifique demandée
         $stmt = $this->pdo->prepare("SELECT $selectColumn FROM applications WHERE $column = :value LIMIT 1");
         $stmt->execute(['value' => $value]);
 
@@ -71,19 +69,14 @@ class ApplyModel
 
     public function StoreApply($IdAccount, $cvPath, $CoverLetter, $dateApply, $IdOffer)
     {
-        // Vérification des données à insérer
         if (empty($IdAccount) || empty($IdOffer) || empty($cvPath)) {
             return "Erreur : Informations manquantes pour l'enregistrement.";
         }
-
-        // Insertion des données dans la base de données
         $query = 'INSERT INTO applications (IdAccount, IdOffer, CvFile, CoverLetter, DateApply) 
               VALUES (:IdAccount, :IdOffer, :CvFile, :CoverLetter, :DateApply)';
 
-        // Préparation de la requête SQL
         $stmt = $this->pdo->prepare($query);
 
-        // Exécution de la requête avec les paramètres
         if ($stmt->execute([
             ':IdAccount' => $IdAccount,
             ':IdOffer' => $IdOffer,
@@ -91,9 +84,9 @@ class ApplyModel
             ':CoverLetter' => $CoverLetter,
             ':DateApply' => $dateApply
         ])) {
-            return true; // Retourne true si l'insertion réussit
+            return true; 
         } else {
-            return "Erreur lors de l'enregistrement de la candidature dans la base de données."; // Retourne un message d'erreur si l'insertion échoue
+            return "Erreur lors de l'enregistrement de la candidature dans la base de données."; 
         }
     }
 
