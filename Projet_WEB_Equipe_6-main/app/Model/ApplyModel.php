@@ -1,6 +1,7 @@
 <?php
 
 namespace app\Model;
+
 use PDO;
 
 
@@ -49,6 +50,13 @@ class ApplyModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function CountgetAllApply($id)
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM applications WHERE Id_Account = :id ORDER BY Id_Application ASC");
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function removeApply($id)
     {
         $stmt = $this->pdo->prepare("DELETE FROM applications WHERE Id_Application = ?");
@@ -57,43 +65,56 @@ class ApplyModel
 
     public function removeAllApply()
     {
-        $stmt = $this->pdo->prepare("DELETE  FROM applications");
+        $stmt = $this->pdo->prepare("DELETE * FROM applications");
         return $stmt->execute();
     }
 
-    public function storeApply($IdApply, $CvApply, $LetterApply, $DateApply)
+    public function StoreApply($IdAccount, $cvPath, $CoverLetter, $dateApply, $IdOffer)
     {
-        if (empty($CvApply) || empty($LetterApply) || empty($DateApply) || empty($IdApply)) {
-            return false;
+        // Vérification des données à insérer
+        if (empty($IdAccount) || empty($IdOffer) || empty($cvPath)) {
+            return "Erreur : Informations manquantes pour l'enregistrement.";
         }
 
-        $stmt = $this->pdo->prepare("INSERT INTO applications (Id_Application, Cv_Application, CoverLetter_Application, Date_Application) VALUES (?, ?, ?, ?)");
-        return $stmt->execute([$IdApply, $CvApply, $LetterApply, $DateApply]);
+        // Insertion des données dans la base de données
+        $query = 'INSERT INTO applications (IdAccount, IdOffer, CvFile, CoverLetter, DateApply) 
+              VALUES (:IdAccount, :IdOffer, :CvFile, :CoverLetter, :DateApply)';
+
+        // Préparation de la requête SQL
+        $stmt = $this->pdo->prepare($query);
+
+        // Exécution de la requête avec les paramètres
+        if ($stmt->execute([
+            ':IdAccount' => $IdAccount,
+            ':IdOffer' => $IdOffer,
+            ':CvFile' => $cvPath,
+            ':CoverLetter' => $CoverLetter,
+            ':DateApply' => $dateApply
+        ])) {
+            return true; // Retourne true si l'insertion réussit
+        } else {
+            return "Erreur lors de l'enregistrement de la candidature dans la base de données."; // Retourne un message d'erreur si l'insertion échoue
+        }
     }
+
+
 
     public function editApply($id, $newData)
     {
-        $validColumns = ['Cv_Application', 'CoverLetter_Application','Id_Application','Date_Application'];
-        $setParts = [];
-        $params = ['id' => $id];
+        $stmt = $this->pdo->prepare("UPDATE applications SET Cv_Application = ?, CoverLetterApplication = ? WHERE Id_Application = ?");
+        return $stmt->execute([$newData['Cv_Application'], $newData['CoverLetterApplication'], $id]);
+    }
 
-        foreach ($newData as $key => $value) {
-            if (in_array($key, $validColumns)) {
-                $setParts[] = "$key = :$key";
-                $params[$key] = $value;
-            }
-        }
-
-        if (empty($setParts)) {
-            return false;
-        }
-
-        $sql = "UPDATE applications SET " . implode(', ', $setParts) . " WHERE Id_Application = :id";
+    public function storeApplication($id, $IdOffer, $coverLetter, $cvNameUnique) {
+        $sql = "INSERT INTO Applications (Id_Account, Id_Offer, CoverLetter_Application, Cv_Application) 
+                VALUES (:Id_Account, :Id_Offer, :CoverLetter, :CV)";
+        
         $stmt = $this->pdo->prepare($sql);
-
-        return $stmt->execute($params);
+        $stmt->execute([
+            'Id_Account' => $id,
+            'Id_Offer' => $IdOffer,
+            'CoverLetter' => $coverLetter,
+            'CV' => $cvNameUnique
+        ]);
     }
 }
-
-
-?>

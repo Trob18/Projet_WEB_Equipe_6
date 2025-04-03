@@ -44,7 +44,6 @@
 }
 
 .main-modifyaccount .profile-picture img {
-    margin-top: -50px;
     width: 150px;
     height: 150px;
     border-radius: 50%;
@@ -86,8 +85,9 @@
 }
 
 
+
 .btn-primary {
-    background: #007BFF;
+    background: rgba(6, 71, 137, 0.5);
     color: white;
     border: none;
     padding: 10px;

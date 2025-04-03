@@ -6,7 +6,7 @@ namespace app\Test;
 use PHPUnit\Framework\TestCase;
 use app\Model\CompanyModel;
 use PDO;
-require_once 'C:\wamp64\www\Projet_WEB_Equipe_6-main\config\ConfigDatabase.php';
+require_once 'C:\wamp64\www\Projet_WEB_Equipe_6-main\config\ConfigDatabase2.php';
 require_once 'C:\wamp64\www\Projet_WEB_Equipe_6-main\app\Model\AccountModel.php';
 
 class CompanyTest extends TestCase
@@ -17,7 +17,7 @@ class CompanyTest extends TestCase
 
     protected function setUp(): void
     {
-        $configDatabase = new \app\config\ConfigDatabase();
+        $configDatabase = new \app\config\ConfigDatabase2nd();
         $this->pdo = $configDatabase->getConnection();
         $this->company = new CompanyModel($this->pdo);
 

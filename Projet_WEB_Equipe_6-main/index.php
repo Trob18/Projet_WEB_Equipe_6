@@ -31,35 +31,121 @@ switch ($page) {
     case 'login':
         echo $controller->loginPage();
         break;
-    // case 'Accueil':
-    //     echo $controller->//fonction dans controller.php
-    //     break;
-    // case 'Offer':
-    //     echo $controller->//fonction dans controller.php
-    //     break;
-    // case 'Company':
-    //     echo $controller->//fonction dans controller.php
-    //     break;
-    // case 'Wishlist':
-    //     echo $controller->//fonction dans controller.php
-    //     break;
-    // case 'Settings':
-    //     echo $controller->//fonction dans controller.php
-    //     break;
+    case 'HOME':
+        echo $controller->homePage();
+        break;
     case 'Account':
-        echo $controller->AccountPage();//fonction dans controller.php
+        echo $controller->accountPage();
+       break;
+    case 'CreateAccount':
+        echo $controller->CreateAccount();
+        break;
+    case 'CreateCompany':
+        echo $controller->CreateCompany();
         break;
     case 'ModifyAccount':
-        echo $controller->ModifyAccountPage();//fonction dans controller.php
+        echo $controller->ModifyAccount();
+        break;
+    case 'Search':
+        echo $controller->SearchAccount();
+        break; 
+    case 'Search_Details':
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+        }
+        $controller->showSearch_Details($id);
+        break;
+
+
+
+
+
+    case 'DeleteOffer':
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+            $controller->deleteOffer($id);
+        } else {
+            echo 'ID non fourni ou invalide.';
+        }
+        break;
+
+    case 'ModifyOffer':
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+            echo $controller->modifyOffer($id);
+        } else {
+            echo 'ID non fourni ou invalide.';
+        }
+        break;
+    
+    case 'UpdateOffer':
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+            echo $controller->updateOffer($id);
+        } else {
+            echo 'ID non fourni ou invalide.';
+        }
+        break;
+        
+    case 'Offer':
+        echo $controller->offerPage(); 
+        break;
+
+    case 'DetailOffer':
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+            $controller->showOfferDetails($id);
+        } else {
+        echo 'ID non fourni ou invalide.';
+        }
+        break;
+
+
+
+
+
+
+
+
+    case 'Company':
+        echo $controller->Company(); //fonction dans controller.php
+        break;
+    case 'Company_Details':
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+        }
+        $controller->showCompanyDetails($id); //fonction dans controller.php
+        break;
+    case 'Wishlist':
+        echo $controller->wishlist();
         break;
     case 'LegalNotice':
         echo $controller->Legal_NoticePage();//fonction dans controller.php
         break;
+
+    case 'Wishlist':
+        echo $controller->wishlist();
+        break;
+    
+    case 'ToggleWishlist':
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+            $controller->toggleWishlist($id);
+        } else {
+            echo 'ID non fourni ou invalide.';
+        }
+        break;
+
+    case 'Submit_Application':
+        echo $controller->submitApplication();
+        break;
+
     default:
         echo '404 Not Found';
         break;
 
 }
+?>
 
 
 

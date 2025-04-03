@@ -44,6 +44,37 @@ class CompanyModel
         return $result ?: null;
     }
 
+
+
+
+
+
+    public function storeCompany($firstName, $email, $address, $description) {
+        if (empty($firstName) || empty($email) || empty($address) || empty($description)) {
+            return false;
+        }
+        
+        $stmt = $this->pdo->prepare("
+            INSERT INTO companies (Name_Company, Email_Company, Address_Company, Description_Company)
+            VALUES (:Name_Company, :Email_Company, :Address_Company, :Description_Company)
+        ");
+        
+        $stmt->execute([
+            'Name_Company' => $firstName,
+            'Email_Company' => $email,
+            'Address_Company' => $address,
+            'Description_Company' => $description
+        ]);
+        
+        return true;
+    }
+
+
+
+
+
+
+
     public function getAllCompany()
     {
         $stmt = $this->pdo->query("SELECT * FROM companies ORDER BY Id_Company ASC"); // dans l'ordre croissant pour éviter les renvoie dans tous le sens
@@ -52,8 +83,8 @@ class CompanyModel
 
     public function removeCompany($id)
     {
-        $stmt = $this->pdo->prepare("DELETE FROM companies WHERE Id_Company = ?");
-        return $stmt->execute([$id]);
+        $stmt = $this->pdo->prepare("DELETE FROM companies WHERE Id_Company = :id");
+        return $stmt->execute(['id' => $id]);
     }
 
     public function removeAllCompany()
@@ -63,21 +94,53 @@ class CompanyModel
 
     }
 
-    public function StoreCompany($IdCompany, $NameCompany, $ImageCompany, $EmailCompany, $AdresseCompany, $DescriptionCompany)
-    {
-        if (empty($IdCompany) || empty($NameCompany) || empty($ImageCompany) || empty($EmailCompany) || empty($AdresseCompany) || empty($DescriptionCompany)) {
-            return false;
-        }
-
-        $stmt = $this->pdo->prepare("INSERT INTO companies (Id_Company,Name_Company,Image_Company,Email_Company,Address_Company,Description_Company) VALUES (?, ?, ?, ?,?, ?)");
-        return $stmt->execute([$IdCompany, $NameCompany, $ImageCompany, $EmailCompany, $AdresseCompany, $DescriptionCompany]);
-    }
+    
 
     public function editCompany($id, $newData)
     {
-        $stmt = $this->pdo->prepare("UPDATE companies SET Name_Company = ?, Image_Company = ?, Email_Company = ?, Address_Company = ?, Description_Company = ? WHERE Id_Company = ?");
-        return $stmt->execute([$newData['Name_Company'], $newData['Image_Company'], $newData['Email_Company'], $newData['Adresse_Company'], $newData['Description_Company'], $id]);
+        $validColumns = [
+            'Description_Company', 'Address_Company'
+        ];
+
+        $setParts = [];
+        $params = ['id' => $id];
+
+        foreach ($newData as $key => $value) {
+            if (in_array($key, $validColumns)) {
+                $setParts[] = "$key = :$key";
+                $params[$key] = $value;
+            }
+        }
+
+        if (empty($setParts)) {
+            return false;
+        }
+
+        $sql = "UPDATE companies SET " . implode(', ', $setParts) . " WHERE Id_Company = :id";
+        $stmt = $this->pdo->prepare($sql);
+
+        return $stmt->execute($params);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function getCompaniesWithPagination($limit, $offset)
 {
@@ -98,4 +161,104 @@ class CompanyModel
         $stmt = $this->pdo->query("SELECT COUNT(*) FROM companies");
         return $stmt->fetchColumn();
     }
+
+    public function searchCompanies($searchName, $searchLocation, $limit, $offset)
+    {
+        $query = "SELECT * FROM companies WHERE 1=1";
+    
+        if (!empty($searchName)) {
+            $query .= " AND Name_Company LIKE :searchName";
+        }
+    
+        if (!empty($searchLocation)) {
+            $query .= " AND Address_Company LIKE :searchLocation";
+        }
+    
+        $query .= " ORDER BY Id_Company ASC LIMIT :limit OFFSET :offset";
+        
+        $stmt = $this->pdo->prepare($query);
+    
+        if (!empty($searchName)) {
+            $stmt->bindValue(':searchName', '%' . $searchName . '%', PDO::PARAM_STR);
+        }
+    
+        if (!empty($searchLocation)) {
+            $stmt->bindValue(':searchLocation', '%' . $searchLocation . '%', PDO::PARAM_STR);
+        }
+    
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getCompanyById($id) {
+        $query = "SELECT * FROM companies WHERE Id_Company = :id";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+
+
+
+
+
+
+    public function uploadimgC($userId, $imageUrl){
+        $stmt = $this->pdo->prepare("
+        UPDATE companies 
+        SET Image_Company = :image_url 
+        WHERE Email_Company = :userId
+        ");
+        $stmt->execute([
+            'image_url' => $imageUrl,
+            'userId' => $userId
+        ]);
+        return TRUE;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

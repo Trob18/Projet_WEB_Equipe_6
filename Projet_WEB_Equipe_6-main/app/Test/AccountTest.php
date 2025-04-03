@@ -6,7 +6,7 @@ use app\Model\AccountModel;
 use PHPUnit\Framework\TestCase;
 
 
-require_once 'C:\wamp64\www\Projet_WEB_Equipe_6-main\config\ConfigDatabase.php';
+require_once 'C:\wamp64\www\Projet_WEB_Equipe_6-main\config\ConfigDatabase2.php';
 require_once 'C:\wamp64\www\Projet_WEB_Equipe_6-main\app\Model\AccountModel.php';
 
 
@@ -20,7 +20,7 @@ class AccountTest extends TestCase
 
     protected function setUp(): void
     {
-        $configDatabase = new \app\config\ConfigDatabase();
+        $configDatabase = new \app\config\ConfigDatabase2nd();
         $this->pdo = $configDatabase->getConnection();
         $this->account = new AccountModel($this->pdo);
 
@@ -44,7 +44,7 @@ class AccountTest extends TestCase
     {
         $this->pdo->exec("DELETE FROM Accounts WHERE Email_Account = 'johndoe@example.com'");
         // Tentative d'insertion du compte
-        $result = $this->account->storeAccount("Doe", "John", "johndoe@example.com", "password123");
+        $result = $this->account->storeAccount("Doe", "John", "johndoe@example.com", "password123","0326154815", "test12345", "2");
         $this->assertTrue($result);
 
         // Vérifier si le compte a bien été ajouté

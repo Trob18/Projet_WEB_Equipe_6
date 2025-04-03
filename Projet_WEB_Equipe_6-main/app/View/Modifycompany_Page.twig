@@ -1,0 +1,25 @@
+{% extends 'base.twig' %}
+
+{% block title %}Modify Company{% endblock %}
+
+{% block content %}
+
+	<main class="main-modifyaccount">
+
+		<div class="container">
+			<h2>Voici le compte :</h2>
+			<form method='POST'>
+				<label for="description">Pour ajouter des détails au profil, décrivez le parcours ici :</label>
+				<textarea id="description" name="details" placeholder="Ajoutez des détails" ></textarea>
+
+				<label for="adresse">Adresse :</label>
+				<input type="text" id="adresse" name="address" placeholder="Son adresse" >
+
+				<button type="submit" name="update_company" class="btn-primary">Enregistrement</button>
+			</form>
+		</div>
+
+	</main>
+
+
+{% endblock %}

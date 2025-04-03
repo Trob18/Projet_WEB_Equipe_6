@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 use app\Model\Permission;
 use PDO;
 
-require_once 'C:\wamp64\www\Projet_WEB_Equipe_6-main\config\ConfigDatabase.php';
+require_once 'C:\wamp64\www\Projet_WEB_Equipe_6-main\config\ConfigDatabase2.php';
 require_once 'C:\wamp64\www\Projet_WEB_Equipe_6-main\app\Model\AccountModel.php';
 
 class PermissionTest extends TestCase {
@@ -16,7 +16,7 @@ class PermissionTest extends TestCase {
 
     // Initialise l'environnement de test avant chaque test
     protected function setUp(): void {
-        $configDatabase = new \app\config\ConfigDatabase();
+        $configDatabase = new \app\config\ConfigDatabase2nd();
         $this->pdo = $configDatabase->getConnection();
         $this->permission = new PermissionModel($this->pdo);
         $this->cleanUpTestPermissions();
