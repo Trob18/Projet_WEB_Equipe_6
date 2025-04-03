@@ -52,6 +52,9 @@ switch ($page) {
     case 'ModifyAccount':
         echo $controller->ModifyAccountPage();//fonction dans controller.php
         break;
+    case 'LegalNotice':
+        echo $controller->Legal_NoticePage();//fonction dans controller.php
+        break;
     default:
         echo '404 Not Found';
         break;

@@ -101,11 +101,11 @@ class Controller extends Abstract_Controller
                 $role = 'Student';
             }
 
-
+/*
             // baniere Note    
 
             $id = $this->accountController->getAccount('Email_Account', $username, 'Id_Account');
-            
+
 
 
             $limit = 10; // Nombre d'entreprises par page
@@ -138,13 +138,13 @@ class Controller extends Abstract_Controller
                     if ($check == 0) {
                         $rating = [$_POST['rating'] ?? '', $id, $id_company];
                         $this->notesController->createNote($rating);
-                        $check = 0 ;
+                        $check = 0;
                     }
 
 
                 }
             }
-
+            */
 
 
             // baniere 
@@ -157,12 +157,12 @@ class Controller extends Abstract_Controller
                 'imageaccount' => $this->accountController->getAccount('Email_Account', $username, 'Image_Account'),
                 'descriptionaccount' => $this->accountController->getAccount('Email_Account', $username, 'Description_Account'),
                 'numberaccount' => $this->accountController->getAccount('Email_Account', $username, 'PhoneNumber_Account'),
-                'idrole' => $role,
+                'idrole' => $role/*,
                 'companies' => $companies,
                 'company_page' => $company_page,
                 'totalPages' => $totalPages,
                 'noteglobal' => $note_global / count($liste_note),
-                'error' => $error
+                'error' => $error*/
 
             ];
 
@@ -255,7 +255,11 @@ class Controller extends Abstract_Controller
 
     }
 
-
+    public function Legal_NoticePage()
+    {
+        echo $this->templateEngine->render('Legal_Notice.twig', ['error' => ""]);
+        exit();
+    }
 
 
 
